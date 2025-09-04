@@ -93,7 +93,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
         {/* Main content grid */}
         <section className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Image card */}
-          <div className="relative rounded-2xl border border-black/5 bg-gradient-to-br from-white to-muted p-4 shadow-sm">
+          <div className="relative rounded-2xl border border-black/5 bg-gradient-to-br from-white to-muted p-4 shadow-sm overflow-hidden">
             <ImageGallery images={galleryImages} isNew={detail.isNew} tdsUrl={detail.tdsUrl} />
             <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-black/5" />
           </div>

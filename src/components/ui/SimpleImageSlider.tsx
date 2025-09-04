@@ -50,7 +50,7 @@ export default function SimpleImageSlider({
   const multiple = images.length > 1;
 
   return (
-    <div className={`relative h-56 sm:h-72 lg:h-120 rounded-lg overflow-hidden ${className ?? ''}`}>
+    <div className={`relative h-48 sm:h-64 lg:h-[28rem] rounded-lg overflow-hidden ${className ?? ''}`}>
       {/* Slides */}
       {images.map((img, i) => (
         <div
@@ -62,7 +62,7 @@ export default function SimpleImageSlider({
             alt={img.alt}
             fill
             sizes="100vw"
-            className="object-cover"
+            className="object-contain object-center sm:object-cover"
             priority={i === 0}
           />
         </div>

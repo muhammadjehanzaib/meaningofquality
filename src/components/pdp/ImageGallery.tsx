@@ -37,8 +37,8 @@ export default function ImageGallery({
       )}
 
       {/* Main image */}
-      <div className="relative w-[600px] overflow-hidden rounded-xl bg-white h-[700px] sm:h-[460px] md:h-[560px] lg:h-[70vh]">
-        <Image src={shown[index]} alt="product" fill sizes="(max-width:1024px) 100vw, 50vw" className="object-contain" />
+      <div className="relative w-full overflow-hidden rounded-xl bg-white h-[320px] sm:h-[420px] md:h-[560px] lg:h-[70vh]">
+        <Image src={shown[index]} alt="product" fill sizes="(max-width:1024px) 100vw, 50vw" className="object-contain object-center" />
       </div>
 
       {/* Thumbnails */}
