@@ -1,0 +1,98 @@
+import type { LString } from "@/data/i18n";
+
+export type PackagingRow = {
+  stockCode?: string;
+  productCode?: string;
+  type?: string;
+  volume?: string;
+  boxQty?: string;
+};
+
+export type ProductDetail = {
+  description?: string | LString;
+  properties?: Array<string | LString>;
+  applications?: Array<string | LString>;
+  packaging?: PackagingRow[];
+  tdsUrl?: string; // Technical Data Sheet
+  sdsUrl?: string; // Safety Data Sheet (MSDS)
+  isNew?: boolean;
+  images?: string[];
+};
+
+export const productDetailsById: Record<string, ProductDetail> = {
+  // AC578 example (np-1)
+  "np-1": {
+    isNew: true,
+    description:
+      "High-quality, one-component acrylic based joint sealant suitable for general sealing in and around kitchen and bathroom. Prevents mold growth thanks to a powerful fungicide.",
+    properties: [
+      "Perfect adhesion without use of a primer on most, even slightly damp substrates.",
+      "Can be painted over after curing.",
+      "Colourfast and waterproof after curing.",
+      "Non-stringing, non-sag formula.",
+    ],
+    applications: [
+      "Sealing around kitchen worktops etc.",
+      "Sealing around baths, sanitary ware, basins and ceramics.",
+      "Internal sealing around uPVC, timber and metal window and door frames.",
+      "Filling gaps, cracks and joints in facades, walls and ceilings before painting.",
+    ],
+    packaging: [
+      { stockCode: "-", productCode: "AC578", type: "-", volume: "310 ml", boxQty: "12" },
+    ],
+    images: [
+      "/images/all-products/sealants/AC578-sanitary-sealant-bath-kitchen.png",
+    ],
+    // Provide real links when available
+    tdsUrl: "#",
+    sdsUrl: "#",
+  },
+  "np-2": {
+    isNew: true,
+    description:
+      "High-quality, one-component acrylic based joint sealant suitable for general sealing in and around kitchen and bathroom. Prevents mold growth thanks to a powerful fungicide.",
+    properties: [
+      "Perfect adhesion without use of a primer on most, even slightly damp substrates.",
+      "Can be painted over after curing.",
+      "Colourfast and waterproof after curing.",
+      "Non-stringing, non-sag formula.",
+    ],
+    applications: [
+      "Sealing around kitchen worktops etc.",
+      "Sealing around baths, sanitary ware, basins and ceramics.",
+      "Internal sealing around uPVC, timber and metal window and door frames.",
+      "Filling gaps, cracks and joints in facades, walls and ceilings before painting.",
+    ],
+    packaging: [
+      { stockCode: "-", productCode: "AC578", type: "-", volume: "310 ml", boxQty: "12" },
+    ],
+    images: [
+      "/images/all-products/adhesives/740-allbond-glue.png",
+    ],
+  },
+  "840P": {
+    isNew: true,
+    description:
+      "Akfix 840P is a self-extinguishable aerosol polyurethane foam for filling, sealing and bonding gaps. PU foam used with an applicator gun and features higher yield, easier application and reusability.",
+    properties: [
+      "Rated B2 according to DIN 4102.",
+      "Excellent adhesion to most building materials.",
+      "It does not contain any propellant gases that are harmful to the ozone layer.",
+      "It can be painted after curing.",
+      "It can be cut and sawn.",
+    ],
+    applications: [
+      "Fixing and insulating of door and window frames.",
+      "Filling and sealing of gaps, joints and cavities.",
+      "Filling of penetrations in walls.",
+      "Insulating electrical outlets and water pipes.",
+    ],
+    packaging: [
+      { stockCode: "FA018", productCode: "840P", type: "All Season", volume: "", boxQty: "12" },
+    ],
+    images: [
+      "/images/all-products/fire-related-products/820P-B1-fire-rated-pu-gun-foam.png",
+    ],
+  }
+};
+
