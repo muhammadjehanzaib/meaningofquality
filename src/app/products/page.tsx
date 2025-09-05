@@ -47,7 +47,7 @@ export default function ProductsPage() {
                 {g.items.map((item) => (
                   <div
                     key={item}
-                    className="rounded-lg border border-black/5 bg-background p-5 hover:shadow-sm transition-shadow"
+                    className="rounded-lg border border-foreground/10 bg-background p-5 hover:shadow-sm transition-shadow"
                   >
                     <div className="h-9 w-9 rounded bg-primary/10 text-primary grid place-items-center text-xs font-bold">
                       {g.title.charAt(0)}

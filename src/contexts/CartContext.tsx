@@ -9,6 +9,8 @@ export type CartItem = {
   qty: number;
   productCode?: string;
   volume?: string;
+  stockCode?: string;
+  type?: string;
 };
 
 export type CartContextType = {
@@ -28,8 +30,9 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 
 const STORAGE_KEY = "moq-cart-v1";
 
-function itemKey(id: string, productCode?: string, volume?: string) {
-  return `${id}|${productCode ?? ""}|${volume ?? ""}`;
+function itemKey(id: string, productCode?: string, volume?: string, stockCode?: string, type?: string) {
+  // Compose a stable key using all packaging-specific fields so variants don't overwrite each other
+  return `${id}|${productCode ?? ""}|${volume ?? ""}|${stockCode ?? ""}|${type ?? ""}`;
 }
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
@@ -68,10 +71,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const api = useMemo<CartContextType>(() => ({
     items,
-    add: (item) => {
+add: (item) => {
       setItems((prev) => {
-        const key = itemKey(item.id, item.productCode, item.volume);
-        const idx = prev.findIndex((p) => itemKey(p.id, p.productCode, p.volume) === key);
+        const key = itemKey(item.id, item.productCode, item.volume, item.stockCode, item.type);
+        const idx = prev.findIndex((p) => itemKey(p.id, p.productCode, p.volume, p.stockCode, p.type) === key);
         let added: CartItem = item;
         if (idx >= 0) {
           const next = [...prev];
@@ -88,10 +91,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         return next;
       });
     },
-    updateQty: (id, qty, key) => {
+updateQty: (id, qty, key) => {
       setItems((prev) => {
         const next = prev.map((p) => {
-          const k = itemKey(p.id, p.productCode, p.volume);
+          const k = itemKey(p.id, p.productCode, p.volume, p.stockCode, p.type);
           if (p.id === id && (!key || k === key)) {
             return { ...p, qty: Math.max(1, qty) };
           }
@@ -100,9 +103,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         return next;
       });
     },
-    remove: (id, key) => {
+remove: (id, key) => {
       setItems((prev) => prev.filter((p) => {
-        const k = itemKey(p.id, p.productCode, p.volume);
+        const k = itemKey(p.id, p.productCode, p.volume, p.stockCode, p.type);
         if (p.id !== id) return true;
         if (!key) return false;
         return k !== key;

@@ -37,7 +37,7 @@ export default function ImageGallery({
       )}
 
       {/* Main image */}
-      <div className="relative w-full overflow-hidden rounded-xl bg-white h-[320px] sm:h-[420px] md:h-[560px] lg:h-[70vh]">
+      <div className="relative w-full overflow-hidden rounded-xl bg-background h-[320px] sm:h-[420px] md:h-[560px] lg:h-[70vh]">
         <Image src={shown[index]} alt="product" fill sizes="(max-width:1024px) 100vw, 50vw" className="object-contain object-center" />
       </div>
 
@@ -49,7 +49,7 @@ export default function ImageGallery({
               key={src + i}
               type="button"
               onClick={() => setIndex(i)}
-              className={`relative h-16 w-16 overflow-hidden rounded border ${i === index ? 'ring-2 ring-primary' : 'border-black/10'}`}
+              className={`relative h-16 w-16 overflow-hidden rounded border ${i === index ? 'ring-2 ring-primary' : 'border-foreground/10'}` }
               aria-label={`Image ${i + 1}`}
             >
               <Image src={src} alt="thumb" fill sizes="64px" className="object-cover" />

@@ -23,7 +23,7 @@ export default function Carousel({ className, children, itemWidth }: CarouselPro
     <div className={clsx("relative", className)}>
       <button
         aria-label="Previous"
-        className="absolute left-1 top-1/2 -translate-y-1/2 z-10 rounded-full bg-background/90 shadow ring-1 ring-black/10 p-2 hover:bg-muted disabled:opacity-40"
+className="absolute left-1 top-1/2 -translate-y-1/2 z-10 rounded-full bg-background/90 shadow ring-1 ring-foreground/10 p-2 hover:bg-muted disabled:opacity-40"
         onClick={() => scrollBy(-1)}
         type="button"
       >
@@ -43,7 +43,7 @@ export default function Carousel({ className, children, itemWidth }: CarouselPro
 
       <button
         aria-label="Next"
-        className="absolute right-1 top-1/2 -translate-y-1/2 z-10 rounded-full bg-background/90 shadow ring-1 ring-black/10 p-2 hover:bg-muted disabled:opacity-40"
+className="absolute right-1 top-1/2 -translate-y-1/2 z-10 rounded-full bg-background/90 shadow ring-1 ring-foreground/10 p-2 hover:bg-muted disabled:opacity-40"
         onClick={() => scrollBy(1)}
         type="button"
       >

@@ -4,12 +4,36 @@ import ProductTile from "@/components/ui/ProductTile";
 import { productImageByItemId } from "@/data/assets";
 import type { Item } from "@/data/catalog";
 import type { Subcategory } from "@/data/subcategories";
-import { useState } from "react";
+import L from "@/components/i18n/L";
+import { useEffect, useMemo, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export default function CategoryClient({ items, subcategories }: { items: Item[]; subcategories: Subcategory[] }) {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+
   const [active, setActive] = useState<string | null>(null);
 
-  const filtered = active ? items.filter((i) => i.tags?.includes(active)) : items;
+  // Sync from URL ?sc=
+  useEffect(() => {
+    const sc = searchParams.get("sc");
+    setActive(sc ?? null);
+  }, [searchParams]);
+
+  // Update URL when local selection changes
+  const setActiveAndUrl = (next: string | null) => {
+    const params = new URLSearchParams(searchParams);
+    if (next) {
+      params.set("sc", next);
+    } else {
+      params.delete("sc");
+    }
+    // Avoid adding a new history entry; prevent scroll jump
+    router.replace(`${pathname}${params.toString() ? `?${params.toString()}` : ""}`);
+  };
+
+  const filtered = useMemo(() => (active ? items.filter((i) => i.tags?.includes(active)) : items), [active, items]);
 
   return (
     <div>
@@ -18,7 +42,8 @@ export default function CategoryClient({ items, subcategories }: { items: Item[]
           <button
             type="button"
             className={`rounded-full border px-3 py-1 text-xs ${active === null ? "bg-primary text-white" : "hover:bg-muted"}`}
-            onClick={() => setActive(null)}
+            onClick={() => setActiveAndUrl(null)}
+            aria-pressed={active === null}
           >
             All
           </button>
@@ -26,10 +51,11 @@ export default function CategoryClient({ items, subcategories }: { items: Item[]
             <button
               key={sc.id}
               type="button"
-              className={`rounded-full border px-3 py-1 text-xs ${active === sc.id ? "bg-primary text-white" : "hover:bg-muted"}`}
-              onClick={() => setActive(sc.id)}
+              className={`rounded-full border px-3 py-1 text-xs capitalize ${active === sc.id ? "bg-primary text-white" : "hover:bg-muted"}`}
+              onClick={() => setActiveAndUrl(sc.id)}
+              aria-pressed={active === sc.id}
             >
-              {typeof sc.title === "string" ? sc.title : sc.title.en}
+              <L value={sc.title} />
             </button>
           ))}
         </div>

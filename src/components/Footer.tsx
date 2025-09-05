@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="mt-20 border-t border-black/5 bg-muted">
+    <footer className="mt-20 border-t border-foreground/10 bg-muted">
       <Container className="py-10 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
         <div>
           <div className="flex items-center gap-3">
@@ -45,7 +45,7 @@ export default function Footer() {
           </ul>
         </div>
       </Container>
-      <div className="border-t border-black/5">
+      <div className="border-t border-foreground/10">
         <Container className="py-6 text-xs text-muted-foreground flex flex-col sm:flex-row items-center justify-between gap-2">
           <p>© {new Date().getFullYear()} Meaning of Quality. All rights reserved.</p>
           <div className="flex gap-4">

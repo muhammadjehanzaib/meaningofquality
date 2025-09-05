@@ -23,6 +23,8 @@ export function buildWhatsAppMessage(items: CartItem[], info: ClientInfo = {}): 
       `${idx + 1}. ${it.name}`,
       it.productCode ? `Code: ${it.productCode}` : undefined,
       it.volume ? `Volume: ${it.volume}` : undefined,
+      it.type ? `Type: ${it.type}` : undefined,
+      it.stockCode ? `Stock: ${it.stockCode}` : undefined,
       `Qty: ${it.qty}`,
     ].filter(Boolean);
     lines.push(parts.join(" | "));

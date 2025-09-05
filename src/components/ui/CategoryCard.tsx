@@ -13,7 +13,7 @@ export default function CategoryCard({ title, href, iconSrc, theme = { bg: 'bg-s
   return (
     <a
       href={href}
-      className="group block rounded-xl border border-black/5 bg-background p-5 hover:shadow-md transition-all hover:-translate-y-0.5 text-center cursor-pointer"
+      className="group block rounded-xl border border-foreground/10 bg-background p-5 hover:shadow-md transition-all hover:-translate-y-0.5 text-center cursor-pointer"
     >
       <div className={`h-14 w-14 rounded-lg ring-1 ${theme.ring} ${theme.bg} ${theme.hoverRing || ''} ${theme.hoverBg || ''} grid place-items-center mx-auto transition-transform`}>
         <div className="relative h-10 w-10 transition-transform group-hover:scale-110">

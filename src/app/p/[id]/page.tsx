@@ -94,9 +94,9 @@ export default async function ProductDetailPage({ params }: PageProps) {
         {/* Main content grid */}
         <section className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Image card */}
-          <div className="relative rounded-2xl border border-black/5 bg-gradient-to-br from-white to-muted p-4 shadow-sm overflow-hidden">
+          <div className="relative rounded-2xl border border-foreground/10 bg-gradient-to-br from-background to-muted p-4 shadow-sm overflow-hidden">
             <ImageGallery images={galleryImages} isNew={detail.isNew} tdsUrl={detail.tdsUrl} />
-            <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-black/5" />
+            <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-foreground/10" />
           </div>
 
           {/* Info panel */}
@@ -140,7 +140,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
 
             {/* Properties */}
             {detail.properties && detail.properties.length > 0 && (
-              <div className="mt-8 rounded-2xl border border-black/5 bg-background p-5">
+              <div className="mt-8 rounded-2xl border border-foreground/10 bg-background p-5">
                 <h2 className="text-base font-semibold text-foreground"><LKey k="properties" /></h2>
                 <ul className="mt-2 list-disc space-y-2 pl-5 text-sm text-muted-foreground">
 {detail.properties.map((p, i) => (
@@ -152,7 +152,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
 
             {/* Applications */}
             {detail.applications && detail.applications.length > 0 && (
-              <div className="mt-5 rounded-2xl border border-black/5 bg-background p-5">
+              <div className="mt-5 rounded-2xl border border-foreground/10 bg-background p-5">
                 <h2 className="text-base font-semibold text-foreground"><LKey k="applicationAreas" /></h2>
                 <ul className="mt-2 list-disc space-y-2 pl-5 text-sm text-muted-foreground">
 {detail.applications.map((p, i) => (
@@ -164,12 +164,12 @@ export default async function ProductDetailPage({ params }: PageProps) {
 
             {/* Packaging table */}
             {detail.packaging && detail.packaging.length > 0 && (
-              <div className="mt-5 rounded-2xl border border-black/5 bg-background p-5">
+              <div className="mt-5 rounded-2xl border border-foreground/10 bg-background p-5">
                 <h2 className="text-base font-semibold text-foreground"><LKey k="packaging" /></h2>
                 <div className="mt-3 overflow-x-auto">
                   <table className="w-full text-left text-xs">
                     <thead className="text-muted-foreground">
-                      <tr className="border-b border-black/5">
+                        <tr className="border-b border-foreground/10">
                         <th className="py-2 pr-3"><LKey k="stockCode" /></th>
                         <th className="py-2 pr-3"><LKey k="productCode" /></th>
                         <th className="py-2 pr-3"><LKey k="type" /></th>
@@ -179,7 +179,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
                     </thead>
                     <tbody>
                       {detail.packaging.map((row, i) => (
-                        <tr key={i} className="border-b border-black/5">
+                        <tr key={i} className="border-b border-foreground/10">
                           <td className="py-2 pr-3">{row.stockCode ?? "-"}</td>
                           <td className="py-2 pr-3">{row.productCode ?? "-"}</td>
                           <td className="py-2 pr-3">{row.type ?? "-"}</td>

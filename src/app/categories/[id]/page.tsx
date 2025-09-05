@@ -1,12 +1,12 @@
 import Link from "next/link";
 import Image from "next/image";
 import Container from "@/components/ui/Container";
-import ProductTile from "@/components/ui/ProductTile";
 import { categories, allItems } from "@/data/catalog";
-import { productImageByItemId, categoryIconById, categoryThemeById } from "@/data/assets";
+import { categoryIconById, categoryThemeById } from "@/data/assets";
 import L, { LKey } from "@/components/i18n/L";
 import CategoryClient from "@/components/category/CategoryClient";
 import { subcategoriesByCategoryId } from "@/data/subcategories";
+import { Suspense } from "react";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -65,7 +65,9 @@ export default async function CategoryPage({ params }: PageProps) {
 
         {/* Subcategories + Grid */}
         {items.length > 0 ? (
-          <CategoryClient items={items} subcategories={subcategoriesByCategoryId[id] || []} />
+          <Suspense fallback={<div className="mt-8 text-sm text-muted-foreground">Loading…</div>}>
+            <CategoryClient items={items} subcategories={subcategoriesByCategoryId[id] || []} />
+          </Suspense>
         ) : (
           <p className="mt-8 text-sm text-muted-foreground">
             <LKey k="noProductsInCategory" />

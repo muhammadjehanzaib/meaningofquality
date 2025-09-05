@@ -29,7 +29,7 @@ export default function Home() {
         <Container className="max-w-2xl">
           <div className="flex items-end justify-between gap-1">
             <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">{t("products", lang)}</h2>
-            <Link href="/products" className="text-sm text-primary hover:underline">{t("viewAll", lang)}</Link>
+<Link href="/categories" className="text-sm text-primary hover:underline">{t("viewAll", lang)}</Link>
           </div>
           <Carousel className="mt-6">
             {categories.map((c) => {
@@ -55,7 +55,7 @@ export default function Home() {
                 <a
                   key={s.id}
                   href={`/solutions#${s.id}`}
-                  className="group block rounded-lg border border-black/5 bg-background p-6 text-center transition-colors hover:shadow-md cursor-pointer"
+className="group block rounded-lg border border-foreground/10 bg-background p-6 text-center transition-colors hover:shadow-md cursor-pointer"
                 >
                   <div className={`h-[50px] w-[50px] rounded-2xl ring-1 ${theme.ring} ${theme.bg} ${theme.hoverBg} ${theme.hoverRing} grid place-items-center mx-auto transition-colors`}>
                     {icon ? (

@@ -20,7 +20,7 @@ export default function Header() {
   const { count } = useCart();
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-black/5 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+<header className="sticky top-0 z-40 w-full border-b border-foreground/10 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <Container className="flex h-16 items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="h-9 w-9 rounded bg-primary/10 grid place-items-center text-primary text-sm font-bold">
@@ -51,7 +51,7 @@ export default function Header() {
             </button>
             {menuOpen && (
               <div
-                className="absolute left-0 top-full z-20 w-64 rounded-md border border-black/5 bg-background p-2 shadow-lg"
+className="absolute left-0 top-full z-20 w-64 rounded-md border border-foreground/10 bg-background p-2 shadow-lg"
                 onMouseEnter={() => setMenuOpen(true)}
               >
                 {headerCategories.map((c) => {
@@ -127,7 +127,7 @@ href={`/categories/${c.id}`}
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="md:hidden border-t border-black/5 bg-background">
+<div className="md:hidden border-t border-foreground/10 bg-background">
           <Container className="py-3">
             <div className="flex flex-col gap-2">
               <details>

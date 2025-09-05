@@ -75,7 +75,7 @@ export default function SimpleImageSlider({
             type="button"
             aria-label="Previous slide"
             onClick={prev}
-            className="absolute left-3 top-1/2 -translate-y-1/2 z-10 rounded-full bg-white/70 hover:bg-white/90 text-gray-900 p-2 shadow"
+            className="absolute left-3 top-1/2 -translate-y-1/2 z-10 rounded-full bg-background/70 hover:bg-background/90 text-foreground p-2 shadow"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
               <path d="M15 19l-7-7 7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -85,7 +85,7 @@ export default function SimpleImageSlider({
             type="button"
             aria-label="Next slide"
             onClick={next}
-            className="absolute right-3 top-1/2 -translate-y-1/2 z-10 rounded-full bg-white/70 hover:bg-white/90 text-gray-900 p-2 shadow"
+            className="absolute right-3 top-1/2 -translate-y-1/2 z-10 rounded-full bg-background/70 hover:bg-background/90 text-foreground p-2 shadow"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
               <path d="M9 5l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -102,7 +102,7 @@ export default function SimpleImageSlider({
               key={i}
               aria-label={`Go to slide ${i + 1}`}
               onClick={() => goTo(i)}
-              className={`w-3 h-3 rounded-full transition-all ${i === index ? 'bg-white scale-125' : 'bg-white/60 hover:bg-white/80'}`}
+              className={`w-3 h-3 rounded-full transition-all ${i === index ? 'bg-foreground scale-125' : 'bg-foreground/60 hover:bg-foreground/80'}`}
             />
           ))}
         </div>
@@ -110,10 +110,10 @@ export default function SimpleImageSlider({
 
       {/* Progress bar */}
       {showProgress && multiple && (
-        <div className="absolute bottom-0 left-0 w-full h-1 bg-white/30">
+        <div className="absolute bottom-0 left-0 w-full h-1 bg-foreground/20">
           <div
             key={index}
-            className="h-full bg-white"
+            className="h-full bg-foreground"
             style={{ animation: `simpleSliderProgress ${intervalMs}ms linear forwards` }}
           />
           <style jsx>{`

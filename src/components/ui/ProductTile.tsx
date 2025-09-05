@@ -28,10 +28,10 @@ export default function ProductTile({ title, imgSrc, href, isNew = false, classN
   };
 
   return (
-    <div className={`group relative rounded-xl border border-black/5 bg-white shadow-sm hover:shadow-md transition-all p-4 hover:-translate-y-0.5 h-full flex flex-col ${className}`}>
-      <div className="relative h-56 sm:h-64 lg:h-72 w-full grid place-items-center bg-white/60 rounded-lg overflow-hidden">
+<div className={`group relative rounded-xl border border-foreground/10 bg-background shadow-sm hover:shadow-md transition-all p-4 hover:-translate-y-0.5 h-full flex flex-col ${className}`}>
+      <div className="relative h-56 sm:h-64 lg:h-72 w-full grid place-items-center bg-muted rounded-lg overflow-hidden">
         {isNew && (
-          <span className="absolute left-2 top-2 z-20 inline-flex items-center rounded-full bg-red-600/90 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white shadow-md ring-1 ring-white/50 pointer-events-none">
+          <span className="absolute left-2 top-2 z-20 inline-flex items-center rounded-full bg-red-600/90 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white shadow-md ring-1 ring-foreground/20 pointer-events-none">
             {t("newProductBadge", lang)}
           </span>
         )}

@@ -34,7 +34,7 @@ export default function CartDrawer() {
         aria-label={t("cart", lang)}
       >
         <div className="flex h-full flex-col">
-          <header className="flex items-center justify-between border-b border-black/5 p-4">
+<header className="flex items-center justify-between border-b border-foreground/10 p-4">
             <div className="text-base font-semibold">{t("cart", lang)} ({count})</div>
             <button className="rounded p-2 hover:bg-muted" onClick={closeDrawer} aria-label="Close">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M6 18L18 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
@@ -44,10 +44,10 @@ export default function CartDrawer() {
           {/* Body */}
           <div className="flex-1 overflow-auto p-4">
             {lastAdded && (
-              <div className="rounded-lg border border-black/5 bg-background p-3">
+<div className="rounded-lg border border-foreground/10 bg-background p-3">
                 <div className="text-xs font-semibold mb-2">{t("addedToCart", lang)}</div>
                 <div className="flex items-center gap-3">
-                  <div className="relative h-16 w-16 rounded bg-white ring-1 ring-black/5 overflow-hidden">
+<div className="relative h-16 w-16 rounded bg-background ring-1 ring-foreground/10 overflow-hidden">
                     {lastAdded.img ? (
                       <Image src={lastAdded.img} alt={lastAdded.name} fill sizes="64px" className="object-contain" />
                     ) : (
@@ -68,10 +68,10 @@ export default function CartDrawer() {
             {/* Brief list */}
             <div className="mt-4 space-y-2">
               {items.slice(0, 5).map((it) => {
-                const key = `${it.id}|${it.productCode ?? ""}|${it.volume ?? ""}`;
+                const key = `${it.id}|${it.productCode ?? ""}|${it.volume ?? ""}|${it.stockCode ?? ""}|${it.type ?? ""}`;
                 return (
-                  <div key={key} className="flex items-center gap-3 rounded border border-black/5 bg-background p-2">
-                    <div className="relative h-12 w-12 rounded bg-white ring-1 ring-black/5 overflow-hidden">
+<div key={key} className="flex items-center gap-3 rounded border border-foreground/10 bg-background p-2">
+<div className="relative h-12 w-12 rounded bg-background ring-1 ring-foreground/10 overflow-hidden">
                       {it.img ? (
                         <Image src={it.img} alt={it.name} fill sizes="48px" className="object-contain" />
                       ) : (
@@ -92,7 +92,7 @@ export default function CartDrawer() {
           </div>
 
           {/* Footer */}
-          <footer className="border-t border-black/5 p-4 space-y-2">
+<footer className="border-t border-foreground/10 p-4 space-y-2">
             <Link href="/cart" className="inline-flex w-full items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white hover:brightness-110" onClick={closeDrawer}>
               {t("goToCart", lang)}
             </Link>

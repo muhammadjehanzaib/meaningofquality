@@ -33,6 +33,8 @@ export default function AddToCart({
       qty: Math.max(1, qty),
       productCode: selected?.productCode,
       volume: selected?.volume,
+      stockCode: selected?.stockCode,
+      type: selected?.type,
     });
   };
 
