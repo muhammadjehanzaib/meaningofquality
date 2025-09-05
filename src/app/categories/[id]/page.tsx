@@ -5,6 +5,8 @@ import ProductTile from "@/components/ui/ProductTile";
 import { categories, allItems } from "@/data/catalog";
 import { productImageByItemId, categoryIconById, categoryThemeById } from "@/data/assets";
 import L, { LKey } from "@/components/i18n/L";
+import CategoryClient from "@/components/category/CategoryClient";
+import { subcategoriesByCategoryId } from "@/data/subcategories";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -61,13 +63,9 @@ export default async function CategoryPage({ params }: PageProps) {
           </h1>
         </header>
 
-        {/* Grid */}
+        {/* Subcategories + Grid */}
         {items.length > 0 ? (
-          <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {items.map((p) => (
-              <ProductTile key={p.id} title={p.name} imgSrc={productImageByItemId[p.id]} href={`/p/${p.id}`} />
-            ))}
-          </div>
+          <CategoryClient items={items} subcategories={subcategoriesByCategoryId[id] || []} />
         ) : (
           <p className="mt-8 text-sm text-muted-foreground">
             <LKey k="noProductsInCategory" />

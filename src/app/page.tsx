@@ -79,7 +79,7 @@ export default function Home() {
           <h2 className="text-2xl sm:text-3xl font-bold tracking-tight uppercase">{t("newProducts", lang)}</h2>
           <Carousel className="mt-6">
             {newProducts.map((p) => (
-              <ProductTile key={p.id} title={p.name} imgSrc={productImageByItemId[p.id]} isNew href={`/p/${p.id}`} />
+              <ProductTile key={p.id} title={p.name} imgSrc={productImageByItemId[p.id]} isNew href={`/p/${p.id}`} productId={p.id} showCtas />
             ))}
           </Carousel>
         </Container>
@@ -91,7 +91,7 @@ export default function Home() {
           <h2 className="text-2xl sm:text-3xl font-bold tracking-tight uppercase">{t("mostVisitedProducts", lang)}</h2>
           <Carousel className="mt-6">
             {mostVisited.map((p) => (
-              <ProductTile key={p.id} title={p.name} imgSrc={productImageByItemId[p.id]} href={`/p/${p.id}`} />
+              <ProductTile key={p.id} title={p.name} imgSrc={productImageByItemId[p.id]} href={`/p/${p.id}`} productId={p.id} showCtas />
             ))}
           </Carousel>
         </Container>

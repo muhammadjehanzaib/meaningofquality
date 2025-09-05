@@ -39,6 +39,8 @@ export const productDetailsById: Record<string, ProductDetail> = {
     ],
     packaging: [
       { stockCode: "-", productCode: "AC578", type: "-", volume: "310 ml", boxQty: "12" },
+      { stockCode: "-", productCode: "AC579", type: "-", volume: "410 ml", boxQty: "19" },
+
     ],
     images: [
       "/images/all-products/sealants/AC578-sanitary-sealant-bath-kitchen.png",
@@ -65,6 +67,7 @@ export const productDetailsById: Record<string, ProductDetail> = {
     ],
     packaging: [
       { stockCode: "-", productCode: "AC578", type: "-", volume: "310 ml", boxQty: "12" },
+      { stockCode: "-", productCode: "AC579", type: "-", volume: "410 ml", boxQty: "19" },
     ],
     images: [
       "/images/all-products/adhesives/740-allbond-glue.png",
@@ -89,6 +92,7 @@ export const productDetailsById: Record<string, ProductDetail> = {
     ],
     packaging: [
       { stockCode: "FA018", productCode: "840P", type: "All Season", volume: "", boxQty: "12" },
+      { stockCode: "FA019", productCode: "841P", type: "All Season", volume: "", boxQty: "16" },
     ],
     images: [
       "/images/all-products/fire-related-products/820P-B1-fire-rated-pu-gun-foam.png",

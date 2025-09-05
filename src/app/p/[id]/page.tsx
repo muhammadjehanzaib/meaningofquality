@@ -4,6 +4,7 @@ import Container from "@/components/ui/Container";
 import Carousel from "@/components/ui/Carousel";
 import ProductTile from "@/components/ui/ProductTile";
 import ImageGallery from "@/components/pdp/ImageGallery";
+import AddToCart from "@/components/pdp/AddToCart";
 import { allItems, categories } from "@/data/catalog";
 import {
   categoryIconById,
@@ -133,6 +134,9 @@ export default async function ProductDetailPage({ params }: PageProps) {
                 <LKey k="contactSales" />
               </a>
             </div>
+
+            {/* Add to cart / inquiry */}
+            <AddToCart productId={item.id} name={item.name} img={img} packaging={detail.packaging} />
 
             {/* Properties */}
             {detail.properties && detail.properties.length > 0 && (

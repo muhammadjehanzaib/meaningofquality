@@ -11,11 +11,13 @@ import { categoryIconById, categoryThemeById } from "@/data/assets";
 import { useLang } from "@/hooks/useLang";
 import { pick } from "@/data/i18n";
 import { t } from "@/data/labels";
+import { useCart } from "@/contexts/CartContext";
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const lang = useLang();
+  const { count } = useCart();
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-black/5 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -79,12 +81,37 @@ href={`/categories/${c.id}`}
 
         <div className="hidden md:flex items-center gap-3">
           <Search />
+          <Link href="/cart" className="relative inline-flex items-center gap-2 text-sm text-foreground/80 hover:text-foreground" aria-label={t("cart", lang)}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+              <path d="M6 6h15l-1.5 9h-12L6 6z" stroke="currentColor" strokeWidth="2" fill="none"/>
+              <circle cx="9" cy="20" r="1.5" fill="currentColor"/>
+              <circle cx="18" cy="20" r="1.5" fill="currentColor"/>
+            </svg>
+            <span>{t("cart", lang)}</span>
+            {count > 0 && (
+              <span className="absolute -right-2 -top-2 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-white">
+                {count}
+              </span>
+            )}
+          </Link>
           <LanguageToggle />
         </div>
 
         {/* Mobile toggles */}
         <div className="md:hidden flex items-center gap-2">
           <Search />
+          <Link href="/cart" className="relative inline-flex h-9 w-9 items-center justify-center rounded hover:bg-muted" aria-label={t("cart", lang)}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+              <path d="M6 6h15l-1.5 9h-12L6 6z" stroke="currentColor" strokeWidth="2" fill="none"/>
+              <circle cx="9" cy="20" r="1.5" fill="currentColor"/>
+              <circle cx="18" cy="20" r="1.5" fill="currentColor"/>
+            </svg>
+            {count > 0 && (
+              <span className="absolute -right-1 -top-1 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[9px] font-bold text-white">
+                {count}
+              </span>
+            )}
+          </Link>
           <button
             className="inline-flex h-9 w-9 items-center justify-center rounded hover:bg-muted"
             onClick={() => setMobileOpen((v) => !v)}
@@ -132,6 +159,9 @@ className="flex items-center gap-2 py-2 text-sm text-foreground/80"
               </Link>
               <Link href="/contact" className="py-2 text-sm text-foreground/90" onClick={() => setMobileOpen(false)}>
                 {t("contact", lang)}
+              </Link>
+              <Link href="/cart" className="py-2 text-sm text-foreground/90" onClick={() => setMobileOpen(false)}>
+                {t("cart", lang)} {count > 0 ? `(${count})` : ""}
               </Link>
               <div className="pt-2"><LanguageToggle /></div>
             </div>
