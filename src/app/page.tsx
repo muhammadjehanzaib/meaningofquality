@@ -7,8 +7,8 @@ import Carousel from "@/components/ui/Carousel";
 import SimpleImageSlider from "@/components/ui/SimpleImageSlider";
 import CategoryCard from "@/components/ui/CategoryCard";
 import ProductTile from "@/components/ui/ProductTile";
-import { categories, solutions, newProducts, mostVisited } from "@/data/catalog";
-import { sliderBanners, categoryIconById, categoryThemeById, solutionIconById, solutionThemeById, productImageByItemId } from "@/data/assets";
+import { categories, newProducts, mostVisited } from "@/data/catalog";
+import { sliderBanners, categoryIconById, categoryThemeById, productImageByItemId } from "@/data/assets";
 import { useLang } from "@/hooks/useLang";
 import { pick } from "@/data/i18n";
 import { t } from "@/data/labels";
@@ -29,45 +29,14 @@ export default function Home() {
         <Container className="max-w-2xl">
           <div className="flex items-end justify-between gap-1">
             <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">{t("products", lang)}</h2>
-<Link href="/categories" className="text-sm text-primary hover:underline">{t("viewAll", lang)}</Link>
+            <Link href="/categories" className="text-sm text-primary hover:underline">{t("viewAll", lang)}</Link>
           </div>
           <Carousel className="mt-6">
             {categories.map((c) => {
               const icon = categoryIconById[c.id] ?? "/images/product-categories/categories-icons/accessories.png";
               const theme = categoryThemeById[c.id] ?? { bg: "bg-slate-50", ring: "ring-slate-200", text: "text-slate-700" };
               return (
-<CategoryCard key={c.id} title={pick(c.title, lang)} href={`/categories/${c.id}`} iconSrc={icon} theme={theme} />
-              );
-            })}
-          </Carousel>
-        </Container>
-      </section>
-
-      {/* 3) Solutions slider section */}
-      <section className="py-10 bg-muted" id="solutions">
-        <Container className="max-w-2xl">
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">{t("solutions", lang)}</h2>
-          <Carousel className="mt-6">
-            {solutions.map((s) => {
-              const icon = solutionIconById[s.id];
-              const theme = solutionThemeById[s.id] ?? { bg: "bg-slate-50", ring: "ring-slate-200", text: "text-slate-700", hoverBg: "group-hover:bg-slate-100", hoverRing: "group-hover:ring-slate-300", hoverText: "group-hover:text-slate-800" };
-              return (
-                <a
-                  key={s.id}
-                  href={`/solutions#${s.id}`}
-className="group block rounded-lg border border-foreground/10 bg-background p-6 text-center transition-colors hover:shadow-md cursor-pointer"
-                >
-                  <div className={`h-[50px] w-[50px] rounded-2xl ring-1 ${theme.ring} ${theme.bg} ${theme.hoverBg} ${theme.hoverRing} grid place-items-center mx-auto transition-colors`}>
-                    {icon ? (
-                      <div className="relative h-[35px] w-[35px] transition-transform group-hover:scale-105">
-                        <Image src={icon} alt={`${pick(s.title, lang)} icon`} fill sizes="35px" className="object-contain" />
-                      </div>
-                    ) : (
-                      <div className="h-[35px] w-[35px] rounded bg-primary/10" />
-                    )}
-                  </div>
-                  <h3 className={`mt-4 text-base font-semibold ${theme.text} ${theme.hoverText} transition-colors`}>{pick(s.title, lang)}</h3>
-                </a>
+                <CategoryCard key={c.id} title={pick(c.title, lang)} href={`/categories/${c.id}`} iconSrc={icon} theme={theme} />
               );
             })}
           </Carousel>

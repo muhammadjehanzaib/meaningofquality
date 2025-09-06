@@ -20,11 +20,11 @@ export default function Header() {
   const { count } = useCart();
 
   return (
-<header className="sticky top-0 z-40 w-full border-b border-foreground/10 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-40 w-full border-b border-foreground/10 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <Container className="flex h-16 items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="h-9 w-9 rounded bg-primary/10 grid place-items-center text-primary text-sm font-bold">
-            MQ
+            MOQ
           </div>
           <Link href="/" className="text-base font-semibold tracking-tight">
             Meaning of Quality
@@ -33,9 +33,10 @@ export default function Header() {
 
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-6 ">
+          <Link href="/" className="text-sm text-foreground/80 hover:text-foreground">{t("home", lang)}</Link>
           <div className="relative"
-               onMouseEnter={() => setMenuOpen(true)}
-               onMouseLeave={() => setMenuOpen(false)}
+            onMouseEnter={() => setMenuOpen(true)}
+            onMouseLeave={() => setMenuOpen(false)}
           >
             <button
               type="button"
@@ -51,7 +52,7 @@ export default function Header() {
             </button>
             {menuOpen && (
               <div
-className="absolute left-0 top-full z-20 w-64 rounded-md border border-foreground/10 bg-background p-2 shadow-lg"
+                className="absolute left-0 top-full z-20 w-64 rounded-md border border-foreground/10 bg-background p-2 shadow-lg"
                 onMouseEnter={() => setMenuOpen(true)}
               >
                 {headerCategories.map((c) => {
@@ -60,7 +61,7 @@ className="absolute left-0 top-full z-20 w-64 rounded-md border border-foregroun
                   return (
                     <Link
                       key={c.id}
-href={`/categories/${c.id}`}
+                      href={`/categories/${c.id}`}
                       className="flex items-center gap-3 rounded px-3 py-2 text-sm text-foreground/80 hover:bg-muted"
                     >
                       <span className={`h-6 w-6 rounded ring-1 ${theme.ring} ${theme.bg} grid place-items-center`}>
@@ -83,9 +84,9 @@ href={`/categories/${c.id}`}
           <Search />
           <Link href="/cart" className="relative inline-flex items-center gap-2 text-sm text-foreground/80 hover:text-foreground" aria-label={t("cart", lang)}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
-              <path d="M6 6h15l-1.5 9h-12L6 6z" stroke="currentColor" strokeWidth="2" fill="none"/>
-              <circle cx="9" cy="20" r="1.5" fill="currentColor"/>
-              <circle cx="18" cy="20" r="1.5" fill="currentColor"/>
+              <path d="M6 6h15l-1.5 9h-12L6 6z" stroke="currentColor" strokeWidth="2" fill="none" />
+              <circle cx="9" cy="20" r="1.5" fill="currentColor" />
+              <circle cx="18" cy="20" r="1.5" fill="currentColor" />
             </svg>
             <span>{t("cart", lang)}</span>
             {count > 0 && (
@@ -102,9 +103,9 @@ href={`/categories/${c.id}`}
           <Search />
           <Link href="/cart" className="relative inline-flex h-9 w-9 items-center justify-center rounded hover:bg-muted" aria-label={t("cart", lang)}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
-              <path d="M6 6h15l-1.5 9h-12L6 6z" stroke="currentColor" strokeWidth="2" fill="none"/>
-              <circle cx="9" cy="20" r="1.5" fill="currentColor"/>
-              <circle cx="18" cy="20" r="1.5" fill="currentColor"/>
+              <path d="M6 6h15l-1.5 9h-12L6 6z" stroke="currentColor" strokeWidth="2" fill="none" />
+              <circle cx="9" cy="20" r="1.5" fill="currentColor" />
+              <circle cx="18" cy="20" r="1.5" fill="currentColor" />
             </svg>
             {count > 0 && (
               <span className="absolute -right-1 -top-1 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[9px] font-bold text-white">
@@ -119,7 +120,7 @@ href={`/categories/${c.id}`}
             type="button"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
             </svg>
           </button>
         </div>
@@ -127,7 +128,7 @@ href={`/categories/${c.id}`}
 
       {/* Mobile menu */}
       {mobileOpen && (
-<div className="md:hidden border-t border-foreground/10 bg-background">
+        <div className="md:hidden border-t border-foreground/10 bg-background">
           <Container className="py-3">
             <div className="flex flex-col gap-2">
               <details>
@@ -139,8 +140,8 @@ href={`/categories/${c.id}`}
                     return (
                       <Link
                         key={c.id}
-href={`/categories/${c.id}`}
-className="flex items-center gap-2 py-2 text-sm text-foreground/80"
+                        href={`/categories/${c.id}`}
+                        className="flex items-center gap-2 py-2 text-sm text-foreground/80"
                         onClick={() => setMobileOpen(false)}
                       >
                         <span className={`h-6 w-6 rounded ring-1 ${theme.ring} ${theme.bg} grid place-items-center`}>

@@ -120,7 +120,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
 
             {/* CTAs (show only if present) */}
             <div className="mt-6 flex flex-wrap gap-3">
-              {detail.tdsUrl && (
+              {/* {detail.tdsUrl && (
                 <a className="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-white text-sm hover:brightness-110" href={detail.tdsUrl} role="button">
                   <LKey k="downloadTDS" />
                 </a>
@@ -129,7 +129,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
                 <a className="inline-flex items-center justify-center rounded-lg border px-4 py-2 text-sm hover:bg-muted" href={detail.sdsUrl} role="button">
                   <LKey k="downloadSDS" />
                 </a>
-              )}
+              )} */}
               <a className="inline-flex items-center justify-center rounded-lg border px-4 py-2 text-sm hover:bg-muted" href="/contact" role="button">
                 <LKey k="contactSales" />
               </a>

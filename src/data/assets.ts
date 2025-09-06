@@ -39,29 +39,6 @@ export const categoryThemeById: Record<string, { bg: string; ring: string; text:
   accessories: { bg: "bg-slate-50", ring: "ring-slate-200", text: "text-slate-700", hoverBg: "group-hover:bg-slate-100", hoverRing: "group-hover:ring-slate-300", hoverText: "group-hover:text-slate-800" },
 };
 
-export const solutionIconById: Record<string, string> = {
-  "hvac": "/images/solutions/hvac.png",
-  "automotive": "/images/solutions/automotive-products.png",
-  "parks": "/images/solutions/decorative-products.png", // closest match available
-  "trucks": "/images/solutions/trucks-long-vehicles.png",
-  "pool": "/images/solutions/pool-aqua.png",
-  "caravans": "/images/solutions/caravans.png",
-  "bike": "/images/solutions/bike-motorbike-maintenance.png",
-  "work-machines": "/images/solutions/work-machines-agriculture-machines.png",
-};
-
-// Visual theme for solution icons (friendly background + ring + text)
-export const solutionThemeById: Record<string, { bg: string; ring: string; text: string; hoverBg: string; hoverRing: string; hoverText: string }> = {
-  hvac: { bg: "bg-sky-50", ring: "ring-sky-200", text: "text-sky-700", hoverBg: "group-hover:bg-sky-100", hoverRing: "group-hover:ring-sky-300", hoverText: "group-hover:text-sky-800" },
-  automotive: { bg: "bg-rose-50", ring: "ring-rose-200", text: "text-rose-700", hoverBg: "group-hover:bg-rose-100", hoverRing: "group-hover:ring-rose-300", hoverText: "group-hover:text-rose-800" },
-  parks: { bg: "bg-emerald-50", ring: "ring-emerald-200", text: "text-emerald-700", hoverBg: "group-hover:bg-emerald-100", hoverRing: "group-hover:ring-emerald-300", hoverText: "group-hover:text-emerald-800" },
-  trucks: { bg: "bg-amber-50", ring: "ring-amber-200", text: "text-amber-800", hoverBg: "group-hover:bg-amber-100", hoverRing: "group-hover:ring-amber-300", hoverText: "group-hover:text-amber-900" },
-  pool: { bg: "bg-cyan-50", ring: "ring-cyan-200", text: "text-cyan-700", hoverBg: "group-hover:bg-cyan-100", hoverRing: "group-hover:ring-cyan-300", hoverText: "group-hover:text-cyan-800" },
-  caravans: { bg: "bg-fuchsia-50", ring: "ring-fuchsia-200", text: "text-fuchsia-700", hoverBg: "group-hover:bg-fuchsia-100", hoverRing: "group-hover:ring-fuchsia-300", hoverText: "group-hover:text-fuchsia-800" },
-  bike: { bg: "bg-indigo-50", ring: "ring-indigo-200", text: "text-indigo-700", hoverBg: "group-hover:bg-indigo-100", hoverRing: "group-hover:ring-indigo-300", hoverText: "group-hover:text-indigo-800" },
-  "work-machines": { bg: "bg-lime-50", ring: "ring-lime-200", text: "text-lime-700", hoverBg: "group-hover:bg-lime-100", hoverRing: "group-hover:ring-lime-300", hoverText: "group-hover:text-lime-800" },
-};
-
 // Map item IDs from data/catalog to product images
 export const productImageByItemId: Record<string, string> = {
   // newProducts
