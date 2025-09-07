@@ -131,6 +131,8 @@ export default function Header() {
         <div className="md:hidden border-t border-foreground/10 bg-background">
           <Container className="py-3">
             <div className="flex flex-col gap-2">
+              <Link href="/" className="text-sm text-foreground/80 hover:text-foreground">{t("home", lang)}</Link>
+
               <details>
                 <summary className="cursor-pointer py-2 text-sm text-foreground/90">{t("products", lang)}</summary>
                 <div className="pl-2">

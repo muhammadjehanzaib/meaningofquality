@@ -8,7 +8,7 @@ import { useLang } from "@/hooks/useLang";
 import { t } from "@/data/labels";
 
 export default function CartDrawer() {
-  const { drawerOpen, closeDrawer, lastAdded, items, count } = useCart();
+  const { drawerOpen, closeDrawer, lastAdded, items, count, updateQty } = useCart();
   const lang = useLang();
 
   // close on Esc
@@ -67,7 +67,7 @@ export default function CartDrawer() {
 
             {/* Brief list */}
             <div className="mt-4 space-y-2">
-              {items.slice(0, 5).map((it) => {
+              {items.map((it) => {
                 const key = `${it.id}|${it.productCode ?? ""}|${it.volume ?? ""}|${it.stockCode ?? ""}|${it.type ?? ""}`;
                 return (
                   <div key={key} className="flex items-center gap-3 rounded border border-foreground/10 bg-background p-2">
@@ -80,14 +80,31 @@ export default function CartDrawer() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="truncate text-sm font-medium">{it.name}</div>
-                      <div className="text-[11px] text-muted-foreground">Qty: {it.qty}</div>
+                      <div className="mt-1 inline-flex items-center rounded-lg border bg-background/70 shadow-sm">
+                        <button
+                          type="button"
+                          aria-label="Decrease quantity"
+                          className="h-7 w-7 text-xs hover:bg-muted rounded-l-lg"
+                          onClick={() => updateQty(it.id, Math.max(1, it.qty - 1), key)}
+                        >
+                          −
+                        </button>
+                        <div className="h-7 w-10 border-x grid place-items-center text-xs select-none">
+                          {it.qty}
+                        </div>
+                        <button
+                          type="button"
+                          aria-label="Increase quantity"
+                          className="h-7 w-7 text-xs hover:bg-muted rounded-r-lg"
+                          onClick={() => updateQty(it.id, it.qty + 1, key)}
+                        >
+                          +
+                        </button>
+                      </div>
                     </div>
                   </div>
                 );
               })}
-              {items.length > 5 && (
-                <div className="px-2 text-xs text-muted-foreground">+{items.length - 5} more…</div>
-              )}
             </div>
           </div>
 

@@ -8,29 +8,29 @@ import { useLang } from "@/hooks/useLang";
 import { t } from "@/data/labels";
 import { WHATSAPP_NUMBER } from "@/data/site";
 import { buildWhatsAppMessage, type ClientInfo } from "@/utils/whatsapp";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 export default function CartPage() {
   const { items, updateQty, remove, clear } = useCart();
   const lang = useLang();
   const [info, setInfo] = useState<ClientInfo>({});
-  const [emailError, setEmailError] = useState("");
-
-  // Email validator
-  const validateEmail = (value: string) => {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return regex.test(value);
-  };
+  const formRef = useRef<HTMLFormElement>(null);
 
   const totalItems = items.reduce((acc, it) => acc + it.qty, 0);
 
-  // Complete info check
-  const isInfoComplete =
-    !!(info.name && info.company && info.email && info.phone && info.note) &&
-    !emailError;
+  const ensureFormValid = (): boolean => {
+    const form = formRef.current;
+    if (!form) return false;
+    if (form.checkValidity()) return true;
+    // Trigger the browser's native validation popups and focus first invalid
+    form.reportValidity();
+    const firstInvalid = form.querySelector<HTMLElement>(":invalid");
+    firstInvalid?.focus();
+    return false;
+  };
 
   const handleSendWhatsApp = () => {
-    if (!isInfoComplete) return;
+    if (!ensureFormValid()) return;
     const msg = buildWhatsAppMessage(items, info);
     const encoded = encodeURIComponent(msg);
     const base = WHATSAPP_NUMBER
@@ -41,7 +41,7 @@ export default function CartPage() {
   };
 
   const handleDownloadPDF = async () => {
-  if (!isInfoComplete) return;
+  if (!ensureFormValid()) return;
   const { jsPDF } = await import("jspdf");
 
   const toDataURL = async (src?: string): Promise<string | null> => {
@@ -363,63 +363,62 @@ export default function CartPage() {
 
               <div className="rounded-2xl border border-foreground/10 bg-gradient-to-br from-background to-muted p-4 space-y-3 shadow-sm">
                 <h2 className="text-base font-semibold">{t("yourInfo", lang)}</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  <input
-                    required
-                    className="w-full rounded border px-3 py-2 text-sm"
-                    placeholder={t("name", lang)}
-                    onChange={(e) =>
-                      setInfo((v) => ({ ...v, name: e.target.value }))
-                    }
-                  />
-                  <input
-                    required
-                    className="w-full rounded border px-3 py-2 text-sm"
-                    placeholder={t("company", lang)}
-                    onChange={(e) =>
-                      setInfo((v) => ({ ...v, company: e.target.value }))
-                    }
-                  />
-                  <div className="sm:col-span-2">
+                <form ref={formRef} className="space-y-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     <input
+                      id="name"
+                      name="name"
                       required
-                      type="email"
-                      className={`w-full rounded border px-3 py-2 text-sm ${
-                        emailError ? "border-red-500" : ""
-                      }`}
-                      placeholder={t("email", lang)}
-                      onChange={(e) => {
-                        const val = e.target.value;
-                        setInfo((v) => ({ ...v, email: val }));
-                        if (!val || validateEmail(val)) {
-                          setEmailError("");
-                        } else {
-                          setEmailError("Check email format");
-                        }
-                      }}
+                      className="w-full rounded border px-3 py-2 text-sm"
+                      placeholder={t("name", lang)}
+                      value={info.name ?? ""}
+                      onChange={(e) => setInfo((v) => ({ ...v, name: e.target.value }))}
                     />
-                    {emailError && (
-                      <p className="text-red-500 text-xs mt-1">{emailError}</p>
-                    )}
+                    <input
+                      id="company"
+                      name="company"
+                      required
+                      className="w-full rounded border px-3 py-2 text-sm"
+                      placeholder={t("company", lang)}
+                      value={info.company ?? ""}
+                      onChange={(e) => setInfo((v) => ({ ...v, company: e.target.value }))}
+                    />
+                    <div className="sm:col-span-2">
+                      <input
+                        id="email"
+                        name="email"
+                        required
+                        type="email"
+                        className="w-full rounded border px-3 py-2 text-sm"
+                        placeholder={t("email", lang)}
+                        value={info.email ?? ""}
+                        onChange={(e) => setInfo((v) => ({ ...v, email: e.target.value }))}
+                      />
+                    </div>
+                    <input
+                      id="phone"
+                      name="phone"
+                      required
+                      type="tel"
+                      pattern="^[+]?[-0-9 ()]{6,}$"
+                      title="Please enter a valid phone number"
+                      className="w-full rounded border px-3 py-2 text-sm sm:col-span-2"
+                      placeholder={t("phone", lang)}
+                      value={info.phone ?? ""}
+                      onChange={(e) => setInfo((v) => ({ ...v, phone: e.target.value }))}
+                    />
                   </div>
-                  <input
+                  <textarea
+                    id="note"
+                    name="note"
                     required
-                    className="w-full rounded border px-3 py-2 text-sm sm:col-span-2"
-                    placeholder={t("phone", lang)}
-                    onChange={(e) =>
-                      setInfo((v) => ({ ...v, phone: e.target.value }))
-                    }
+                    className="w-full rounded border px-3 py-2 text-sm"
+                    placeholder={t("note", lang)}
+                    rows={3}
+                    value={info.note ?? ""}
+                    onChange={(e) => setInfo((v) => ({ ...v, note: e.target.value }))}
                   />
-                </div>
-                <textarea
-                  required
-                  className="w-full rounded border px-3 py-2 text-sm"
-                  placeholder={t("note", lang)}
-                  rows={3}
-                  onChange={(e) =>
-                    setInfo((v) => ({ ...v, note: e.target.value }))
-                  }
-                />
+                </form>
                 <p className="text-xs text-muted-foreground">
                   We will use this information to prepare your quotation and reply
                   to your inquiry.
@@ -427,12 +426,7 @@ export default function CartPage() {
               </div>
 
               <button
-                disabled={!isInfoComplete}
-                className={`w-full inline-flex items-center justify-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-white text-sm font-medium transition ${
-                  !isInfoComplete
-                    ? "opacity-50 cursor-not-allowed"
-                    : "hover:brightness-110"
-                }`}
+                className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-white text-sm font-medium transition hover:brightness-110"
                 onClick={handleSendWhatsApp}
                 type="button"
               >
@@ -461,12 +455,7 @@ export default function CartPage() {
               </button>
 
               <button
-                disabled={!isInfoComplete}
-                className={`w-full inline-flex items-center justify-center gap-2 rounded-lg border px-4 py-2 text-sm transition ${
-                  !isInfoComplete
-                    ? "opacity-50 cursor-not-allowed"
-                    : "hover:bg-muted"
-                }`}
+                className="w-full inline-flex items-center justify-center gap-2 rounded-lg border px-4 py-2 text-sm transition hover:bg-muted"
                 onClick={handleDownloadPDF}
                 type="button"
               >
