@@ -241,17 +241,28 @@ export default function CartPage() {
     // Footer
     const drawFooter = (pageNum: number, pageCount: number) => {
       doc.setFontSize(9).setTextColor(100);
-      const footerMsg =
-        "For quotation? Forward this PDF to sale@moq.com.sa or WhatsApp us at +966590019826";
-      doc.text(footerMsg, DIMENSIONS.margin, pageH - 6, { align: "left" });
+
+      // Left side: Email text
+      const emailMsg = "For quotation? Forward this PDF to sale@moq.com.sa or ";
+      doc.text(emailMsg, DIMENSIONS.margin, pageH - 6, { align: "left" });
+
+      // WhatsApp clickable link
+      const whatsAppText = "WhatsApp us at +966590019826";
+      doc.textWithLink(whatsAppText, DIMENSIONS.margin + doc.getTextWidth(emailMsg), pageH - 6, {
+        url: "https://wa.me/966590019826"
+      });
+
+      // Right side: Page numbering
       doc.text(
         `Page ${pageNum} of ${pageCount}`,
         pageW - DIMENSIONS.margin,
         pageH - 6,
         { align: "right" }
       );
+
       doc.setTextColor(0, 0, 0);
     };
+
 
     // Table rows
     const renderRows = async (startIdx: number, startY: number) => {
