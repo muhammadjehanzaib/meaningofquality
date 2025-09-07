@@ -28,6 +28,7 @@ export default function CartPage() {
     return false;
   };
 
+  // WhatsApp Integration
   const handleSendWhatsApp = () => {
     if (!ensureFormValid()) return;
     const msg = buildWhatsAppMessage(items, info);
@@ -39,11 +40,13 @@ export default function CartPage() {
     window.open(url, "_blank");
   };
 
+  // PDF Download
   const handleDownloadPDF = async () => {
     if (!ensureFormValid()) return;
-    const { jsPDF } = await import("jspdf");
+    const { jsPDF } = await import("jspdf").then((mod) => mod);
+    if (typeof window === "undefined") return;
 
-    // Utilities
+    // Util: Image to DataURL
     const toDataURL = async (src?: string): Promise<string | null> => {
       if (!src) return null;
       try {
@@ -63,8 +66,9 @@ export default function CartPage() {
       }
     };
 
+    // Colors + Layout
     const COLORS = {
-      primary: { r: 22, g: 163, b: 74 }, // Tailwind green-600
+      primary: { r: 22, g: 163, b: 74 },
       gray: (v: number) => ({ r: v, g: v, b: v }),
     };
 
@@ -73,14 +77,7 @@ export default function CartPage() {
       headerBarH: 22,
       infoBoxH: 40,
       bottomMargin: 14,
-      table: {
-        idxW: 8,
-        imgW: 20,
-        nameW: 80,
-        metaW: 60,
-        qtyW: 12,
-        minRowH: 24,
-      },
+      table: { idxW: 8, imgW: 20, nameW: 80, metaW: 60, qtyW: 12, minRowH: 24 },
     };
 
     const doc = new jsPDF({ unit: "mm", format: "a4" });
@@ -95,58 +92,47 @@ export default function CartPage() {
       if (showInquiry) {
         doc.setTextColor(255, 255, 255);
 
-        // Left: Logo box + Company name
+        // Logo + Text
         const logoX = DIMENSIONS.margin;
         const logoY = 6;
         const logoSize = 8;
-
-        // Draw logo box
-        doc.setFillColor(255, 255, 255); // white background
-        doc.roundedRect(logoX, logoY , logoSize + 4, logoSize + 4, 2, 2, "F");
+        doc.setFillColor(255, 255, 255);
+        doc.roundedRect(logoX, logoY, logoSize + 4, logoSize + 4, 2, 2, "F");
         doc.setTextColor(COLORS.primary.r, COLORS.primary.g, COLORS.primary.b);
         doc.setFont("helvetica", "bold").setFontSize(9);
         doc.text("MOQ", logoX + 2.5, logoY + 6, { baseline: "middle" });
 
-        // Company name next to logo
+        // Company name
         doc.setTextColor(255, 255, 255);
         doc.setFont("helvetica", "bold").setFontSize(11);
         doc.text("Meaning of Quality", logoX + 15, 14);
 
-        // Center: Inquiry
+        // Center Inquiry
         doc.setFont("helvetica", "bold").setFontSize(18);
         doc.text("Inquiry", pageW / 2, 14, { align: "center" });
 
-        // Right: Generated Time
+        // Date right
         const generatedAt = new Date().toLocaleString();
         doc.setFont("helvetica", "normal").setFontSize(10);
         doc.text(generatedAt, pageW - DIMENSIONS.margin, 14, { align: "right" });
-
         doc.setTextColor(0, 0, 0);
       }
 
-      // Divider line under header
+      // Divider
       doc.setDrawColor(200);
       doc.setLineWidth(0.2);
       doc.line(0, DIMENSIONS.headerBarH, pageW, DIMENSIONS.headerBarH);
     };
+
     // Company + Customer Info
     const drawCompanyAndCustomer = (yStart: number) => {
       const colW = (pageW - DIMENSIONS.margin * 2 - 6) / 2;
 
-      // Company Info
+      // Company box
       doc.setDrawColor(220).setLineWidth(0.4);
-      doc.roundedRect(
-        DIMENSIONS.margin,
-        yStart,
-        colW,
-        DIMENSIONS.infoBoxH,
-        2,
-        2,
-        "S"
-      );
+      doc.roundedRect(DIMENSIONS.margin, yStart, colW, DIMENSIONS.infoBoxH, 2, 2, "S");
       doc.setFontSize(11).setFont("helvetica", "bold");
       doc.text("Company Info", DIMENSIONS.margin + 4, yStart + 6);
-
       doc.setFont("helvetica", "normal").setFontSize(10);
       let y = yStart + 12;
       const companyLines = [
@@ -160,12 +146,11 @@ export default function CartPage() {
         y += 5;
       });
 
-      // Customer Info
+      // Customer box
       const rightX = DIMENSIONS.margin + colW + 6;
       doc.roundedRect(rightX, yStart, colW, DIMENSIONS.infoBoxH, 2, 2, "S");
       doc.setFont("helvetica", "bold").setFontSize(11);
       doc.text("Customer Info", rightX + 4, yStart + 6);
-
       doc.setFont("helvetica", "normal").setFontSize(10);
       let cy = yStart + 12;
       if (info.name) {
@@ -187,19 +172,14 @@ export default function CartPage() {
 
       let nextY = Math.max(y, cy);
 
-      // Customer Note
+      // Note
       if (info.note) {
         const noteY = nextY + 10;
         doc.setFont("helvetica", "bold").setFontSize(11);
-        doc.setDrawColor(220);
-
         const maxWidth = pageW - DIMENSIONS.margin * 2 - 10;
         const wrapped = doc.splitTextToSize(info.note, maxWidth);
-
         const lineHeight = 6;
-        const contentHeight = wrapped.length * lineHeight;
-        const boxHeight = contentHeight + 14;
-
+        const boxHeight = wrapped.length * lineHeight + 14;
         doc.roundedRect(
           DIMENSIONS.margin,
           noteY,
@@ -210,38 +190,31 @@ export default function CartPage() {
           "S"
         );
         doc.text("Customer Note:", DIMENSIONS.margin + 4, noteY + 8);
-
         doc.setFont("helvetica", "normal").setFontSize(10);
         doc.text(wrapped, DIMENSIONS.margin + 4, noteY + 16);
-
         nextY = noteY + boxHeight + 6;
       }
 
-      // Generated By (compact box)
+      // Generated by
       const genY = nextY;
       const generatedBy = "The Meaning of Quality - Website";
-      doc.setFont("helvetica", "bold").setFontSize(10);
-
       const boxHeight = 12;
-      const boxWidth = pageW - DIMENSIONS.margin * 2;
       doc.setDrawColor(220);
       doc.roundedRect(
         DIMENSIONS.margin,
         genY,
-        boxWidth,
+        pageW - DIMENSIONS.margin * 2,
         boxHeight,
         2,
         2,
         "S"
       );
-
+      doc.setFont("helvetica", "bold").setFontSize(10);
       doc.text("Generated By:", DIMENSIONS.margin + 4, genY + 8);
       doc.setFont("helvetica", "normal");
       doc.text(generatedBy, DIMENSIONS.margin + 35, genY + 8);
 
-      nextY = genY + boxHeight + 8;
-
-      return nextY;
+      return genY + boxHeight + 8;
     };
 
     // Table header
@@ -249,10 +222,8 @@ export default function CartPage() {
       const { idxW, imgW, nameW, metaW, qtyW } = DIMENSIONS.table;
       doc.setFillColor(245, 247, 250);
       doc.rect(DIMENSIONS.margin, y, pageW - DIMENSIONS.margin * 2, 9, "F");
-
       doc.setFont("helvetica", "bold").setFontSize(10);
       doc.setTextColor(60);
-
       let x = DIMENSIONS.margin + 2;
       doc.text("#", x, y + 6);
       x += idxW;
@@ -263,48 +234,37 @@ export default function CartPage() {
       doc.text("Details", x, y + 6);
       x += metaW;
       doc.text("Qty", x, y + 6);
-
       doc.setTextColor(0, 0, 0);
       return { rowY: y + 11 };
     };
 
     // Footer
-const drawFooter = (pageNum: number, pageCount: number) => {
-  doc.setFontSize(9).setTextColor(100);
-
-  // Left side: Contact message
-  const footerMsg =
-    "For quotation? Forward this PDF to sale@moq.com.sa or WhatsApp us at +966590019826";
-  doc.text(footerMsg, DIMENSIONS.margin, pageH - 6, { align: "left" });
-
-  // Right side: Page numbers
-  doc.text(
-    `Page ${pageNum} of ${pageCount}`,
-    pageW - DIMENSIONS.margin,
-    pageH - 6,
-    { align: "right" }
-  );
-
-  doc.setTextColor(0, 0, 0);
-};
-
+    const drawFooter = (pageNum: number, pageCount: number) => {
+      doc.setFontSize(9).setTextColor(100);
+      const footerMsg =
+        "For quotation? Forward this PDF to sale@moq.com.sa or WhatsApp us at +966590019826";
+      doc.text(footerMsg, DIMENSIONS.margin, pageH - 6, { align: "left" });
+      doc.text(
+        `Page ${pageNum} of ${pageCount}`,
+        pageW - DIMENSIONS.margin,
+        pageH - 6,
+        { align: "right" }
+      );
+      doc.setTextColor(0, 0, 0);
+    };
 
     // Table rows
     const renderRows = async (startIdx: number, startY: number) => {
       const { idxW, imgW, nameW, metaW, qtyW, minRowH } = DIMENSIONS.table;
       let yPos = startY;
 
-      const drawRow = async (
-        rowIndex: number,
-        yRow: number
-      ): Promise<number | -1> => {
+      const drawRow = async (rowIndex: number, yRow: number): Promise<number | -1> => {
         const it = items[rowIndex];
         if (!it) return 0;
-
         const rowH = minRowH;
         let x = DIMENSIONS.margin + 2;
 
-        // Page break check
+        // Page break
         if (yRow + rowH > pageH - DIMENSIONS.bottomMargin) {
           doc.addPage();
           drawHeaderBar(false);
@@ -312,7 +272,7 @@ const drawFooter = (pageNum: number, pageCount: number) => {
           return -1;
         }
 
-        // Row border
+        // Border
         doc.setDrawColor(230).setLineWidth(0.3);
         doc.rect(DIMENSIONS.margin, yRow, pageW - DIMENSIONS.margin * 2, rowH);
 
@@ -325,21 +285,16 @@ const drawFooter = (pageNum: number, pageCount: number) => {
           try {
             const imgData = await toDataURL(it.img);
             if (imgData) {
-              const imgProps = (doc as any).getImageProperties(imgData);
+              const imgProps = (doc as unknown as { getImageProperties: (data: string) => { width: number; height: number } }).getImageProperties(imgData);
               const imgRatio = imgProps.width / imgProps.height;
-
               const maxW = imgW - 4;
               const maxH = rowH - 4;
-
               let drawW = maxW;
               let drawH = maxH;
-
               if (imgRatio > 1) drawH = maxW / imgRatio;
               else drawW = maxH * imgRatio;
-
               const imgX = x + (imgW - drawW) / 2;
               const imgY = yRow + (rowH - drawH) / 2;
-
               doc.addImage(imgData, "PNG", imgX, imgY, drawW, drawH);
             }
           } catch (e) {
@@ -348,7 +303,7 @@ const drawFooter = (pageNum: number, pageCount: number) => {
         }
         x += imgW;
 
-        // Item Name
+        // Item name
         const nameLines = doc.splitTextToSize(it.name || "", nameW - 2);
         doc.text(nameLines, x, yRow + 6);
         x += nameW;
@@ -382,7 +337,7 @@ const drawFooter = (pageNum: number, pageCount: number) => {
 
     // Execution
     drawHeaderBar(true);
-    let y = drawCompanyAndCustomer(DIMENSIONS.headerBarH + 2);
+    const y = drawCompanyAndCustomer(DIMENSIONS.headerBarH + 2);
     const header = drawTableHeader(y);
     await renderRows(0, header.rowY);
 
@@ -395,7 +350,6 @@ const drawFooter = (pageNum: number, pageCount: number) => {
 
     doc.save("inquiry.pdf");
   };
-
 
   return (
     <div className="py-10 sm:py-12">
