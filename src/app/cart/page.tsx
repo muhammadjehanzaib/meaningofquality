@@ -22,7 +22,6 @@ export default function CartPage() {
     const form = formRef.current;
     if (!form) return false;
     if (form.checkValidity()) return true;
-    // Trigger the browser's native validation popups and focus first invalid
     form.reportValidity();
     const firstInvalid = form.querySelector<HTMLElement>(":invalid");
     firstInvalid?.focus();
@@ -41,127 +40,361 @@ export default function CartPage() {
   };
 
   const handleDownloadPDF = async () => {
-  if (!ensureFormValid()) return;
-  const { jsPDF } = await import("jspdf");
+    if (!ensureFormValid()) return;
+    const { jsPDF } = await import("jspdf");
 
-  const toDataURL = async (src?: string): Promise<string | null> => {
-    if (!src) return null;
-    try {
-      const abs = src.startsWith("http")
-        ? src
-        : new URL(src, window.location.origin).href;
-      const res = await fetch(abs);
-      if (!res.ok) return null;
-      const blob = await res.blob();
-      return await new Promise<string>((resolve) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result as string);
-        reader.readAsDataURL(blob);
-      });
-    } catch {
-      return null;
-    }
-  };
+    // Utilities
+    const toDataURL = async (src?: string): Promise<string | null> => {
+      if (!src) return null;
+      try {
+        const abs = src.startsWith("http")
+          ? src
+          : new URL(src, window.location.origin).href;
+        const res = await fetch(abs);
+        if (!res.ok) return null;
+        const blob = await res.blob();
+        return await new Promise<string>((resolve) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result as string);
+          reader.readAsDataURL(blob);
+        });
+      } catch {
+        return null;
+      }
+    };
 
-  const doc = new jsPDF({ unit: "mm", format: "a4" });
-  const pageW = doc.internal.pageSize.getWidth();
-  const pageH = doc.internal.pageSize.getHeight();
+    const COLORS = {
+      primary: { r: 22, g: 163, b: 74 }, // Tailwind green-600
+      gray: (v: number) => ({ r: v, g: v, b: v }),
+    };
 
-  // Header
-  doc.setFillColor(245, 247, 250);
-  doc.rect(0, 0, pageW, 20, "F");
-  doc.setFontSize(14);
-  doc.text("Inquiry", 14, 12);
-  doc.setFontSize(10);
-  const stamp = new Date().toLocaleString();
-  doc.text(stamp, pageW - 14, 12, { align: "right" });
+    const DIMENSIONS = {
+      margin: 12,
+      headerBarH: 22,
+      infoBoxH: 40,
+      bottomMargin: 14,
+      table: {
+        idxW: 8,
+        imgW: 20,
+        nameW: 80,
+        metaW: 60,
+        qtyW: 12,
+        minRowH: 24,
+      },
+    };
 
-  let y = 26;
+    const doc = new jsPDF({ unit: "mm", format: "a4" });
+    const pageW = doc.internal.pageSize.getWidth();
+    const pageH = doc.internal.pageSize.getHeight();
 
-  // Client info block
-  doc.setFontSize(11);
-  doc.text("Client Info", 14, y);
-  y += 5;
-  doc.setFontSize(9);
-  const infoLines: string[] = [];
-  if (info.name) infoLines.push(`Name: ${info.name}`);
-  if (info.company) infoLines.push(`Company: ${info.company}`);
-  if (info.email) infoLines.push(`Email: ${info.email}`);
-  if (info.phone) infoLines.push(`Phone: ${info.phone}`);
-  if (info.note) infoLines.push(`Note: ${info.note}`);
-  if (infoLines.length > 0) {
-    infoLines.forEach((l) => {
-      doc.text(l, 14, y);
-      y += 5;
-    });
-    y += 2;
-  }
+    // Header
+    const drawHeaderBar = (showInquiry: boolean) => {
+      doc.setFillColor(COLORS.primary.r, COLORS.primary.g, COLORS.primary.b);
+      doc.rect(0, 0, pageW, DIMENSIONS.headerBarH, "F");
 
-  // Items title
-  doc.setFontSize(12);
-  doc.text("Items", 14, y);
-  y += 4;
+      if (showInquiry) {
+        doc.setTextColor(255, 255, 255);
 
-  // Item cards
-  for (let idx = 0; idx < items.length; idx++) {
-    const it = items[idx];
-    const imgBox = 20; // box size (square)
-    const pad = 5;
-    const lineH = 5;
-    const cardInnerH = Math.max(imgBox, lineH * 7 + 1);
-    const cardH = cardInnerH + pad * 2;
-    const cardW = pageW - 20;
+        // Left: Logo box + Company name
+        const logoX = DIMENSIONS.margin;
+        const logoY = 6;
+        const logoSize = 8;
 
-    if (y + cardH > pageH - 14) {
-      doc.addPage();
-      y = 14;
-    }
+        // Draw logo box
+        doc.setFillColor(255, 255, 255); // white background
+        doc.roundedRect(logoX, logoY , logoSize + 4, logoSize + 4, 2, 2, "F");
+        doc.setTextColor(COLORS.primary.r, COLORS.primary.g, COLORS.primary.b);
+        doc.setFont("helvetica", "bold").setFontSize(9);
+        doc.text("MOQ", logoX + 2.5, logoY + 6, { baseline: "middle" });
 
-    doc.setDrawColor(230, 230, 235);
-    doc.roundedRect(10, y, cardW, cardH, 2, 2, "S");
+        // Company name next to logo
+        doc.setTextColor(255, 255, 255);
+        doc.setFont("helvetica", "bold").setFontSize(11);
+        doc.text("Meaning of Quality", logoX + 15, 14);
 
-    const dataUrl = await toDataURL(it.img);
-    if (dataUrl) {
-      const imgProps = doc.getImageProperties(dataUrl);
-      const ratio = imgProps.width / imgProps.height;
-      let imgW = imgBox;
-      let imgH = imgBox;
+        // Center: Inquiry
+        doc.setFont("helvetica", "bold").setFontSize(18);
+        doc.text("Inquiry", pageW / 2, 14, { align: "center" });
 
-      if (ratio > 1) {
-        imgH = imgBox / ratio;
-      } else {
-        imgW = imgBox * ratio;
+        // Right: Generated Time
+        const generatedAt = new Date().toLocaleString();
+        doc.setFont("helvetica", "normal").setFontSize(10);
+        doc.text(generatedAt, pageW - DIMENSIONS.margin, 14, { align: "right" });
+
+        doc.setTextColor(0, 0, 0);
       }
 
-      const offsetX = 10 + pad + (imgBox - imgW) / 2;
-      const offsetY = y + pad + (imgBox - imgH) / 2;
+      // Divider line under header
+      doc.setDrawColor(200);
+      doc.setLineWidth(0.2);
+      doc.line(0, DIMENSIONS.headerBarH, pageW, DIMENSIONS.headerBarH);
+    };
+    // Company + Customer Info
+    const drawCompanyAndCustomer = (yStart: number) => {
+      const colW = (pageW - DIMENSIONS.margin * 2 - 6) / 2;
 
-      doc.addImage(dataUrl, imgProps.fileType as "JPEG" | "PNG", offsetX, offsetY, imgW, imgH);
-    }
+      // Company Info
+      doc.setDrawColor(220).setLineWidth(0.4);
+      doc.roundedRect(
+        DIMENSIONS.margin,
+        yStart,
+        colW,
+        DIMENSIONS.infoBoxH,
+        2,
+        2,
+        "S"
+      );
+      doc.setFontSize(11).setFont("helvetica", "bold");
+      doc.text("Company Info", DIMENSIONS.margin + 4, yStart + 6);
 
-    const tx = 10 + pad + imgBox + 6;
-    let ty = y + pad + 5;
-    doc.setFontSize(11);
-    doc.text(`${idx + 1}. ${it.name}`, tx, ty);
-    ty += lineH;
+      doc.setFont("helvetica", "normal").setFontSize(10);
+      let y = yStart + 12;
+      const companyLines = [
+        "Trading Establishment",
+        "123 Street, Riyadh",
+        "Phone: 0590019826",
+        "Email: sale@moq.com.sa",
+      ];
+      companyLines.forEach((l) => {
+        doc.text(l, DIMENSIONS.margin + 4, y);
+        y += 5;
+      });
 
-    doc.setFontSize(9);
-    const meta: string[] = [];
-    if (it.productCode) meta.push(`Code: ${it.productCode}`);
-    if (it.volume) meta.push(`Volume: ${it.volume}`);
-    if (it.type) meta.push(`Type: ${it.type}`);
-    if (it.stockCode) meta.push(`Stock: ${it.stockCode}`);
-    if (meta.length > 0) {
-      doc.text(meta.join("  |  "), tx, ty);
-      ty += lineH;
-    }
-    doc.text(`Qty: ${it.qty}`, tx, ty);
+      // Customer Info
+      const rightX = DIMENSIONS.margin + colW + 6;
+      doc.roundedRect(rightX, yStart, colW, DIMENSIONS.infoBoxH, 2, 2, "S");
+      doc.setFont("helvetica", "bold").setFontSize(11);
+      doc.text("Customer Info", rightX + 4, yStart + 6);
 
-    y += cardH + 4;
-  }
+      doc.setFont("helvetica", "normal").setFontSize(10);
+      let cy = yStart + 12;
+      if (info.name) {
+        doc.text(`Name: ${info.name}`, rightX + 4, cy);
+        cy += 5;
+      }
+      if (info.company) {
+        doc.text(`Company: ${info.company}`, rightX + 4, cy);
+        cy += 5;
+      }
+      if (info.email) {
+        doc.text(`Email: ${info.email}`, rightX + 4, cy);
+        cy += 5;
+      }
+      if (info.phone) {
+        doc.text(`Phone: ${info.phone}`, rightX + 4, cy);
+        cy += 5;
+      }
 
-  doc.save("inquiry.pdf");
+      let nextY = Math.max(y, cy);
+
+      // Customer Note
+      if (info.note) {
+        const noteY = nextY + 10;
+        doc.setFont("helvetica", "bold").setFontSize(11);
+        doc.setDrawColor(220);
+
+        const maxWidth = pageW - DIMENSIONS.margin * 2 - 10;
+        const wrapped = doc.splitTextToSize(info.note, maxWidth);
+
+        const lineHeight = 6;
+        const contentHeight = wrapped.length * lineHeight;
+        const boxHeight = contentHeight + 14;
+
+        doc.roundedRect(
+          DIMENSIONS.margin,
+          noteY,
+          pageW - DIMENSIONS.margin * 2,
+          boxHeight,
+          2,
+          2,
+          "S"
+        );
+        doc.text("Customer Note:", DIMENSIONS.margin + 4, noteY + 8);
+
+        doc.setFont("helvetica", "normal").setFontSize(10);
+        doc.text(wrapped, DIMENSIONS.margin + 4, noteY + 16);
+
+        nextY = noteY + boxHeight + 6;
+      }
+
+      // Generated By (compact box)
+      const genY = nextY;
+      const generatedBy = "The Meaning of Quality - Website";
+      doc.setFont("helvetica", "bold").setFontSize(10);
+
+      const boxHeight = 12;
+      const boxWidth = pageW - DIMENSIONS.margin * 2;
+      doc.setDrawColor(220);
+      doc.roundedRect(
+        DIMENSIONS.margin,
+        genY,
+        boxWidth,
+        boxHeight,
+        2,
+        2,
+        "S"
+      );
+
+      doc.text("Generated By:", DIMENSIONS.margin + 4, genY + 8);
+      doc.setFont("helvetica", "normal");
+      doc.text(generatedBy, DIMENSIONS.margin + 35, genY + 8);
+
+      nextY = genY + boxHeight + 8;
+
+      return nextY;
+    };
+
+    // Table header
+    const drawTableHeader = (y: number) => {
+      const { idxW, imgW, nameW, metaW, qtyW } = DIMENSIONS.table;
+      doc.setFillColor(245, 247, 250);
+      doc.rect(DIMENSIONS.margin, y, pageW - DIMENSIONS.margin * 2, 9, "F");
+
+      doc.setFont("helvetica", "bold").setFontSize(10);
+      doc.setTextColor(60);
+
+      let x = DIMENSIONS.margin + 2;
+      doc.text("#", x, y + 6);
+      x += idxW;
+      doc.text("Image", x, y + 6);
+      x += imgW;
+      doc.text("Item", x, y + 6);
+      x += nameW;
+      doc.text("Details", x, y + 6);
+      x += metaW;
+      doc.text("Qty", x, y + 6);
+
+      doc.setTextColor(0, 0, 0);
+      return { rowY: y + 11 };
+    };
+
+    // Footer
+const drawFooter = (pageNum: number, pageCount: number) => {
+  doc.setFontSize(9).setTextColor(100);
+
+  // Left side: Contact message
+  const footerMsg =
+    "For quotation? Forward this PDF to sale@moq.com.sa or WhatsApp us at +966590019826";
+  doc.text(footerMsg, DIMENSIONS.margin, pageH - 6, { align: "left" });
+
+  // Right side: Page numbers
+  doc.text(
+    `Page ${pageNum} of ${pageCount}`,
+    pageW - DIMENSIONS.margin,
+    pageH - 6,
+    { align: "right" }
+  );
+
+  doc.setTextColor(0, 0, 0);
 };
+
+
+    // Table rows
+    const renderRows = async (startIdx: number, startY: number) => {
+      const { idxW, imgW, nameW, metaW, qtyW, minRowH } = DIMENSIONS.table;
+      let yPos = startY;
+
+      const drawRow = async (
+        rowIndex: number,
+        yRow: number
+      ): Promise<number | -1> => {
+        const it = items[rowIndex];
+        if (!it) return 0;
+
+        const rowH = minRowH;
+        let x = DIMENSIONS.margin + 2;
+
+        // Page break check
+        if (yRow + rowH > pageH - DIMENSIONS.bottomMargin) {
+          doc.addPage();
+          drawHeaderBar(false);
+          drawTableHeader(DIMENSIONS.headerBarH + 2);
+          return -1;
+        }
+
+        // Row border
+        doc.setDrawColor(230).setLineWidth(0.3);
+        doc.rect(DIMENSIONS.margin, yRow, pageW - DIMENSIONS.margin * 2, rowH);
+
+        // Index
+        doc.text(String(rowIndex + 1), x, yRow + 7);
+        x += idxW;
+
+        // Image
+        if (it.img) {
+          try {
+            const imgData = await toDataURL(it.img);
+            if (imgData) {
+              const imgProps = (doc as any).getImageProperties(imgData);
+              const imgRatio = imgProps.width / imgProps.height;
+
+              const maxW = imgW - 4;
+              const maxH = rowH - 4;
+
+              let drawW = maxW;
+              let drawH = maxH;
+
+              if (imgRatio > 1) drawH = maxW / imgRatio;
+              else drawW = maxH * imgRatio;
+
+              const imgX = x + (imgW - drawW) / 2;
+              const imgY = yRow + (rowH - drawH) / 2;
+
+              doc.addImage(imgData, "PNG", imgX, imgY, drawW, drawH);
+            }
+          } catch (e) {
+            console.error("Image load failed:", e);
+          }
+        }
+        x += imgW;
+
+        // Item Name
+        const nameLines = doc.splitTextToSize(it.name || "", nameW - 2);
+        doc.text(nameLines, x, yRow + 6);
+        x += nameW;
+
+        // Details
+        const details: string[] = [];
+        if (it.productCode) details.push(`Code: ${it.productCode}`);
+        if (it.volume) details.push(`Vol: ${it.volume}`);
+        if (it.type) details.push(`Type: ${it.type}`);
+        if (it.stockCode) details.push(`Stock: ${it.stockCode}`);
+        const detailLines = doc.splitTextToSize(details.join(" | "), metaW - 2);
+        doc.text(detailLines, x, yRow + 6);
+        x += metaW;
+
+        // Qty
+        doc.text(String(it.qty), x + 2, yRow + 7);
+
+        return rowH;
+      };
+
+      for (let i = startIdx; i < items.length; i++) {
+        const rowH = await drawRow(i, yPos);
+        if (rowH === -1) {
+          yPos = DIMENSIONS.headerBarH + 2 + 11;
+          i--;
+          continue;
+        }
+        yPos += rowH;
+      }
+    };
+
+    // Execution
+    drawHeaderBar(true);
+    let y = drawCompanyAndCustomer(DIMENSIONS.headerBarH + 2);
+    const header = drawTableHeader(y);
+    await renderRows(0, header.rowY);
+
+    // Page numbers
+    const pages = doc.getNumberOfPages();
+    for (let p = 1; p <= pages; p++) {
+      doc.setPage(p);
+      drawFooter(p, pages);
+    }
+
+    doc.save("inquiry.pdf");
+  };
 
 
   return (
@@ -222,9 +455,8 @@ export default function CartPage() {
             {/* Items list */}
             <div className="lg:col-span-2 space-y-4">
               {items.map((it) => {
-                const key = `${it.id}|${it.productCode ?? ""}|${it.volume ?? ""}|${
-                  it.stockCode ?? ""
-                }|${it.type ?? ""}`;
+                const key = `${it.id}|${it.productCode ?? ""}|${it.volume ?? ""}|${it.stockCode ?? ""
+                  }|${it.type ?? ""}`;
                 return (
                   <div
                     key={key}
