@@ -246,11 +246,18 @@ export default function CartPage() {
       const emailMsg = "For quotation? Forward this PDF to sale@moq.com.sa or ";
       doc.text(emailMsg, DIMENSIONS.margin, pageH - 6, { align: "left" });
 
-      // WhatsApp clickable link
+      // WhatsApp clickable link (green only)
       const whatsAppText = "WhatsApp us at +966590019826";
-      doc.textWithLink(whatsAppText, DIMENSIONS.margin + doc.getTextWidth(emailMsg), pageH - 6, {
-        url: "https://wa.me/966590019826"
-      });
+      doc.setTextColor(37, 211, 102); // WhatsApp green
+      doc.textWithLink(
+        whatsAppText,
+        DIMENSIONS.margin + doc.getTextWidth(emailMsg),
+        pageH - 6,
+        { url: "https://wa.me/966590019826" }
+      );
+
+      // Reset color back for other text
+      doc.setTextColor(100);
 
       // Right side: Page numbering
       doc.text(
@@ -260,6 +267,7 @@ export default function CartPage() {
         { align: "right" }
       );
 
+      // final reset to black (optional, for anything else later)
       doc.setTextColor(0, 0, 0);
     };
 
