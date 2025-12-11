@@ -20,6 +20,14 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Admin Panel
+
+This project includes a **local admin panel** for managing products and categories without manually editing files.
+
+**Access**: `http://localhost:3000/admin` (development mode only)
+
+See [ADMIN_PANEL.md](./ADMIN_PANEL.md) for detailed documentation.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

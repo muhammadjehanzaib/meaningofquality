@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import Container from "@/components/ui/Container";
 import Carousel from "@/components/ui/Carousel";
 import SimpleImageSlider from "@/components/ui/SimpleImageSlider";
@@ -48,7 +47,7 @@ export default function Home() {
           <h2 className="text-2xl sm:text-3xl font-bold tracking-tight uppercase">{t("newProducts", lang)}</h2>
           <Carousel className="mt-6" autoPlay pauseOnHover intervalMs={3000} stepItems={1}>
             {newProducts.map((p) => (
-              <ProductTile key={p.id} title={p.name} imgSrc={productImageByItemId[p.id]} isNew href={`/p/${p.id}`} productId={p.id} showCtas />
+              <ProductTile key={p.id} title={p.name} imgSrc={productImageByItemId[p.id]} isNew href={`/p/${p.id}`} productId={p.id} showCtas priceRange={p.priceRange} />
             ))}
           </Carousel>
         </Container>
@@ -60,7 +59,7 @@ export default function Home() {
           <h2 className="text-2xl sm:text-3xl font-bold tracking-tight uppercase">{t("mostVisitedProducts", lang)}</h2>
           <Carousel className="mt-6" autoPlay pauseOnHover intervalMs={3200} stepItems={1}>
             {mostVisited.map((p) => (
-              <ProductTile key={p.id} title={p.name} imgSrc={productImageByItemId[p.id]} href={`/p/${p.id}`} productId={p.id} showCtas />
+              <ProductTile key={p.id} title={p.name} imgSrc={productImageByItemId[p.id]} href={`/p/${p.id}`} productId={p.id} showCtas priceRange={p.priceRange} />
             ))}
           </Carousel>
         </Container>

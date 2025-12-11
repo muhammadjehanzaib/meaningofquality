@@ -143,7 +143,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
               <div className="mt-8 rounded-2xl border border-foreground/10 bg-background p-5">
                 <h2 className="text-base font-semibold text-foreground"><LKey k="properties" /></h2>
                 <ul className="mt-2 list-disc space-y-2 pl-5 text-sm text-muted-foreground">
-{detail.properties.map((p, i) => (
+                  {detail.properties.map((p, i) => (
                     <li key={i}><L value={p} /></li>
                   ))}
                 </ul>
@@ -155,7 +155,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
               <div className="mt-5 rounded-2xl border border-foreground/10 bg-background p-5">
                 <h2 className="text-base font-semibold text-foreground"><LKey k="applicationAreas" /></h2>
                 <ul className="mt-2 list-disc space-y-2 pl-5 text-sm text-muted-foreground">
-{detail.applications.map((p, i) => (
+                  {detail.applications.map((p, i) => (
                     <li key={i}><L value={p} /></li>
                   ))}
                 </ul>
@@ -169,7 +169,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
                 <div className="mt-3 overflow-x-auto">
                   <table className="w-full text-left text-xs">
                     <thead className="text-muted-foreground">
-                        <tr className="border-b border-foreground/10">
+                      <tr className="border-b border-foreground/10">
                         <th className="py-2 pr-3"><LKey k="stockCode" /></th>
                         <th className="py-2 pr-3"><LKey k="productCode" /></th>
                         <th className="py-2 pr-3"><LKey k="type" /></th>
@@ -201,7 +201,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
             <h2 className="text-xl font-semibold tracking-tight"><LKey k="relatedIn" /> {cat && <L value={cat.title} />}</h2>
             <Carousel className="mt-6">
               {related.slice(0, 8).map((r) => (
-                <ProductTile key={r.id} title={r.name} imgSrc={productImageByItemId[r.id]} href={`/p/${r.id}`} />
+                <ProductTile key={r.id} title={r.name} imgSrc={productImageByItemId[r.id]} href={`/p/${r.id}`} priceRange={r.priceRange} />
               ))}
             </Carousel>
           </section>

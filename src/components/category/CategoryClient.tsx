@@ -64,7 +64,7 @@ export default function CategoryClient({ items, subcategories }: { items: Item[]
       {filtered.length > 0 ? (
         <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {filtered.map((p) => (
-            <ProductTile key={p.id} title={p.name} imgSrc={productImageByItemId[p.id]} href={`/p/${p.id}`} productId={p.id} showCtas />
+            <ProductTile key={p.id} title={p.name} imgSrc={productImageByItemId[p.id]} href={`/p/${p.id}`} productId={p.id} showCtas priceRange={p.priceRange} />
           ))}
         </div>
       ) : (

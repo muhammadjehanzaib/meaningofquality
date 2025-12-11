@@ -219,7 +219,7 @@ export default function CartPage() {
 
     // Table header
     const drawTableHeader = (y: number) => {
-      const { idxW, imgW, nameW, metaW, qtyW } = DIMENSIONS.table;
+      const { idxW, imgW, nameW, metaW } = DIMENSIONS.table;
       doc.setFillColor(245, 247, 250);
       doc.rect(DIMENSIONS.margin, y, pageW - DIMENSIONS.margin * 2, 9, "F");
       doc.setFont("helvetica", "bold").setFontSize(10);
@@ -274,7 +274,7 @@ export default function CartPage() {
 
     // Table rows
     const renderRows = async (startIdx: number, startY: number) => {
-      const { idxW, imgW, nameW, metaW, qtyW, minRowH } = DIMENSIONS.table;
+      const { idxW, imgW, nameW, metaW, minRowH } = DIMENSIONS.table;
       let yPos = startY;
 
       const drawRow = async (rowIndex: number, yRow: number): Promise<number | -1> => {

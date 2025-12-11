@@ -33,7 +33,7 @@ export const labels = {
   noProductsInCategory: { en: "No products found in this category yet.", ar: "لا توجد منتجات في هذه الفئة بعد." },
   cart: { en: "Cart", ar: "الاستفسار" },
   cartTitle: { en: "Your Inquiry", ar: "استفسارك" },
-  addToCart: { en: "Add to Inquiry", ar: "أضف إلى الاستفسار" },
+  addToCart: { en: "Request Quote", ar: "طلب عرض سعر " },
   quantity: { en: "Quantity", ar: "الكمية" },
   remove: { en: "Remove", ar: "إزالة" },
   clearCart: { en: "Clear cart", ar: "مسح الاستفسار" },
@@ -47,10 +47,17 @@ export const labels = {
   note: { en: "Note", ar: "ملاحظة" },
   sendWhatsAppInquiry: { en: "Send WhatsApp Inquiry", ar: "إرسال استفسار عبر واتساب" },
   downloadPDF: { en: "Download PDF", ar: "تحميل PDF" },
-  goToCart: { en: "Go to Inquiry", ar: "اذهب إلى الاستفسار" },
+  goToCart: { en: "Submit Quotation Request", ar: "إرسال طلب عرض أسعار" },
   addedToCart: { en: "Added to Inquiry", ar: "تمت الإضافة إلى الاستفسار" },
   viewDetails: { en: "View details", ar: "عرض التفاصيل" },
   continueShopping: { en: "Keep Exploring", ar: "متابعة التصفح" },
+  priceRange: { en: "Price Range", ar: "نطاق السعر" },
+  currency: { en: "SAR", ar: "ريال" },
+  basedOnQuantity: { 
+  en: "Based on order quantity", 
+  ar: "حسب كمية المطلوبة" 
+},
+
 } as const;
 
 
