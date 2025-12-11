@@ -75,7 +75,7 @@ export default function ProductTile({
   {/* )} */}
 
   {/* Product Name */}
-  <div className="text-center text-sm sm:text-base font-semibold text-gray-900 mt-1 line-clamp-2 group-hover:text-primary">
+  <div className="text-center text-sm sm:text-base font-semibold text-gray-500 mt-1 line-clamp-2 group-hover:text-primary">
     {href ? <Link href={href} className="hover:underline">{name}</Link> : name}
   </div>
 
