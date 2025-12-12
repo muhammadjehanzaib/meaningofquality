@@ -7,6 +7,12 @@ import { LText, pickAny } from "@/data/i18n";
 import { t } from "@/data/labels";
 import { useCart } from "@/contexts/CartContext";
 
+// Convert English digits → Arabic digits when needed
+function toArabicNumber(num: number | string) {
+  const map = ["٠","١","٢","٣","٤","٥","٦","٧","٨","٩"];
+  return num.toString().replace(/[0-9]/g, (d) => map[parseInt(d)]);
+}
+
 interface ProductTileProps {
   title: LText;
   imgSrc: string | undefined;
@@ -16,7 +22,7 @@ interface ProductTileProps {
   productId?: string;
   showCtas?: boolean;
   priceRange?: { min: number; max: number };
-  brand?: string; // optional brand prop
+  brand?: string;
 }
 
 export default function ProductTile({
@@ -28,14 +34,14 @@ export default function ProductTile({
   productId,
   showCtas = false,
   priceRange,
-  brand,
+  brand = "Akfix",
 }: ProductTileProps) {
+  
   const lang = useLang();
   const { add } = useCart();
   const name = pickAny(title, lang);
 
-  // Use brand variable to avoid linting warning
-  // console.log(brand);
+  const formatNum = (n: number) => (lang === "ar" ? toArabicNumber(n) : n);
 
   const onAdd = () => {
     if (!productId) return;
@@ -43,53 +49,57 @@ export default function ProductTile({
   };
 
   return (
-<div className={`group relative rounded-xl border border-foreground/10 bg-background shadow-sm hover:shadow-lg transition-all p-3 h-full flex flex-col ${className}`}>
-  
-  {/* Product Image */}
-  <div className="relative h-56 sm:h-64 lg:h-72 w-full grid place-items-center bg-muted rounded-lg overflow-hidden">
-    {isNew && (
-      <span className="absolute left-2 top-2 z-20 inline-flex items-center rounded-full bg-red-600/90 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white shadow-md ring-1 ring-foreground/20 pointer-events-none">
-        {t("newProductBadge", lang)}
-      </span>
-    )}
-    {href && <Link href={href} className="absolute inset-0" aria-label={name} />}
-    {imgSrc ? (
-      <Image
-        src={imgSrc}
-        alt={name}
-        fill
-        sizes="(max-width:640px) 80vw, (max-width:1024px) 50vw, 33vw"
-        className="object-contain object-center transition-transform duration-200 group-hover:scale-105 z-10"
-      />
-    ) : (
-      <div className="text-xs text-muted-foreground">Image</div>
-    )}
-  </div>
-
-  {/* Brand */}
-  {/* {brand && ( */}
-    <div className="text-center text-xs sm:text-sm font-semibold text-gray-500 uppercase tracking-wider mt-3">
-      {/* {brand} */}
-      AKFIX
-    </div>
-  {/* )} */}
-
-  {/* Product Name */}
-  <div className="text-center text-sm sm:text-base font-semibold text-gray-500 mt-1 line-clamp-2 group-hover:text-primary">
-    {href ? <Link href={href} className="hover:underline">{name}</Link> : name}
-  </div>
-
-  {/* Price Range */}
-  {priceRange && (
-    <div className="mt-2 text-center">
-      <div className="text-sm font-semibold text-primary">
-        {t("priceRange", lang)}: {t("currency", lang)} {priceRange.min} – {priceRange.max}
+    <div
+      className={`group relative rounded-xl border border-gray-200 bg-white shadow-sm hover:shadow-lg transition-all p-3 flex flex-col h-full ${className}`}
+      dir={lang === "ar" ? "rtl" : "ltr"}
+    >
+      {/* Product Image */}
+      <div className="relative h-56 sm:h-64 w-full grid place-items-center bg-muted rounded-lg overflow-hidden">
+        {isNew && (
+          <span className="absolute left-2 top-2 z-20 px-2 py-0.5 text-[10px] font-bold rounded-full bg-red-600 text-white shadow-md">
+            {t("newProductBadge", lang)}
+          </span>
+        )}
+        {href && <Link href={href} className="absolute inset-0" aria-label={name} />}
+        {imgSrc ? (
+          <Image
+            src={imgSrc}
+            alt={name}
+            fill
+            sizes="(max-width:640px) 80vw, (max-width:1024px) 50vw, 33vw"
+            className="object-contain object-center transition-transform duration-200 group-hover:scale-105"
+          />
+        ) : (
+          <div className="text-xs text-muted-foreground">Image</div>
+        )}
       </div>
-      <div className="text-xs text-muted-foreground mt-1">
-        ({t("basedOnQuantity", lang)})
+
+      {/* Brand */}
+      <div className="text-center text-xs sm:text-sm font-semibold text-gray-500 uppercase tracking-widest mt-3">
+        {brand}
       </div>
-    </div>
-  )}
+
+      {/* Product Name */}
+      <div className="text-center text-sm sm:text-base font-medium mt-1 text-gray-700 line-clamp-2 group-hover:text-primary transition-colors">
+        {href ? <Link href={href}>{name}</Link> : name}
+      </div>
+
+      {/* Price Range */}
+      {priceRange && (
+        <div className="mt-3 text-center">
+          <div className="text-sm font-semibold text-primary">
+            {t("priceRange", lang)}:
+            {" "}
+            {t("currency", lang)}
+            {" "}
+            {formatNum(priceRange.min)} – {formatNum(priceRange.max)}
+          </div>
+          <div className="text-xs text-muted-foreground mt-1">
+            ({t("basedOnQuantity", lang)})
+          </div>
+        </div>
+      )}
+
 
   {/* Spacer to push buttons to bottom */}
   <div className="flex-1"></div>
@@ -121,3 +131,7 @@ export default function ProductTile({
 
   );
 }
+
+
+
+

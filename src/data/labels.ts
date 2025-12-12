@@ -31,13 +31,13 @@ export const labels = {
   relatedIn: { en: "Related in", ar: "منتجات ذات صلة في" },
   newProductBadge: { en: "New Product", ar: "منتج جديد" },
   noProductsInCategory: { en: "No products found in this category yet.", ar: "لا توجد منتجات في هذه الفئة بعد." },
-  cart: { en: "Cart", ar: "الاستفسار" },
+  cart: { en: "Inquiry", ar: "الاستفسار" },
   cartTitle: { en: "Your Inquiry", ar: "استفسارك" },
-  addToCart: { en: "Request Quote", ar: "طلب عرض سعر " },
+  addToCart: { en: "Request Quote", ar: "طلب عرض سعر" },
   quantity: { en: "Quantity", ar: "الكمية" },
   remove: { en: "Remove", ar: "إزالة" },
-  clearCart: { en: "Clear cart", ar: "مسح الاستفسار" },
-  emptyCart: { en: "Your cart is empty.", ar: "استفسارك فارغ." },
+  clearCart: { en: "Clear Quote", ar: "مسح العرض" },
+  emptyCart: { en: "Your Inquiry is empty.", ar: "استفسارك فارغ." },
   items: { en: "Items", ar: "العناصر" },
   yourInfo: { en: "Your Info", ar: "معلوماتك" },
   name: { en: "Name", ar: "الاسم" },
@@ -50,13 +50,14 @@ export const labels = {
   goToCart: { en: "Submit Quotation Request", ar: "إرسال طلب عرض أسعار" },
   addedToCart: { en: "Added to Inquiry", ar: "تمت الإضافة إلى الاستفسار" },
   viewDetails: { en: "View details", ar: "عرض التفاصيل" },
-  continueShopping: { en: "Keep Exploring", ar: "متابعة التصفح" },
+  continueShopping: { en: "Add To Quote", ar: "أضف للعرض" },
   priceRange: { en: "Price Range", ar: "نطاق السعر" },
   currency: { en: "SAR", ar: "ريال" },
-  basedOnQuantity: { 
+basedOnQuantity: { 
   en: "Based on order quantity", 
-  ar: "حسب كمية المطلوبة" 
+  ar: "حسب الكمية المطلوبة"
 },
+
 
 } as const;
 
