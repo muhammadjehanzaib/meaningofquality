@@ -103,11 +103,9 @@ export default function ProductTile({
 
   {/* Spacer to push buttons to bottom */}
   <div className="flex-1"></div>
-
-{/* Buttons fixed at bottom */}
+  
 {showCtas && (
-  <div className="mt-3 flex gap-2">
-    {/* View Details */}
+  <div className="mt-3 flex flex-col sm:flex-row gap-2">
     <Link
       href={href ?? "#"}
       className="flex-1 text-center py-2 px-3 rounded-lg border border-gray-300 bg-white text-gray-700 font-medium text-sm hover:bg-gray-100 transition-shadow shadow-sm hover:shadow-md whitespace-nowrap"
@@ -115,17 +113,17 @@ export default function ProductTile({
       {t("viewDetails", lang)}
     </Link>
 
-    {/* Request Quote / Add to Inquiry */}
     <button
       type="button"
       onClick={onAdd}
       disabled={!productId}
-      className="flex-1 text-center py-2 px-2  rounded-lg bg-primary text-white font-medium text-sm hover:brightness-110 disabled:opacity-50 transition-shadow shadow-sm hover:shadow-md whitespace-nowrap"
+      className="flex-1 text-center py-2 px-2 rounded-lg bg-primary text-white font-medium text-sm hover:brightness-110 disabled:opacity-50 transition-shadow shadow-sm hover:shadow-md whitespace-nowrap"
     >
       {t("addToCart", lang)}
     </button>
   </div>
 )}
+
 
 </div>
 
