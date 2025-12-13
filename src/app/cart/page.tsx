@@ -748,9 +748,330 @@ export default function CartPage() {
     const { jsPDF } = await import("jspdf").then((mod) => mod);
     if (typeof window === "undefined") return;
 
-    // ... (your existing PDF generation logic remains unchanged) ...
-    // You can keep the entire PDF logic from your previous code
+    // Util: Image to DataURL
+    const toDataURL = async (src?: string): Promise<string | null> => {
+      if (!src) return null;
+      try {
+        const abs = src.startsWith("http")
+          ? src
+          : new URL(src, window.location.origin).href;
+        const res = await fetch(abs);
+        if (!res.ok) return null;
+        const blob = await res.blob();
+        return await new Promise<string>((resolve) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result as string);
+          reader.readAsDataURL(blob);
+        });
+      } catch {
+        return null;
+      }
+    };
+
+    // Colors + Layout
+    const COLORS = {
+      primary: { r: 22, g: 163, b: 74 },
+      gray: (v: number) => ({ r: v, g: v, b: v }),
+    };
+
+    const DIMENSIONS = {
+      margin: 12,
+      headerBarH: 22,
+      infoBoxH: 40,
+      bottomMargin: 14,
+      table: { idxW: 8, imgW: 20, nameW: 80, metaW: 60, qtyW: 12, minRowH: 24 },
+    };
+
+    const doc = new jsPDF({ unit: "mm", format: "a4" });
+    const pageW = doc.internal.pageSize.getWidth();
+    const pageH = doc.internal.pageSize.getHeight();
+
+    // Header
+    const drawHeaderBar = (showInquiry: boolean) => {
+      doc.setFillColor(COLORS.primary.r, COLORS.primary.g, COLORS.primary.b);
+      doc.rect(0, 0, pageW, DIMENSIONS.headerBarH, "F");
+
+      if (showInquiry) {
+        doc.setTextColor(255, 255, 255);
+
+        // Logo + Text
+        const logoX = DIMENSIONS.margin;
+        const logoY = 6;
+        const logoSize = 8;
+        doc.setFillColor(255, 255, 255);
+        doc.roundedRect(logoX, logoY, logoSize + 4, logoSize + 4, 2, 2, "F");
+        doc.setTextColor(COLORS.primary.r, COLORS.primary.g, COLORS.primary.b);
+        doc.setFont("helvetica", "bold").setFontSize(9);
+        doc.text("MOQ", logoX + 2.5, logoY + 6, { baseline: "middle" });
+
+        // Company name
+        doc.setTextColor(255, 255, 255);
+        doc.setFont("helvetica", "bold").setFontSize(11);
+        doc.text("Meaning of Quality", logoX + 15, 14);
+
+        // Center Inquiry
+        doc.setFont("helvetica", "bold").setFontSize(18);
+        doc.text("Inquiry", pageW / 2, 14, { align: "center" });
+
+        // Date right
+        const generatedAt = new Date().toLocaleString();
+        doc.setFont("helvetica", "normal").setFontSize(10);
+        doc.text(generatedAt, pageW - DIMENSIONS.margin, 14, { align: "right" });
+        doc.setTextColor(0, 0, 0);
+      }
+
+      // Divider
+      doc.setDrawColor(200);
+      doc.setLineWidth(0.2);
+      doc.line(0, DIMENSIONS.headerBarH, pageW, DIMENSIONS.headerBarH);
+    };
+
+    // Company + Customer Info
+    const drawCompanyAndCustomer = (yStart: number) => {
+      const colW = (pageW - DIMENSIONS.margin * 2 - 6) / 2;
+
+      // Company box
+      doc.setDrawColor(220).setLineWidth(0.4);
+      doc.roundedRect(DIMENSIONS.margin, yStart, colW, DIMENSIONS.infoBoxH, 2, 2, "S");
+      doc.setFontSize(11).setFont("helvetica", "bold");
+      doc.text("Company Info", DIMENSIONS.margin + 4, yStart + 6);
+      doc.setFont("helvetica", "normal").setFontSize(10);
+      let y = yStart + 12;
+      const companyLines = [
+        "Trading Establishment",
+        "123 Street, Riyadh",
+        "Phone: 0590019826",
+        "Email: sale@moq.com.sa",
+      ];
+      companyLines.forEach((l) => {
+        doc.text(l, DIMENSIONS.margin + 4, y);
+        y += 5;
+      });
+
+      // Customer box
+      const rightX = DIMENSIONS.margin + colW + 6;
+      doc.roundedRect(rightX, yStart, colW, DIMENSIONS.infoBoxH, 2, 2, "S");
+      doc.setFont("helvetica", "bold").setFontSize(11);
+      doc.text("Customer Info", rightX + 4, yStart + 6);
+      doc.setFont("helvetica", "normal").setFontSize(10);
+      let cy = yStart + 12;
+      if (info.name) {
+        doc.text(`Name: ${info.name}`, rightX + 4, cy);
+        cy += 5;
+      }
+      if (info.company) {
+        doc.text(`Company: ${info.company}`, rightX + 4, cy);
+        cy += 5;
+      }
+      if (info.email) {
+        doc.text(`Email: ${info.email}`, rightX + 4, cy);
+        cy += 5;
+      }
+      if (info.phone) {
+        doc.text(`Phone: ${info.phone}`, rightX + 4, cy);
+        cy += 5;
+      }
+
+      let nextY = Math.max(y, cy);
+
+      // Note
+      if (info.note) {
+        const noteY = nextY + 10;
+        doc.setFont("helvetica", "bold").setFontSize(11);
+        const maxWidth = pageW - DIMENSIONS.margin * 2 - 10;
+        const wrapped = doc.splitTextToSize(info.note, maxWidth);
+        const lineHeight = 6;
+        const boxHeight = wrapped.length * lineHeight + 14;
+        doc.roundedRect(
+          DIMENSIONS.margin,
+          noteY,
+          pageW - DIMENSIONS.margin * 2,
+          boxHeight,
+          2,
+          2,
+          "S"
+        );
+        doc.text("Customer Note:", DIMENSIONS.margin + 4, noteY + 8);
+        doc.setFont("helvetica", "normal").setFontSize(10);
+        doc.text(wrapped, DIMENSIONS.margin + 4, noteY + 16);
+        nextY = noteY + boxHeight + 6;
+      }
+
+      // Generated by
+      const genY = nextY;
+      const generatedBy = "The Meaning of Quality - Website";
+      const boxHeight = 12;
+      doc.setDrawColor(220);
+      doc.roundedRect(
+        DIMENSIONS.margin,
+        genY,
+        pageW - DIMENSIONS.margin * 2,
+        boxHeight,
+        2,
+        2,
+        "S"
+      );
+      doc.setFont("helvetica", "bold").setFontSize(10);
+      doc.text("Generated By:", DIMENSIONS.margin + 4, genY + 8);
+      doc.setFont("helvetica", "normal");
+      doc.text(generatedBy, DIMENSIONS.margin + 35, genY + 8);
+
+      return genY + boxHeight + 8;
+    };
+
+    // Table header
+    const drawTableHeader = (y: number) => {
+      const { idxW, imgW, nameW, metaW, qtyW } = DIMENSIONS.table;
+      doc.setFillColor(245, 247, 250);
+      doc.rect(DIMENSIONS.margin, y, pageW - DIMENSIONS.margin * 2, 9, "F");
+      doc.setFont("helvetica", "bold").setFontSize(10);
+      doc.setTextColor(60);
+      let x = DIMENSIONS.margin + 2;
+      doc.text("#", x, y + 6);
+      x += idxW;
+      doc.text("Image", x, y + 6);
+      x += imgW;
+      doc.text("Item", x, y + 6);
+      x += nameW;
+      doc.text("Details", x, y + 6);
+      x += metaW;
+      doc.text("Qty", x, y + 6);
+      doc.setTextColor(0, 0, 0);
+      return { rowY: y + 11 };
+    };
+
+    // Footer
+    const drawFooter = (pageNum: number, pageCount: number) => {
+      doc.setFontSize(9).setTextColor(100);
+
+      // Left side: Email text
+      const emailMsg = "For quotation? Forward this PDF to sale@moq.com.sa or ";
+      doc.text(emailMsg, DIMENSIONS.margin, pageH - 6, { align: "left" });
+
+      // WhatsApp clickable link (green only)
+      const whatsAppText = "WhatsApp us at +966590019826";
+      doc.setTextColor(37, 211, 102); // WhatsApp green
+      doc.textWithLink(
+        whatsAppText,
+        DIMENSIONS.margin + doc.getTextWidth(emailMsg),
+        pageH - 6,
+        { url: "https://wa.me/966590019826" }
+      );
+
+      // Reset color back for other text
+      doc.setTextColor(100);
+
+      // Right side: Page numbering
+      doc.text(
+        `Page ${pageNum} of ${pageCount}`,
+        pageW - DIMENSIONS.margin,
+        pageH - 6,
+        { align: "right" }
+      );
+
+      // final reset to black (optional, for anything else later)
+      doc.setTextColor(0, 0, 0);
+    };
+
+
+    // Table rows
+    const renderRows = async (startIdx: number, startY: number) => {
+      const { idxW, imgW, nameW, metaW, qtyW, minRowH } = DIMENSIONS.table;
+      let yPos = startY;
+
+      const drawRow = async (rowIndex: number, yRow: number): Promise<number | -1> => {
+        const it = items[rowIndex];
+        if (!it) return 0;
+        const rowH = minRowH;
+        let x = DIMENSIONS.margin + 2;
+
+        // Page break
+        if (yRow + rowH > pageH - DIMENSIONS.bottomMargin) {
+          doc.addPage();
+          drawHeaderBar(false);
+          drawTableHeader(DIMENSIONS.headerBarH + 2);
+          return -1;
+        }
+
+        // Border
+        doc.setDrawColor(230).setLineWidth(0.3);
+        doc.rect(DIMENSIONS.margin, yRow, pageW - DIMENSIONS.margin * 2, rowH);
+
+        // Index
+        doc.text(String(rowIndex + 1), x, yRow + 7);
+        x += idxW;
+
+        // Image
+        if (it.img) {
+          try {
+            const imgData = await toDataURL(it.img);
+            if (imgData) {
+              const imgProps = (doc as unknown as { getImageProperties: (data: string) => { width: number; height: number } }).getImageProperties(imgData);
+              const imgRatio = imgProps.width / imgProps.height;
+              const maxW = imgW - 4;
+              const maxH = rowH - 4;
+              let drawW = maxW;
+              let drawH = maxH;
+              if (imgRatio > 1) drawH = maxW / imgRatio;
+              else drawW = maxH * imgRatio;
+              const imgX = x + (imgW - drawW) / 2;
+              const imgY = yRow + (rowH - drawH) / 2;
+              doc.addImage(imgData, "PNG", imgX, imgY, drawW, drawH);
+            }
+          } catch (e) {
+            console.error("Image load failed:", e);
+          }
+        }
+        x += imgW;
+
+        // Item name
+        const nameLines = doc.splitTextToSize(it.name || "", nameW - 2);
+        doc.text(nameLines, x, yRow + 6);
+        x += nameW;
+
+        // Details
+        const details: string[] = [];
+        if (it.productCode) details.push(`Code: ${it.productCode}`);
+        if (it.volume) details.push(`Vol: ${it.volume}`);
+        if (it.type) details.push(`Type: ${it.type}`);
+        if (it.stockCode) details.push(`Stock: ${it.stockCode}`);
+        const detailLines = doc.splitTextToSize(details.join(" | "), metaW - 2);
+        doc.text(detailLines, x, yRow + 6);
+        x += metaW;
+
+        // Qty
+        doc.text(String(it.qty), x + 2, yRow + 7);
+
+        return rowH;
+      };
+
+      for (let i = startIdx; i < items.length; i++) {
+        const rowH = await drawRow(i, yPos);
+        if (rowH === -1) {
+          yPos = DIMENSIONS.headerBarH + 2 + 11;
+          i--;
+          continue;
+        }
+        yPos += rowH;
+      }
+    };
+
+    // Execution
+    drawHeaderBar(true);
+    const y = drawCompanyAndCustomer(DIMENSIONS.headerBarH + 2);
+    const header = drawTableHeader(y);
+    await renderRows(0, header.rowY);
+
+    // Page numbers
+    const pages = doc.getNumberOfPages();
+    for (let p = 1; p <= pages; p++) {
+      doc.setPage(p);
+      drawFooter(p, pages);
+    }
+
+    doc.save("inquiry.pdf");
   };
+
 
   return (
     <div className="py-10 sm:py-12">
@@ -1007,63 +1328,63 @@ export default function CartPage() {
               </div>
 
               {/* Buttons */}
-{/* Buttons with logos */}
-<button
-  className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-white text-sm font-medium transition hover:brightness-110"
-  onClick={handleSendWhatsApp}
-  type="button"
->
-  {/* WhatsApp SVG Logo */}
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className="h-5 w-5"
-    fill="currentColor"
-    viewBox="0 0 24 24"
-  >
-    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.472-.149-.672.15-.198.297-.767.966-.94 1.164-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.297-.497.099-.198.05-.372-.025-.521-.075-.149-.672-1.611-.921-2.204-.242-.579-.487-.5-.672-.51l-.573-.01c-.198 0-.52.074-.793.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.29.173-1.413-.074-.124-.272-.198-.57-.347z" />
-  </svg>
-  {t("sendWhatsAppInquiry", lang)}
-</button>
+              {/* Buttons with logos */}
+              <button
+                className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-white text-sm font-medium transition hover:brightness-110"
+                onClick={handleSendWhatsApp}
+                type="button"
+              >
+                {/* WhatsApp SVG Logo */}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.472-.149-.672.15-.198.297-.767.966-.94 1.164-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.297-.497.099-.198.05-.372-.025-.521-.075-.149-.672-1.611-.921-2.204-.242-.579-.487-.5-.672-.51l-.573-.01c-.198 0-.52.074-.793.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.29.173-1.413-.074-.124-.272-.198-.57-.347z" />
+                </svg>
+                {t("sendWhatsAppInquiry", lang)}
+              </button>
 
-<button
-  className="w-full inline-flex items-center justify-center gap-2 rounded-lg border px-4 py-2 text-sm transition hover:bg-muted"
-  onClick={handleSendEmail}
-  type="button"
->
-  {/* Email SVG Logo */}
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className="h-5 w-5"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-    strokeWidth={2}
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M16 12h.01M12 12h.01M8 12h.01M21 12c0 4.418-3.582 8-8 8s-8-3.582-8-8 3.582-8 8-8 8 3.582 8 8z"
-    />
-  </svg>
-  {t("sendEmailInquiry", lang)}
-</button>
+              <button
+                className="w-full inline-flex items-center justify-center gap-2 rounded-lg border px-4 py-2 text-sm transition hover:bg-muted"
+                onClick={handleSendEmail}
+                type="button"
+              >
+                {/* Email SVG Logo */}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M16 12h.01M12 12h.01M8 12h.01M21 12c0 4.418-3.582 8-8 8s-8-3.582-8-8 3.582-8 8-8 8 3.582 8 8z"
+                  />
+                </svg>
+                {t("sendEmailInquiry", lang)}
+              </button>
 
-<button
-  className="w-full inline-flex items-center justify-center gap-2 rounded-lg border px-4 py-2 text-sm transition hover:bg-muted"
-  onClick={handleDownloadPDF}
-  type="button"
->
-  {/* PDF SVG Logo */}
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className="h-5 w-5"
-    fill="currentColor"
-    viewBox="0 0 24 24"
-  >
-    <path d="M6 2h9l5 5v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zM15 2v5h5M8 12h8M8 16h8M8 20h8" />
-  </svg>
-  {t("downloadPDF", lang)}
-</button>
+              <button
+                className="w-full inline-flex items-center justify-center gap-2 rounded-lg border px-4 py-2 text-sm transition hover:bg-muted"
+                onClick={handleDownloadPDF}
+                type="button"
+              >
+                {/* PDF SVG Logo */}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M6 2h9l5 5v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zM15 2v5h5M8 12h8M8 16h8M8 20h8" />
+                </svg>
+                {t("downloadPDF", lang)}
+              </button>
 
 
             </aside>
