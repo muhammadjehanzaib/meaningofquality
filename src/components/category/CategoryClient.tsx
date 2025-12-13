@@ -68,7 +68,7 @@ export default function CategoryClient({ items, subcategories }: { items: Item[]
           ))}
         </div>
       ) : (
-        <p className="mt-8 text-sm text-muted-foreground">No products found in this subcategory.</p>
+        <p className="mt-8 text-sm text-muted-foreground">No products found under this section.</p>
       )}
     </div>
   );

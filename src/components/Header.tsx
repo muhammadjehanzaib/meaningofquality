@@ -21,15 +21,30 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-foreground/10 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <Container className="flex h-16 items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="h-9 w-9 rounded bg-primary/10 grid place-items-center text-primary text-sm font-bold">
+      <Container className="flex min-h-16 items-center justify-between gap-4 py-2">
+        <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
+          {/* Logo / MOQ Box */}
+          <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-gradient-to-tr from-purple-500 to-indigo-500 flex items-center justify-center text-white font-bold text-xs sm:text-sm shadow-[0_0_20px_rgba(128,90,213,0.7)] transition-transform duration-300 hover:scale-110">
             MOQ
           </div>
-          <Link href="/" className="text-base font-semibold tracking-tight">
-            Meaning of Quality
-          </Link>
+
+          {/* Text Section */}
+          <div className="flex flex-col text-center sm:text-left leading-tight max-w-xs sm:max-w-none">
+            {/* English */}
+            <Link
+              href="/"
+              className="text-sm sm:text-base font-semibold text-gray-800 hover:text-indigo-600 transition-colors duration-300 break-words"
+            >
+              THE MEANING OF QUALITY TRADING ESTABLISHMENT
+            </Link>
+
+            {/* Arabic */}
+            <span className="text-xs sm:text-sm font-medium text-center text-gray-600 hover:text-indigo-600 rtl">
+              مؤسسة معنى الجودة للتجارة
+            </span>
+          </div>
         </div>
+
 
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-6 ">
@@ -76,6 +91,7 @@ export default function Header() {
               </div>
             )}
           </div>
+          <Link href="/cart" className="text-sm text-foreground/80 hover:text-foreground">{t("quotationSummery", lang)}</Link>
           <Link href="/about" className="text-sm text-foreground/80 hover:text-foreground">{t("about", lang)}</Link>
           <Link href="/contact" className="text-sm text-foreground/80 hover:text-foreground">{t("contact", lang)}</Link>
         </nav>
@@ -90,7 +106,7 @@ export default function Header() {
             </svg>
             <span>{t("cart", lang)}</span>
             {count > 0 && (
-              <span className="absolute -right-2 -top-2 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-white">
+              <span className="absolute -right-2 -top-4 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-white">
                 {count}
               </span>
             )}
@@ -157,6 +173,9 @@ export default function Header() {
                   })}
                 </div>
               </details>
+              <Link href="/cart" className="py-2 text-sm text-foreground/90" onClick={() => setMobileOpen(false)}>
+                {t("quotationSummery", lang)}
+              </Link>
               <Link href="/about" className="py-2 text-sm text-foreground/90" onClick={() => setMobileOpen(false)}>
                 {t("about", lang)}
               </Link>
