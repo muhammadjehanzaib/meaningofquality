@@ -44,7 +44,11 @@ export default async function CategoryPage({ params }: PageProps) {
         <nav className="text-xs text-muted-foreground">
           <Link href="/" className="hover:underline"><LKey k="home" /></Link>
           <span className="mx-1">/</span>
-          <span><LKey k="categories" /></span>
+          {/* <Link href="/categories" className="hover:underline"><LKey k="categories" /></Link> */}
+          <Link href="/categories" className="hover:underline">
+            <span><LKey k="categories" /></span>
+          </Link>
+
           <span className="mx-1">/</span>
           <span className="text-foreground"><L value={cat.title} /></span>
         </nav>
