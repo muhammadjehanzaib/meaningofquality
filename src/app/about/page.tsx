@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Container from "@/components/ui/Container";
 import { Users, Target, Award } from "lucide-react";
 import { useLang } from "@/hooks/useLang";
@@ -45,7 +46,7 @@ export default function AboutPage() {
             </p>
           </div>
           <div className="rounded-xl overflow-hidden shadow-lg">
-            <img
+            <Image
               src="/images/aboutus.jpg"
               alt={isAr ? "صورة عن الشركة" : "About Us Image"}
               className="w-250 h-90 object-cover"

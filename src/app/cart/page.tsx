@@ -355,7 +355,7 @@ const handleDownloadPDF = async () => {
         try {
           const imgData = await toDataURL(it.img);
           if (imgData) {
-            const imgProps = (doc as any).getImageProperties(imgData);
+            const imgProps = (doc as unknown as { getImageProperties: (data: string) => { width: number; height: number } }).getImageProperties(imgData);
             const imgRatio = imgProps.width / imgProps.height;
             const maxW = imgW - 4;
             const maxH = rowH - 4;
