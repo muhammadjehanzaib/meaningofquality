@@ -9,7 +9,7 @@ export const labels = {
   mostVisitedProducts: { en: "Most Visited Products", ar: "المنتجات الأكثر زيارة" },
   categories: { en: "Products", ar: "الفئات" },
   about: { en: "About", ar: "حول" },
-  quotationSummery: { en: "Request for Quoutation", ar: "طلب عرض سعر" },
+  quotationSummery: { en: "Request Quoutation", ar: "طلب عرض سعر" },
   contact: { en: "Contact", ar: "اتصل" },
   home: { en: "Home", ar: "الصفحة الرئيسية" },
   productNotFound: { en: "Product not found", ar: "المنتج غير موجود" },
@@ -46,7 +46,7 @@ export const labels = {
   email: { en: "Email", ar: "البريد الإلكتروني" },
   phone: { en: "Phone", ar: "الهاتف" },
   note: { en: "Note", ar: "ملاحظة" },
-  sendWhatsAppInquiry: { en: "Send WhatsApp Inquiry", ar: "إرسال استفسار عبر واتساب" },
+  sendWhatsAppInquiry: { en: "Send Quotation Via WhatsApp", ar: "إرسال استفسار عبر واتساب" },
   downloadPDF: { en: "Download PDF", ar: "تحميل PDF" },
   goToCart: { en: "Submit Quotation Request", ar: "إرسال طلب عرض أسعار" },
   addedToCart: { en: "Added to Inquiry", ar: "تمت الإضافة إلى الاستفسار" },
@@ -58,7 +58,10 @@ basedOnQuantity: {
   en: "Based on order quantity", 
   ar: "حسب الكمية المطلوبة"
 },
-
+sendEmailInquiry: {
+  en: "Send Quotation Via Email",
+  ar: "إرسال استفسار عبر البريد الإلكتروني"
+}
 
 } as const;
 
