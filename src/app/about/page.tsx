@@ -46,7 +46,7 @@ export default function AboutPage() {
           </div>
           <div className="rounded-xl overflow-hidden shadow-lg">
             <img
-              src="/aboutus.jpg"
+              src="/images/aboutus.jpg"
               alt={isAr ? "صورة عن الشركة" : "About Us Image"}
               className="w-250 h-90 object-cover"
             />
