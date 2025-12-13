@@ -9,7 +9,7 @@ export const labels = {
   mostVisitedProducts: { en: "Most Visited Products", ar: "المنتجات الأكثر زيارة" },
   categories: { en: "Products", ar: "الفئات" },
   about: { en: "About", ar: "حول" },
-  quotationSummery: { en: "Request Quoutation", ar: "طلب عرض سعر" },
+  quotationSummery: { en: "Request Quotation", ar: "طلب عرض سعر" },
   contact: { en: "Contact", ar: "اتصل" },
   home: { en: "Home", ar: "الصفحة الرئيسية" },
   productNotFound: { en: "Product not found", ar: "المنتج غير موجود" },
@@ -61,6 +61,10 @@ basedOnQuantity: {
 sendEmailInquiry: {
   en: "Send Quotation Via Email",
   ar: "إرسال استفسار عبر البريد الإلكتروني"
+},
+addProducts: {
+  en: "Add Products",
+  ar: "إضافة منتجات"
 }
 
 } as const;
