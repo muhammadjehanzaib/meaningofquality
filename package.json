@@ -9,6 +9,11 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@react-pdf/font": "^4.0.3",
+    "@react-pdf/renderer": "^4.3.1",
+    "arabic-persian-reshaper": "^1.0.1",
+    "arabic-reshaper": "^1.1.0",
+    "bidi-js": "^1.0.3",
     "clsx": "^2.1.1",
     "jspdf": "^2.5.2",
     "lucide-react": "^0.542.0",
@@ -26,6 +31,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.5.2",
+    "jspdf-font": "^1.0.7",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

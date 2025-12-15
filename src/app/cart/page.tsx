@@ -51,468 +51,473 @@ export default function CartPage() {
     window.location.href = mailto;
   };
 
-// Complete handleDownloadPDF with QR Code containing essential info
-const handleDownloadPDF = async () => {
-  if (!ensureFormValid()) return;
-  const { jsPDF } = await import("jspdf").then((mod) => mod);
-  const QRCode = (await import("qrcode")).default;
-  
-  if (typeof window === "undefined") return;
+  // Complete handleDownloadPDF with QR Code containing essential info
+  const handleDownloadPDF = async () => {
+    if (!ensureFormValid()) return;
+    const { jsPDF } = await import("jspdf").then((mod) => mod);
+    const QRCode = (await import("qrcode")).default;
 
-  // Util: Image to DataURL
-  const toDataURL = async (src?: string): Promise<string | null> => {
-    if (!src) return null;
-    try {
-      const abs = src.startsWith("http")
-        ? src
-        : new URL(src, window.location.origin).href;
-      const res = await fetch(abs);
-      if (!res.ok) return null;
-      const blob = await res.blob();
-      return await new Promise<string>((resolve) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result as string);
-        reader.readAsDataURL(blob);
+
+    if (typeof window === "undefined") return;
+
+    // Util: Image to DataURL
+    const toDataURL = async (src?: string): Promise<string | null> => {
+      if (!src) return null;
+      try {
+        const abs = src.startsWith("http")
+          ? src
+          : new URL(src, window.location.origin).href;
+        const res = await fetch(abs);
+        if (!res.ok) return null;
+        const blob = await res.blob();
+        return await new Promise<string>((resolve) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result as string);
+          reader.readAsDataURL(blob);
+        });
+      } catch {
+        return null;
+      }
+    };
+
+    // Generate QR code with minimal essential information as plain text
+    const generateQR = async (inquiryNumber: string): Promise<string> => {
+      // Simple text format - easy to read when scanned
+      const qrText = [
+        'Request for Quotation',
+        `Quote#: ${inquiryNumber}`,
+        `Date: ${new Date().toLocaleDateString()}`,
+        `Customer: ${info.name || 'N/A'}`,
+        `Company: ${info.company || 'N/A'}`,
+        `Email: ${info.email || 'N/A'}`,
+        `Phone: ${info.phone || 'N/A'}`
+      ].join(' |\n ');
+
+
+      return await QRCode.toDataURL(qrText, {
+        errorCorrectionLevel: "M",
+        margin: 1,
+        width: 256,
+        color: { dark: "#000000", light: "#FFFFFF" },
       });
-    } catch {
-      return null;
-    }
-  };
+    };
 
-  // Generate QR code with minimal essential information as plain text
-  const generateQR = async (inquiryNumber: string): Promise<string> => {
-    // Simple text format - easy to read when scanned
-    const qrText = [
-      `Inquiry #: ${inquiryNumber}`,
-      `Customer: ${info.name || 'N/A'}`,
-      `Company: ${info.company || 'N/A'}`,
-      `Email: ${info.email || 'N/A'}`,
-      `Phone: ${info.phone || 'N/A'}`,
-      `Items: ${items.length} types`,
-      `Total Qty: ${items.reduce((acc, it) => acc + it.qty, 0)}`,
-      `Date: ${new Date().toLocaleDateString()}`,
-    ].join('\n');
-    
-    return await QRCode.toDataURL(qrText, {
-      errorCorrectionLevel: "M",
-      margin: 1,
-      width: 256,
-      color: { dark: "#000000", light: "#FFFFFF" },
-    });
-  };
+    const COLORS = {
+      primary: { r: 22, g: 163, b: 74 },
+      gray: (v: number) => ({ r: v, g: v, b: v }),
+    };
 
-  const COLORS = {
-    primary: { r: 22, g: 163, b: 74 },
-    gray: (v: number) => ({ r: v, g: v, b: v }),
-  };
+    const DIMENSIONS = {
+      margin: 12,
+      headerBarH: 22,
+      infoBoxH: 40,
+      bottomMargin: 14,
+      table: { idxW: 8, imgW: 20, nameW: 80, metaW: 60, qtyW: 12, minRowH: 24 },
+    };
 
-  const DIMENSIONS = {
-    margin: 12,
-    headerBarH: 22,
-    infoBoxH: 40,
-    bottomMargin: 14,
-    table: { idxW: 8, imgW: 20, nameW: 80, metaW: 60, qtyW: 12, minRowH: 24 },
-  };
+    const doc = new jsPDF({ unit: "mm", format: "a4" });
+    const pageW = doc.internal.pageSize.getWidth();
+    const pageH = doc.internal.pageSize.getHeight();
+    const now = new Date();
 
-  const doc = new jsPDF({ unit: "mm", format: "a4" });
-  const pageW = doc.internal.pageSize.getWidth();
-  const pageH = doc.internal.pageSize.getHeight();
+    // Get Pakistan time offset in minutes
+    const localOffset = now.getTimezoneOffset(); // PKT = -300 (UTC+5)
 
-  // Generate Inquiry Number: DDMMYYYYHHMMSS
-  const now = new Date();
-  const day = String(now.getDate()).padStart(2, '0');
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-  const year = now.getFullYear();
-  const hours = String(now.getHours()).padStart(2, '0');
-  const minutes = String(now.getMinutes()).padStart(2, '0');
-  const seconds = String(now.getSeconds()).padStart(2, '0');
-  const inquiryNumber = `${day}${month}${year}${hours}${minutes}${seconds}`;
+    // Saudi Arabia is UTC+3 → 3 * 60 = 180 minutes
+    const saudiOffset = 3 * 60;
 
-  // Header
-  const drawHeaderBar = (showInquiry: boolean) => {
-    doc.setFillColor(COLORS.primary.r, COLORS.primary.g, COLORS.primary.b);
-    doc.rect(0, 0, pageW, DIMENSIONS.headerBarH, "F");
+    // Adjust current time to Saudi Arabia
+    const saudiTime = new Date(now.getTime() + (saudiOffset + localOffset) * 60000);
 
-    if (showInquiry) {
-      doc.setTextColor(255, 255, 255);
+    const day = String(saudiTime.getDate()).padStart(2, '0');
+    const month = String(saudiTime.getMonth() + 1).padStart(2, '0');
+    const year = saudiTime.getFullYear();
+    const hours = String(saudiTime.getHours()).padStart(2, '0');
+    const minutes = String(saudiTime.getMinutes()).padStart(2, '0');
+    const seconds = String(saudiTime.getSeconds()).padStart(2, '0');
 
-      // Logo + Text
-      const logoX = DIMENSIONS.margin;
-      const logoY = 6;
-      const logoSize = 8;
-      doc.setFillColor(255, 255, 255);
-      doc.roundedRect(logoX, logoY, logoSize + 4, logoSize + 4, 2, 2, "F");
-      doc.setTextColor(COLORS.primary.r, COLORS.primary.g, COLORS.primary.b);
-      doc.setFont("helvetica", "bold").setFontSize(9);
-      doc.text("MOQ", logoX + 2.5, logoY + 6, { baseline: "middle" });
+    const inquiryNumber = `${day}${month}${year}${hours}${minutes}${seconds}`;
 
-      // Company name
-      doc.setTextColor(255, 255, 255);
-      doc.setFont("helvetica", "bold").setFontSize(11);
-      doc.text("Meaning of Quality", logoX + 15, 14);
 
-      // Center Inquiry with Number
-      doc.setFont("helvetica", "bold").setFontSize(18);
-      doc.text("Quotaion Summery", pageW / 2, 11, { align: "center" });
-      doc.setFont("helvetica", "normal").setFontSize(9);
-      doc.text(`Inq - #${inquiryNumber}`, pageW / 2, 17, { align: "center" });
+    // Header
+    const drawHeaderBar = (showInquiry: boolean) => {
+      doc.setFillColor(COLORS.primary.r, COLORS.primary.g, COLORS.primary.b);
+      doc.rect(0, 0, pageW, DIMENSIONS.headerBarH, "F");
 
-      // Date right
-      const generatedAt = new Date().toLocaleString();
+      if (showInquiry) {
+        doc.setTextColor(255, 255, 255);
+
+        // Logo + Text
+        const logoX = DIMENSIONS.margin;
+        const logoY = 6;
+        const logoSize = 8;
+        doc.setFillColor(255, 255, 255);
+        doc.roundedRect(logoX, logoY, logoSize + 4, logoSize + 4, 2, 2, "F");
+        doc.setTextColor(COLORS.primary.r, COLORS.primary.g, COLORS.primary.b);
+        doc.setFont("helvetica", "bold").setFontSize(9);
+        doc.text("MOQ", logoX + 2.5, logoY + 6, { baseline: "middle" });
+
+        // Company name
+        doc.setTextColor(255, 255, 255);
+        doc.setFont("helvetica", "bold").setFontSize(11);
+        doc.text("Meaning of Quality", logoX + 15, 14);
+
+        // Center Inquiry with Number
+        doc.setFont("helvetica", "bold").setFontSize(18);
+        doc.text("Request for Quotation", pageW / 2, 11, { align: "center" });
+        doc.setFont("helvetica", "normal").setFontSize(9);
+        doc.text(`Quote# ${inquiryNumber}`, pageW / 2, 17, { align: "center" });
+
+        // Date right
+        const generatedAt = new Date().toLocaleString();
+        doc.setFont("helvetica", "normal").setFontSize(10);
+        doc.text(generatedAt, pageW - DIMENSIONS.margin, 14, { align: "right" });
+        doc.setTextColor(0, 0, 0);
+      }
+
+      // Divider
+      doc.setDrawColor(200);
+      doc.setLineWidth(0.2);
+      doc.line(0, DIMENSIONS.headerBarH, pageW, DIMENSIONS.headerBarH);
+    };
+
+    // Company + Customer Info with QR Code
+    const drawCompanyAndCustomer = async (yStart: number) => {
+      const colW = (pageW - DIMENSIONS.margin * 2 - 6) / 2;
+
+      // Company box
+      doc.setDrawColor(220).setLineWidth(0.4);
+      doc.roundedRect(DIMENSIONS.margin, yStart, colW, DIMENSIONS.infoBoxH, 2, 2, "S");
+      doc.setFontSize(11).setFont("helvetica", "bold");
+      doc.text("Company Info", DIMENSIONS.margin + 4, yStart + 6);
       doc.setFont("helvetica", "normal").setFontSize(10);
-      doc.text(generatedAt, pageW - DIMENSIONS.margin, 14, { align: "right" });
-      doc.setTextColor(0, 0, 0);
-    }
+      let y = yStart + 12;
+      const companyLines = [
+        "The Meaning of Quality Trading Establishment",
+        "Jarallah Bin Fahad Street,",
+        "Al Jazeerah District 14262 Riyadh, Saudi Arabia",
+        "Phone: 00966 590019826",
+        "Email: sale@moq.com.sa",
+      ];
+      companyLines.forEach((l) => {
+        doc.text(l, DIMENSIONS.margin + 4, y);
+        y += 5;
+      });
 
-    // Divider
-    doc.setDrawColor(200);
-    doc.setLineWidth(0.2);
-    doc.line(0, DIMENSIONS.headerBarH, pageW, DIMENSIONS.headerBarH);
-  };
-
-  // Company + Customer Info with QR Code
-  const drawCompanyAndCustomer = async (yStart: number) => {
-    const colW = (pageW - DIMENSIONS.margin * 2 - 6) / 2;
-
-    // Company box
-    doc.setDrawColor(220).setLineWidth(0.4);
-    doc.roundedRect(DIMENSIONS.margin, yStart, colW, DIMENSIONS.infoBoxH, 2, 2, "S");
-    doc.setFontSize(11).setFont("helvetica", "bold");
-    doc.text("Company Info", DIMENSIONS.margin + 4, yStart + 6);
-    doc.setFont("helvetica", "normal").setFontSize(10);
-    let y = yStart + 12;
-    const companyLines = [
-      "The Meaning of Quality Trading Establishment",
-      "Jarallah Bin Fahad Street,",
-      "Al Jazeerah District 14262 Riyadh, Saudi Arabia",
-      "Phone: 00966 590019826",
-      "Email: sale@moq.com.sa",
-    ];
-    companyLines.forEach((l) => {
-      doc.text(l, DIMENSIONS.margin + 4, y);
-      y += 5;
-    });
-
-    // Customer box
-    const rightX = DIMENSIONS.margin + colW + 6;
-    doc.roundedRect(rightX, yStart, colW, DIMENSIONS.infoBoxH, 2, 2, "S");
-    doc.setFont("helvetica", "bold").setFontSize(11);
-    doc.text("Customer Info", rightX + 4, yStart + 6);
-    doc.setFont("helvetica", "normal").setFontSize(10);
-    let cy = yStart + 12;
-    if (info.name) {
-      doc.text(`Name: ${info.name}`, rightX + 4, cy);
-      cy += 5;
-    }
-    if (info.company) {
-      doc.text(`Company: ${info.company}`, rightX + 4, cy);
-      cy += 5;
-    }
-    if (info.email) {
-      doc.text(`Email: ${info.email}`, rightX + 4, cy);
-      cy += 5;
-    }
-    if (info.phone) {
-      doc.text(`Phone: ${info.phone}`, rightX + 4, cy);
-      cy += 5;
-    }
-
-    let nextY = Math.max(y, cy);
-
-    // Note
-    if (info.note) {
-      const noteY = nextY + 10;
+      // Customer box
+      const rightX = DIMENSIONS.margin + colW + 6;
+      doc.roundedRect(rightX, yStart, colW, DIMENSIONS.infoBoxH, 2, 2, "S");
       doc.setFont("helvetica", "bold").setFontSize(11);
-      const maxWidth = pageW - DIMENSIONS.margin * 2 - 10;
-      const wrapped = doc.splitTextToSize(info.note, maxWidth);
-      const lineHeight = 6;
-      const boxHeight = wrapped.length * lineHeight + 14;
+      doc.text("Customer Info", rightX + 4, yStart + 6);
+      doc.setFont("helvetica", "normal").setFontSize(10);
+      let cy = yStart + 12;
+      if (info.name) {
+        doc.text(`Name: ${info.name}`, rightX + 4, cy);
+        cy += 5;
+      }
+      if (info.company) {
+        doc.text(`Company: ${info.company}`, rightX + 4, cy);
+        cy += 5;
+      }
+      if (info.email) {
+        doc.text(`Email: ${info.email}`, rightX + 4, cy);
+        cy += 5;
+      }
+      if (info.phone) {
+        doc.text(`Phone: ${info.phone}`, rightX + 4, cy);
+        cy += 5;
+      }
+
+      let nextY = Math.max(y, cy);
+
+      // Note
+      if (info.note) {
+        const noteY = nextY + 10;
+        doc.setFont("helvetica", "bold").setFontSize(11);
+        const maxWidth = pageW - DIMENSIONS.margin * 2 - 10;
+        const wrapped = doc.splitTextToSize(info.note, maxWidth);
+        const lineHeight = 6;
+        const boxHeight = wrapped.length * lineHeight + 14;
+        doc.roundedRect(
+          DIMENSIONS.margin,
+          noteY,
+          pageW - DIMENSIONS.margin * 2,
+          boxHeight,
+          2,
+          2,
+          "S"
+        );
+        doc.text("Customer Note:", DIMENSIONS.margin + 4, noteY + 8);
+        doc.setFont("helvetica", "normal").setFontSize(10);
+        doc.text(wrapped, DIMENSIONS.margin + 4, noteY + 16);
+        nextY = noteY + boxHeight + 6;
+      }
+
+      // Generated by box with QR Code
+      const genY = nextY;
+      const boxHeight = 28; // Increased height for QR code
+      doc.setDrawColor(220);
       doc.roundedRect(
         DIMENSIONS.margin,
-        noteY,
+        genY,
         pageW - DIMENSIONS.margin * 2,
         boxHeight,
         2,
         2,
         "S"
       );
-      doc.text("Customer Note:", DIMENSIONS.margin + 4, noteY + 8);
-      doc.setFont("helvetica", "normal").setFontSize(10);
-      doc.text(wrapped, DIMENSIONS.margin + 4, noteY + 16);
-      nextY = noteY + boxHeight + 6;
-    }
 
-    // Generated by box with QR Code
-    const genY = nextY;
-    const boxHeight = 28; // Increased height for QR code
-    doc.setDrawColor(220);
-    doc.roundedRect(
-      DIMENSIONS.margin,
-      genY,
-      pageW - DIMENSIONS.margin * 2,
-      boxHeight,
-      2,
-      2,
-      "S"
-    );
-    
-    // Text on left side
-    doc.setFont("helvetica", "bold").setFontSize(10);
-    doc.text("Generated By:", DIMENSIONS.margin + 4, genY + 8);
-    doc.setFont("helvetica", "normal");
-    doc.text("The Meaning of Quality Trading Establishment - Website", DIMENSIONS.margin + 4, genY + 14);
-    
-    // QR Code info text
-    doc.setFont("helvetica", "normal").setFontSize(8);
-    doc.setTextColor(100);
-    doc.text("Scan QR for inquiry details", DIMENSIONS.margin + 4, genY + 20);
-    doc.setTextColor(0);
+      // Text on left side
+      doc.setFont("helvetica", "bold").setFontSize(10);
+      doc.text("Generated By:", DIMENSIONS.margin + 4, genY + 8);
+      doc.setFont("helvetica", "normal");
+      doc.text("The Meaning of Quality Trading Establishment - Website", DIMENSIONS.margin + 4, genY + 14);
 
-    // Generate and add QR code on the right side
-    const qrData = await generateQR(inquiryNumber);
-    const qrSize = 24;
-    doc.addImage(
-      qrData,
-      "PNG",
-      pageW - DIMENSIONS.margin - qrSize - 2,
-      genY + 2,
-      qrSize,
-      qrSize
-    );
+      // QR Code info text
+      doc.setFont("helvetica", "normal").setFontSize(8);
+      doc.setTextColor(100);
+      doc.text("Scan QR for inquiry details", DIMENSIONS.margin + 4, genY + 20);
+      doc.setTextColor(0);
 
-    return genY + boxHeight + 8;
-  };
+      // Generate and add QR code on the right side
+      const qrData = await generateQR(inquiryNumber);
+      const qrSize = 24;
+      doc.addImage(
+        qrData,
+        "PNG",
+        pageW - DIMENSIONS.margin - qrSize - 2,
+        genY + 2,
+        qrSize,
+        qrSize
+      );
 
-  // Table header
-  const drawTableHeader = (y: number) => {
-    const { idxW, imgW, nameW, metaW } = DIMENSIONS.table;
-    doc.setFillColor(245, 247, 250);
-    doc.rect(DIMENSIONS.margin, y, pageW - DIMENSIONS.margin * 2, 9, "F");
-    doc.setFont("helvetica", "bold").setFontSize(10);
-    doc.setTextColor(60);
-    let x = DIMENSIONS.margin + 2;
-    doc.text("#", x, y + 6);
-    x += idxW;
-    doc.text("Image", x, y + 6);
-    x += imgW;
-    doc.text("Item", x, y + 6);
-    x += nameW;
-    doc.text("Details", x, y + 6);
-    x += metaW;
-    doc.text("Qty", x, y + 6);
-    doc.setTextColor(0, 0, 0);
-    return { rowY: y + 11 };
-  };
-
-  // Footer
-  const drawFooter = (pageNum: number, pageCount: number) => {
-    doc.setFontSize(9).setTextColor(100);
-    const emailMsg = "Please forward this PDF to sales@moq.com.sa or ";
-    doc.text(emailMsg, DIMENSIONS.margin, pageH - 6, { align: "left" });
-    const whatsAppText = "send via WhatsApp: 00966 590019826";
-    doc.setTextColor(37, 211, 102);
-    doc.textWithLink(
-      whatsAppText,
-      DIMENSIONS.margin + doc.getTextWidth(emailMsg),
-      pageH - 6,
-      { url: "https://wa.me/966590019826" }
-    );
-    doc.setTextColor(100);
-    doc.text(
-      `Page ${pageNum} of ${pageCount}`,
-      pageW - DIMENSIONS.margin,
-      pageH - 6,
-      { align: "right" }
-    );
-    doc.setTextColor(0, 0, 0);
-  };
-
-  // Table rows
-  const renderRows = async (startIdx: number, startY: number) => {
-    const { idxW, imgW, nameW, metaW, minRowH } = DIMENSIONS.table;
-    let yPos = startY;
-
-    const drawRow = async (rowIndex: number, yRow: number): Promise<number | -1> => {
-      const it = items[rowIndex];
-      if (!it) return 0;
-      const rowH = minRowH;
-      let x = DIMENSIONS.margin + 2;
-
-      if (yRow + rowH > pageH - DIMENSIONS.bottomMargin) {
-        doc.addPage();
-        drawHeaderBar(false);
-        drawTableHeader(DIMENSIONS.headerBarH + 2);
-        return -1;
-      }
-
-      doc.setDrawColor(230).setLineWidth(0.3);
-      doc.rect(DIMENSIONS.margin, yRow, pageW - DIMENSIONS.margin * 2, rowH);
-
-      doc.text(String(rowIndex + 1), x, yRow + 7);
-      x += idxW;
-
-      if (it.img) {
-        try {
-          const imgData = await toDataURL(it.img);
-          if (imgData) {
-            const imgProps = (doc as unknown as { getImageProperties: (data: string) => { width: number; height: number } }).getImageProperties(imgData);
-            const imgRatio = imgProps.width / imgProps.height;
-            const maxW = imgW - 4;
-            const maxH = rowH - 4;
-            let drawW = maxW;
-            let drawH = maxH;
-            if (imgRatio > 1) drawH = maxW / imgRatio;
-            else drawW = maxH * imgRatio;
-            const imgX = x + (imgW - drawW) / 2;
-            const imgY = yRow + (rowH - drawH) / 2;
-            doc.addImage(imgData, "PNG", imgX, imgY, drawW, drawH);
-          }
-        } catch (e) {
-          console.error("Image load failed:", e);
-        }
-      }
-      x += imgW;
-
-      const nameLines = doc.splitTextToSize(it.name || "", nameW - 2);
-      doc.text(nameLines, x, yRow + 6);
-      x += nameW;
-
-      const details: string[] = [];
-      if (it.productCode) details.push(`Code: ${it.productCode}`);
-      if (it.volume) details.push(`Vol: ${it.volume}`);
-      if (it.type) details.push(`Type: ${it.type}`);
-      if (it.stockCode) details.push(`Stock: ${it.stockCode}`);
-      const detailLines = doc.splitTextToSize(details.join(" | "), metaW - 2);
-      doc.text(detailLines, x, yRow + 6);
-      x += metaW;
-
-      doc.text(String(it.qty), x + 2, yRow + 7);
-
-      return rowH;
+      return genY + boxHeight + 8;
     };
 
-    for (let i = startIdx; i < items.length; i++) {
-      const rowH = await drawRow(i, yPos);
-      if (rowH === -1) {
-        yPos = DIMENSIONS.headerBarH + 2 + 11;
-        i--;
-        continue;
+    // Table header
+    const drawTableHeader = (y: number) => {
+      const { idxW, imgW, nameW, metaW } = DIMENSIONS.table;
+      doc.setFillColor(245, 247, 250);
+      doc.rect(DIMENSIONS.margin, y, pageW - DIMENSIONS.margin * 2, 9, "F");
+      doc.setFont("helvetica", "bold").setFontSize(10);
+      doc.setTextColor(60);
+      let x = DIMENSIONS.margin + 2;
+      doc.text("#", x, y + 6);
+      x += idxW;
+      doc.text("Image", x, y + 6);
+      x += imgW;
+      doc.text("Item", x, y + 6);
+      x += nameW;
+      doc.text("Details", x, y + 6);
+      x += metaW;
+      doc.text("Qty", x, y + 6);
+      doc.setTextColor(0, 0, 0);
+      return { rowY: y + 11 };
+    };
+
+    // Footer
+    const drawFooter = (pageNum: number, pageCount: number) => {
+      doc.setFontSize(9);
+
+      const startX = DIMENSIONS.margin;
+      const y = pageH - 6;
+
+      const prefixText = "For Quotation: Please forward this PDF to ";
+      const emailText = "sales@moq.com.sa";
+      const middleText = " or send via WhatsApp:";
+
+      // Prefix (gray)
+      doc.setTextColor(100);
+      doc.text(prefixText, startX, y);
+
+      // Email (blue + clickable)
+      doc.setTextColor(0, 102, 204);
+      doc.textWithLink(
+        emailText,
+        startX + doc.getTextWidth(prefixText),
+        y,
+        { url: "mailto:sales@moq.com.sa" }
+      );
+
+      // Middle text (gray)
+      doc.setTextColor(100);
+      doc.text(
+        middleText,
+        startX + doc.getTextWidth(prefixText + emailText),
+        y
+      );
+
+      // WhatsApp (green + clickable)
+      const whatsAppText = " 00966 590019826";
+      doc.setTextColor(37, 211, 102);
+      doc.textWithLink(
+        whatsAppText,
+        startX + doc.getTextWidth(prefixText + emailText + middleText),
+        y,
+        { url: "https://wa.me/966590019826" }
+      );
+
+      // Page number (gray, right aligned)
+      doc.setTextColor(100);
+      doc.text(
+        `Page ${pageNum} of ${pageCount}`,
+        pageW - DIMENSIONS.margin,
+        y,
+        { align: "right" }
+      );
+
+      // Reset color
+      doc.setTextColor(0, 0, 0);
+    };
+
+    // Table rows
+    const renderRows = async (startIdx: number, startY: number) => {
+      const { idxW, imgW, nameW, metaW, minRowH } = DIMENSIONS.table;
+      let yPos = startY;
+
+      const drawRow = async (rowIndex: number, yRow: number): Promise<number | -1> => {
+        const it = items[rowIndex];
+        if (!it) return 0;
+        const rowH = minRowH;
+        let x = DIMENSIONS.margin + 2;
+
+        if (yRow + rowH > pageH - DIMENSIONS.bottomMargin) {
+          doc.addPage();
+          drawHeaderBar(false);
+          drawTableHeader(DIMENSIONS.headerBarH + 2);
+          return -1;
+        }
+
+        doc.setDrawColor(230).setLineWidth(0.3);
+        doc.rect(DIMENSIONS.margin, yRow, pageW - DIMENSIONS.margin * 2, rowH);
+
+        doc.text(String(rowIndex + 1), x, yRow + 7);
+        x += idxW;
+
+        if (it.img) {
+          try {
+            const imgData = await toDataURL(it.img);
+            if (imgData) {
+              const imgProps = (doc as unknown as { getImageProperties: (data: string) => { width: number; height: number } }).getImageProperties(imgData);
+              const imgRatio = imgProps.width / imgProps.height;
+              const maxW = imgW - 4;
+              const maxH = rowH - 4;
+              let drawW = maxW;
+              let drawH = maxH;
+              if (imgRatio > 1) drawH = maxW / imgRatio;
+              else drawW = maxH * imgRatio;
+              const imgX = x + (imgW - drawW) / 2;
+              const imgY = yRow + (rowH - drawH) / 2;
+              doc.addImage(imgData, "PNG", imgX, imgY, drawW, drawH);
+            }
+          } catch (e) {
+            console.error("Image load failed:", e);
+          }
+        }
+        x += imgW;
+
+        const nameLines = doc.splitTextToSize(it.name || "", nameW - 2);
+        doc.text(nameLines, x, yRow + 6);
+        x += nameW;
+
+        const details: string[] = [];
+        if (it.productCode) details.push(`Code: ${it.productCode}`);
+        if (it.volume) details.push(`Vol: ${it.volume}`);
+        if (it.type) details.push(`Type: ${it.type}`);
+        if (it.stockCode) details.push(`Stock: ${it.stockCode}`);
+        const detailLines = doc.splitTextToSize(details.join(" | "), metaW - 2);
+        doc.text(detailLines, x, yRow + 6);
+        x += metaW;
+
+        doc.text(String(it.qty), x + 2, yRow + 7);
+
+        return rowH;
+      };
+
+      for (let i = startIdx; i < items.length; i++) {
+        const rowH = await drawRow(i, yPos);
+        if (rowH === -1) {
+          yPos = DIMENSIONS.headerBarH + 2 + 11;
+          i--;
+          continue;
+        }
+        yPos += rowH;
       }
-      yPos += rowH;
+    };
+
+    // Execution
+    drawHeaderBar(true);
+    const y = await drawCompanyAndCustomer(DIMENSIONS.headerBarH + 2);
+    const header = drawTableHeader(y);
+    await renderRows(0, header.rowY);
+
+    // Add summary row after items table
+    const drawSummary = (yStart: number) => {
+      const totalTypes = items.length;
+      const totalQty = items.reduce((acc, it) => acc + it.qty, 0);
+
+      const summaryY = yStart;
+      const summaryH = 12;
+      const fullWidth = pageW - DIMENSIONS.margin * 2;
+
+      // Draw summary row with green background
+      doc.setDrawColor(230).setLineWidth(0.3);
+      doc.setFillColor(COLORS.primary.r, COLORS.primary.g, COLORS.primary.b);
+      doc.rect(DIMENSIONS.margin, summaryY, fullWidth, summaryH, "FD");
+
+      // White text for contrast
+      doc.setTextColor(255, 255, 255);
+      doc.setFont("helvetica", "bold").setFontSize(11);
+
+      // Left side - Total Items
+      doc.text(
+        `Total Items: ${totalTypes}`,
+        DIMENSIONS.margin + 4,
+        summaryY + 8
+      );
+
+      // Right side - Total Quantity
+      doc.text(
+        `Total Quantity: ${totalQty}`,
+        pageW - DIMENSIONS.margin - 4,
+        summaryY + 8,
+        { align: "right" }
+      );
+
+      // Reset color
+      doc.setTextColor(0, 0, 0);
+    };
+
+    // Get last item position
+    const getLastItemY = (): number => {
+      const { minRowH } = DIMENSIONS.table;
+      const headerY = y;
+      const tableHeaderHeight = 11;
+      const itemsCount = items.length;
+      return headerY + tableHeaderHeight + (itemsCount * minRowH);
+    };
+
+    const lastY = getLastItemY();
+
+    // Check if summary fits on current page
+    if (lastY + 20 > pageH - DIMENSIONS.bottomMargin) {
+      doc.addPage();
+      drawHeaderBar(false);
+      drawSummary(DIMENSIONS.headerBarH + 2);
+    } else {
+      drawSummary(lastY);
     }
+
+    const pages = doc.getNumberOfPages();
+    for (let p = 1; p <= pages; p++) {
+      doc.setPage(p);
+      drawFooter(p, pages);
+    }
+
+    doc.save(`inquiry-${inquiryNumber}.pdf`);
   };
 
-  // Execution
-  drawHeaderBar(true);
-  const y = await drawCompanyAndCustomer(DIMENSIONS.headerBarH + 2);
-  const header = drawTableHeader(y);
-  await renderRows(0, header.rowY);
 
-  // Add summary row after items table
-  const drawSummary = (yStart: number) => {
-    const totalTypes = items.length;
-    const totalQty = items.reduce((acc, it) => acc + it.qty, 0);
-    
-    const summaryY = yStart;
-    const summaryH = 12;
-    const fullWidth = pageW - DIMENSIONS.margin * 2;
-
-    // Draw summary row with green background
-    doc.setDrawColor(230).setLineWidth(0.3);
-    doc.setFillColor(COLORS.primary.r, COLORS.primary.g, COLORS.primary.b);
-    doc.rect(DIMENSIONS.margin, summaryY, fullWidth, summaryH, "FD");
-
-    // White text for contrast
-    doc.setTextColor(255, 255, 255);
-    doc.setFont("helvetica", "bold").setFontSize(11);
-    
-    // Left side - Total Items
-    doc.text(
-      `Total Item Types: ${totalTypes}`,
-      DIMENSIONS.margin + 4,
-      summaryY + 8
-    );
-
-    // Right side - Total Quantity
-    doc.text(
-      `Total Quantity: ${totalQty}`,
-      pageW - DIMENSIONS.margin - 4,
-      summaryY + 8,
-      { align: "right" }
-    );
-
-    // Reset color
-    doc.setTextColor(0, 0, 0);
-  };
-
-  // Get last item position
-  const getLastItemY = (): number => {
-    const { minRowH } = DIMENSIONS.table;
-    const headerY = y;
-    const tableHeaderHeight = 11;
-    const itemsCount = items.length;
-    return headerY + tableHeaderHeight + (itemsCount * minRowH);
-  };
-
-  const lastY = getLastItemY();
-  
-  // Check if summary fits on current page
-  if (lastY + 20 > pageH - DIMENSIONS.bottomMargin) {
-    doc.addPage();
-    drawHeaderBar(false);
-    drawSummary(DIMENSIONS.headerBarH + 2);
-  } else {
-    drawSummary(lastY);
-  }
-
-  const pages = doc.getNumberOfPages();
-  for (let p = 1; p <= pages; p++) {
-    doc.setPage(p);
-    drawFooter(p, pages);
-  }
-
-  doc.save(`inquiry-${inquiryNumber}.pdf`);
-};
-
-// QR Code Scanner - Direct Text Display
-// When scanned, the QR code shows this information directly:
-/*
-Example QR Code Content (Plain Text):
-
-Inquiry #: 13122024143055
-Customer: John Doe
-Company: ABC Trading LLC
-Email: john@abc.com
-Phone: +966501234567
-Items: 5 types
-Total Qty: 150
-Date: 12/13/2024
-
-Inquiry Number Format: DDMMYYYYHHMMSS
-- DD: Day (13)
-- MM: Month (12)
-- YYYY: Year (2024)
-- HH: Hour (14)
-- MM: Minute (30)
-- SS: Second (55)
-
-Example: 13122024143055 = December 13, 2024 at 14:30:55
-
-Benefits:
-✅ Unique inquiry number for each PDF
-✅ Visible in PDF header below "Inquiry" title
-✅ Included in QR code for verification
-✅ Easy to reference in communications
-✅ Chronological sorting (oldest to newest)
-✅ No website needed - shows text immediately
-✅ Works with any QR scanner app
-✅ Can be copied/pasted from scanner
-
-The inquiry number appears:
-1. In the PDF header (center, below "Inquiry")
-2. In the QR code data
-3. In the filename (inquiry-13122024143055.pdf)
-*/
 
   return (
     <div className="py-10 sm:py-12">
