@@ -114,16 +114,26 @@ export default function Footer() {
 
         {/* Legal */}
         <div>
-          <h3 className="text-sm font-semibold text-gray-800 mb-4">Legal</h3>
+          <h3 className="text-sm font-semibold text-gray-800 mb-4">Human Rights</h3>
           <ul className="space-y-2 text-gray-500 text-sm">
             <li>
-              <Link href="#" className="hover:text-primary transition">
-                Privacy
+              <Link href="/customer-care/humanRightPolicy" className="hover:text-primary transition">
+                Human Rights Policy
               </Link>
             </li>
             <li>
-              <Link href="#" className="hover:text-primary transition">
-                Terms & Conditions
+              <Link href="/customer-care/humanRightsAnalysisProcessDescription" className="hover:text-primary transition">
+                Human Rights Analysis Process Description
+              </Link>
+            </li>
+                        <li>
+              <Link href="/customer-care/humanRightsDueDiligance" className="hover:text-primary transition">
+                Human Rights Due Diligance
+              </Link>
+            </li>
+            <li>
+              <Link href="/customer-care/supplierIncentiveProcessDescription" className="hover:text-primary transition">
+                Supplier Incentive Process 
               </Link>
             </li>
           </ul>

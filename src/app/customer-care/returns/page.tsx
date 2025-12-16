@@ -11,6 +11,11 @@ const sidebarItems = [
   { id: 'shopping-guide', label: 'Shopping Guide', path: '/customer-care/shopping-guide', isActive: false },
   { id: 'returns', label: 'Return and Exchange', path: '/customer-care/returns', isActive: true },
   { id: 'privacy', label: 'Privacy Policy', path: '/customer-care/privacy', isActive: false },
+  { id: 'human-rights', label: 'Human Rights Due Diligence', path: '/customer-care/humanRightsDueDiligance', isActive: false },
+  { id: 'human-rights-policy', label: 'Human Rights Policy', path: '/customer-care/humanRightPolicy', isActive: false },
+  { id: 'human-rights-analysis', label: 'Human Rights Analysis Process Description', path: '/customer-care/humanRightsAnalysisProcessDescription', isActive: false },
+  { id: 'supplier-incentive', label: 'Supplier Incentive Process Description', path: '/customer-care/supplierIncentiveProcessDescription', isActive: false },
+
 ];
 
 export default function ReturnsPage() {
@@ -41,8 +46,8 @@ export default function ReturnsPage() {
                       <Link
                         href={item.path}
                         className={`block px-4 py-3 text-sm rounded-md transition-colors ${item.isActive
-                            ? 'bg-purple-50 text-purple-700 font-medium border-l-4 border-purple-600'
-                            : 'text-gray-700 hover:bg-gray-50 hover:text-purple-600'
+                          ? 'bg-purple-50 text-purple-700 font-medium border-l-4 border-purple-600'
+                          : 'text-gray-700 hover:bg-gray-50 hover:text-purple-600'
                           }`}
                       >
                         {item.label}
