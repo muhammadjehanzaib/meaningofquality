@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Users, Target, Award } from "lucide-react";
 import { useLang } from "@/hooks/useLang";
+import { usePathname } from 'next/navigation';
 
 // Sidebar items (dynamic highlight)
 const sidebarItems = [
@@ -15,9 +16,11 @@ const sidebarItems = [
     { id: 'privacy', label: 'Privacy Policy', path: '/customer-care/privacy', isActive: false },
 ];
 
+
 export default function AboutPage() {
     const lang = useLang();
     const isAr = lang === "ar";
+    const pathname = usePathname();
 
     return (
         <div className="min-h-screen bg-gray-50">
@@ -40,22 +43,23 @@ export default function AboutPage() {
                 <aside className="lg:col-span-1">
                     <div className="bg-white shadow rounded-lg border">
                         <nav className="p-4">
-                            <ul className="space-y-1">
-                                {sidebarItems.map((item) => (
-                                    <li key={item.id}>
-                                        <Link
-                                            href={item.path}
-                                            className={`block px-4 py-3 text-sm rounded-md transition-colors ${item.isActive
-                                                    ? 'bg-purple-50 text-purple-700 font-medium border-l-4 border-purple-600'
-                                                    : 'text-gray-700 hover:bg-gray-50 hover:text-purple-600'
-                                                }`}
-                                        >
-                                            {item.label}
-                                        </Link>
-
-                                    </li>
-                                ))}
-                            </ul>
+                       <ul>
+  {sidebarItems.map(item => (
+    <li key={item.id}>
+      <Link
+        href={item.path}
+        replace
+        className={`block px-4 py-3 text-sm rounded-md transition-colors ${
+          pathname === item.path
+            ? 'bg-purple-50 text-purple-700 font-medium border-l-4 border-purple-600'
+            : 'text-gray-700 hover:bg-gray-50 hover:text-purple-600'
+        }`}
+      >
+        {item.label}
+      </Link>
+    </li>
+  ))}
+</ul>
                         </nav>
                     </div>
                 </aside>
