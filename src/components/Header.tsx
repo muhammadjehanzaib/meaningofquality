@@ -33,18 +33,17 @@ export default function Header() {
             {/* English */}
             <Link
               href="/"
-              className="text-sm sm:text-base font-semibold text-gray-800 hover:text-indigo-600 transition-colors duration-300 break-words"
+              className="text-sm sm:text-base font-semibold text-gray-500 hover:text-indigo-600 transition-colors duration-300 break-words"
             >
               THE MEANING OF QUALITY TRADING ESTABLISHMENT
             </Link>
 
             {/* Arabic */}
-            <span className="text-xs sm:text-sm font-medium text-center text-gray-600 hover:text-indigo-600 rtl">
+            <span className="text-xs sm:text-sm font-medium text-center text-gray-500 hover:text-indigo-600 rtl">
               مؤسسة معنى الجودة للتجارة
             </span>
           </div>
         </div>
-
 
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-6 ">

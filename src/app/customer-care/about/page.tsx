@@ -43,23 +43,22 @@ export default function AboutPage() {
                 <aside className="lg:col-span-1">
                     <div className="bg-white shadow rounded-lg border">
                         <nav className="p-4">
-                       <ul>
-  {sidebarItems.map(item => (
-    <li key={item.id}>
-      <Link
-        href={item.path}
-        replace
-        className={`block px-4 py-3 text-sm rounded-md transition-colors ${
-          pathname === item.path
-            ? 'bg-purple-50 text-purple-700 font-medium border-l-4 border-purple-600'
-            : 'text-gray-700 hover:bg-gray-50 hover:text-purple-600'
-        }`}
-      >
-        {item.label}
-      </Link>
-    </li>
-  ))}
-</ul>
+                            <ul>
+                                {sidebarItems.map(item => (
+                                    <li key={item.id}>
+                                        <Link
+                                            href={item.path}
+                                            replace
+                                            className={`block px-4 py-3 text-sm rounded-md transition-colors ${pathname === item.path
+                                                    ? 'bg-purple-50 text-purple-700 font-medium border-l-4 border-purple-600'
+                                                    : 'text-gray-700 hover:bg-gray-50 hover:text-purple-600'
+                                                }`}
+                                        >
+                                            {item.label}
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
                         </nav>
                     </div>
                 </aside>
