@@ -5,13 +5,14 @@ import Container from "@/components/ui/Container";
 import { Mail, Phone, MapPin, MessageCircle, Clock } from "lucide-react";
 import { useLang } from "@/hooks/useLang";
 
-// Sidebar navigation items
+// Sidebar items
 const sidebarItems = [
-  { id: 'contact', label: 'Contact Us', path: '/customer-care' },
-  { id: 'faq', label: 'FAQ', path: '/customer-care/faq' },
-  { id: 'shopping-guide', label: 'Shopping Guide', path: '/customer-care/shopping-guide' },
-  { id: 'returns', label: 'Return & Exchange', path: '/customer-care/returns' },
-  { id: 'privacy', label: 'Privacy Policy', path: '/customer-care/privacy' },
+  { id: 'contact', label: 'Contact Us', path: '/customer-care', isActive: true },
+  { id: 'about', label: 'About Us', path: '/customer-care/about', isActive: false },
+  { id: 'faq', label: 'Frequently Asked Questions', path: '/customer-care/faq', isActive: false },
+  { id: 'shopping-guide', label: 'Shopping Guide', path: '/customer-care/shopping-guide', isActive: false },
+  { id: 'returns', label: 'Return and Exchange', path: '/customer-care/returns', isActive: false },
+  { id: 'privacy', label: 'Privacy Policy', path: '/customer-care/privacy', isActive: false },
 ];
 
 export default function CustomerCarePage() {
@@ -23,10 +24,12 @@ export default function CustomerCarePage() {
       {/* Breadcrumb */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <nav className="flex text-sm text-gray-500" aria-label="Breadcrumb">
-            <Link href="/" className="hover:text-purple-600">{isAr ? "الرئيسية" : "Home"}</Link>
-            <span className="mx-2">/</span>
-            <span className="text-purple-600">{isAr ? "خدمة العملاء" : "Customer Care"}</span>
+          <nav className="flex text-sm text-gray-500">
+            <Link href="/" className="hover:text-purple-600">Home</Link>
+            <span className="mx-2">&gt;</span>
+            <Link href="/customer-care" className="hover:text-purple-600">Customer Care</Link>
+            <span className="mx-2">&gt;</span>
+            <span className="text-gray-900">{isAr ? "تواصل معنا" : "Contact Us"}</span>
           </nav>
         </div>
       </div>
@@ -42,9 +45,14 @@ export default function CustomerCarePage() {
                     <Link
                       href={item.path}
                       className={`flex items-center px-4 py-3 text-sm rounded-md transition-colors ${
-                        item.path === '/customer-care' ? 'bg-purple-100 text-purple-700 font-medium border-r-4 border-purple-700' : 'text-gray-700 hover:bg-gray-50 hover:text-purple-600'
+                        item.isActive
+                          ? 'bg-purple-100 text-purple-700 font-medium border-r-4 border-purple-700'
+                          : 'text-gray-700 hover:bg-gray-50 hover:text-purple-600'
                       }`}
                     >
+                      <span className="mr-2">
+                        {item.isActive && <span className="text-purple-600">▶</span>}
+                      </span>
                       {item.label}
                     </Link>
                   </li>

@@ -4,10 +4,10 @@ import React from 'react';
 // import { useLanguage } from '@/contexts/LanguageContext';
 import Link from 'next/link';
 // import { Footer } from '@/components';
-
-// Sidebar navigation items
+// Sidebar items (reuse the same as other pages)
 const sidebarItems = [
   { id: 'contact', label: 'Contact Us', path: '/customer-care', isActive: false },
+  { id: 'about', label: 'About Us', path: '/customer-care/about', isActive: false },
   { id: 'faq', label: 'Frequently Asked Questions', path: '/customer-care/faq', isActive: false },
   { id: 'shopping-guide', label: 'Shopping Guide', path: '/customer-care/shopping-guide', isActive: true },
   { id: 'returns', label: 'Return and Exchange', path: '/customer-care/returns', isActive: false },

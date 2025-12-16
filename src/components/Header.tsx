@@ -92,8 +92,8 @@ export default function Header() {
             )}
           </div>
           <Link href="/cart" className="text-sm text-foreground/80 hover:text-foreground">{t("quotationSummery", lang)}</Link>
-          <Link href="/about" className="text-sm text-foreground/80 hover:text-foreground">{t("about", lang)}</Link>
-          <Link href="/contact" className="text-sm text-foreground/80 hover:text-foreground">{t("contact", lang)}</Link>
+          <Link href="customer-care/about" className="text-sm text-foreground/80 hover:text-foreground">{t("about", lang)}</Link>
+          <Link href="/customer-care" className="text-sm text-foreground/80 hover:text-foreground">{t("contact", lang)}</Link>
         </nav>
 
         <div className="hidden md:flex items-center gap-3">
@@ -176,10 +176,10 @@ export default function Header() {
               <Link href="/cart" className="py-2 text-sm text-foreground/90" onClick={() => setMobileOpen(false)}>
                 {t("quotationSummery", lang)}
               </Link>
-              <Link href="/about" className="py-2 text-sm text-foreground/90" onClick={() => setMobileOpen(false)}>
+              <Link href="/customer-care/about" className="py-2 text-sm text-foreground/90" onClick={() => setMobileOpen(false)}>
                 {t("about", lang)}
               </Link>
-              <Link href="/contact" className="py-2 text-sm text-foreground/90" onClick={() => setMobileOpen(false)}>
+              <Link href="/customer-care" className="py-2 text-sm text-foreground/90" onClick={() => setMobileOpen(false)}>
                 {t("contact", lang)}
               </Link>
               <Link href="/cart" className="py-2 text-sm text-foreground/90" onClick={() => setMobileOpen(false)}>
