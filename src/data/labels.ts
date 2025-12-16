@@ -8,9 +8,9 @@ export const labels = {
   newProducts: { en: "New Products", ar: "منتجات جديدة" },
   mostVisitedProducts: { en: "Most Visited Products", ar: "المنتجات الأكثر زيارة" },
   categories: { en: "Products", ar: "الفئات" },
-  about: { en: "About", ar: "حول" },
+  about: { en: "About Us", ar: "حول" },
   quotationSummery: { en: "Request Quotation", ar: "طلب عرض سعر" },
-  contact: { en: "Contact", ar: "اتصل" },
+  contact: { en: "Contact Us", ar: "اتصل" },
   home: { en: "Home", ar: "الصفحة الرئيسية" },
   productNotFound: { en: "Product not found", ar: "المنتج غير موجود" },
   productNotFoundDesc: {

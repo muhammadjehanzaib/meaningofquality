@@ -92,7 +92,7 @@ export default function Header() {
             )}
           </div>
           <Link href="/cart" className="text-sm text-foreground/80 hover:text-foreground">{t("quotationSummery", lang)}</Link>
-          <Link href="customer-care/about" className="text-sm text-foreground/80 hover:text-foreground">{t("about", lang)}</Link>
+          <Link href="/customer-care/about" className="text-sm text-foreground/80 hover:text-foreground">{t("about", lang)}</Link>
           <Link href="/customer-care" className="text-sm text-foreground/80 hover:text-foreground">{t("contact", lang)}</Link>
         </nav>
 

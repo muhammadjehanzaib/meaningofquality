@@ -109,16 +109,16 @@ export default function CustomerCarePage() {
           </div>
 
           {/* Map */}
-          {/* Map */}
           <div className="overflow-hidden rounded-3xl border shadow-sm">
             <iframe
               title="MOQ Location"
-              src="https://www.google.com/maps?q=RQJA6630%20Riyadh%20Saudi%20Arabia&output=embed"
+              src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3625.123456789!2d46.8030671!3d24.6488866!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e2f07c304da7f73%3A0x1ac7613a97fb0c26!2sRQJA6630%2C%20Al%20Jazeerah%20District%2C%20Riyadh%2014262%2C%20Saudi%20Arabia!5e0!3m2!1sen!2sar!4v1700000000000!5m2!1sen!2sar"
               className="h-[380px] w-full border-0"
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
             />
           </div>
+
 
         </div>
       </div>
