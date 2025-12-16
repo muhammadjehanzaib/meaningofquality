@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import Container from "@/components/ui/Container";
 import { Users, Target, Award } from "lucide-react";
 import { useLang } from "@/hooks/useLang";
 

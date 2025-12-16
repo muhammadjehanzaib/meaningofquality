@@ -46,8 +46,8 @@ export default function CustomerCarePage() {
                     <Link
                       href={item.path}
                       className={`block px-4 py-3 text-sm rounded-md transition-colors ${item.isActive
-                          ? 'bg-purple-50 text-purple-700 font-medium border-l-4 border-purple-600'
-                          : 'text-gray-700 hover:bg-gray-50 hover:text-purple-600'
+                        ? 'bg-purple-50 text-purple-700 font-medium border-l-4 border-purple-600'
+                        : 'text-gray-700 hover:bg-gray-50 hover:text-purple-600'
                         }`}
                     >
                       {item.label}
@@ -109,14 +109,17 @@ export default function CustomerCarePage() {
           </div>
 
           {/* Map */}
+          {/* Map */}
           <div className="overflow-hidden rounded-3xl border shadow-sm">
             <iframe
               title="MOQ Location"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3624.168834123456!2d46.673112!3d24.705623!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e2f031a5bc12345%3A0xabcdef1234567890!2sJarallah%20Bin%20Fahad%20Street%2C%20Al%20Jazeerah%20District%2C%20Riyadh%2C%20Saudi%20Arabia!5e0!3m2!1sen!2sar!4v1699999999999!5m2!1sen!2sar"
+              src="https://www.google.com/maps?q=RQJA6630%20Riyadh%20Saudi%20Arabia&output=embed"
               className="h-[380px] w-full border-0"
               loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
             />
           </div>
+
         </div>
       </div>
 
