@@ -107,8 +107,8 @@ export default function FAQPage() {
   const [openQuestions, setOpenQuestions] = useState<string[]>([]);
 
   const toggleQuestion = (questionId: string) => {
-    setOpenQuestions(prev => 
-      prev.includes(questionId) 
+    setOpenQuestions(prev =>
+      prev.includes(questionId)
         ? prev.filter(id => id !== questionId)
         : [...prev, questionId]
     );
@@ -117,7 +117,7 @@ export default function FAQPage() {
   const filteredCategories = faqCategories.map(category => ({
     ...category,
     questions: category.questions.filter(
-      q => 
+      q =>
         q.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
         q.answer.toLowerCase().includes(searchQuery.toLowerCase())
     )
@@ -149,17 +149,14 @@ export default function FAQPage() {
                     <li key={item.id}>
                       <Link
                         href={item.path}
-                        className={`flex items-center px-4 py-3 text-sm rounded-md transition-colors ${
-                          item.isActive
-                            ? 'bg-purple-100 text-purple-700 font-medium border-r-4 border-purple-700'
+                        className={`block px-4 py-3 text-sm rounded-md transition-colors ${item.isActive
+                            ? 'bg-purple-50 text-purple-700 font-medium border-l-4 border-purple-600'
                             : 'text-gray-700 hover:bg-gray-50 hover:text-purple-600'
-                        }`}
+                          }`}
                       >
-                        <span className="mr-2">
-                          {item.isActive && <span className="text-purple-600">▶</span>}
-                        </span>
                         {item.label}
                       </Link>
+
                     </li>
                   ))}
                 </ul>
@@ -171,7 +168,7 @@ export default function FAQPage() {
           <div className="lg:col-span-3">
             <div className="bg-white rounded-lg shadow-sm border p-8">
               <h1 className="text-3xl font-bold text-gray-900 mb-8">Frequently Asked Questions</h1>
-              
+
               {/* Search */}
               <div className="mb-8">
                 <label htmlFor="search" className="block text-sm font-medium text-gray-700 mb-2">
@@ -198,12 +195,12 @@ export default function FAQPage() {
                         </span>
                         {category.title}
                       </h2>
-                      
+
                       <div className="space-y-4">
                         {category.questions.map((faq, questionIndex) => {
                           const questionId = `${categoryIndex}-${questionIndex}`;
                           const isOpen = openQuestions.includes(questionId);
-                          
+
                           return (
                             <div key={questionIndex} className="border border-gray-200 rounded-lg">
                               <button
@@ -219,7 +216,7 @@ export default function FAQPage() {
                                   </svg>
                                 </span>
                               </button>
-                              
+
                               {isOpen && (
                                 <div className="px-6 pb-4">
                                   <div className="text-gray-600 leading-relaxed">
@@ -243,7 +240,7 @@ export default function FAQPage() {
                     <h3 className="text-lg font-medium text-gray-900 mb-2">No FAQs found</h3>
                     <p className="text-gray-600 mb-4">
                       We couldn&apos;t find any questions matching your search. Try different keywords or{' '}
-                      <button 
+                      <button
                         onClick={() => setSearchQuery('')}
                         className="text-purple-600 hover:underline"
                       >

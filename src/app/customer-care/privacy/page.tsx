@@ -40,17 +40,14 @@ export default function PrivacyPage() {
                     <li key={item.id}>
                       <Link
                         href={item.path}
-                        className={`flex items-center px-4 py-3 text-sm rounded-md transition-colors ${
-                          item.isActive
-                            ? 'bg-purple-100 text-purple-700 font-medium border-r-4 border-purple-700'
+                        className={`block px-4 py-3 text-sm rounded-md transition-colors ${item.isActive
+                            ? 'bg-purple-50 text-purple-700 font-medium border-l-4 border-purple-600'
                             : 'text-gray-700 hover:bg-gray-50 hover:text-purple-600'
-                        }`}
+                          }`}
                       >
-                        <span className="mr-2">
-                          {item.isActive && <span className="text-purple-600">▶</span>}
-                        </span>
                         {item.label}
                       </Link>
+
                     </li>
                   ))}
                 </ul>
@@ -62,7 +59,7 @@ export default function PrivacyPage() {
           <div className="lg:col-span-3">
             <div className="bg-white rounded-lg shadow-sm border p-8">
               <h1 className="text-3xl font-bold text-gray-900 mb-8">Privacy Policy</h1>
-              
+
               <div className="space-y-8">
                 {/* Last Updated */}
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
@@ -82,7 +79,7 @@ export default function PrivacyPage() {
                     </span>
                     Information We Collect
                   </h2>
-                  
+
                   <div className="space-y-6 text-gray-700">
                     <div>
                       <h3 className="text-lg font-medium text-gray-900 mb-3">Personal Information</h3>
@@ -94,7 +91,7 @@ export default function PrivacyPage() {
                         <li>Subscribe to our newsletter or marketing communications</li>
                         <li>Participate in surveys, contests, or promotions</li>
                       </ul>
-                      
+
                       <div className="mt-4 p-4 bg-gray-50 rounded-lg">
                         <h4 className="font-medium text-gray-900 mb-2">This may include:</h4>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
@@ -137,10 +134,10 @@ export default function PrivacyPage() {
                     </span>
                     How We Use Your Information
                   </h2>
-                  
+
                   <div className="space-y-4 text-gray-700">
                     <p>We use the collected information for various purposes, including:</p>
-                    
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                         <h3 className="font-medium text-green-900 mb-3">🛒 Service Provision</h3>
@@ -151,7 +148,7 @@ export default function PrivacyPage() {
                           <li>• Sending order confirmations and updates</li>
                         </ul>
                       </div>
-                      
+
                       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                         <h3 className="font-medium text-blue-900 mb-3">📧 Communication</h3>
                         <ul className="text-sm text-blue-800 space-y-1">
@@ -161,7 +158,7 @@ export default function PrivacyPage() {
                           <li>• Conducting surveys and feedback collection</li>
                         </ul>
                       </div>
-                      
+
                       <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
                         <h3 className="font-medium text-purple-900 mb-3">🔍 Improvement</h3>
                         <ul className="text-sm text-purple-800 space-y-1">
@@ -171,7 +168,7 @@ export default function PrivacyPage() {
                           <li>• Improving our products and services</li>
                         </ul>
                       </div>
-                      
+
                       <div className="bg-red-50 border border-red-200 rounded-lg p-4">
                         <h3 className="font-medium text-red-900 mb-3">🛡️ Security & Legal</h3>
                         <ul className="text-sm text-red-800 space-y-1">
@@ -193,26 +190,26 @@ export default function PrivacyPage() {
                     </span>
                     Information Sharing and Disclosure
                   </h2>
-                  
+
                   <div className="space-y-4 text-gray-700">
                     <p>We do not sell, trade, or rent your personal information to third parties. However, we may share your information in the following circumstances:</p>
-                    
+
                     <div className="space-y-4">
                       <div className="border-l-4 border-blue-500 pl-4">
                         <h3 className="font-medium text-gray-900">Service Providers</h3>
                         <p className="text-sm">We may share information with trusted third-party service providers who assist us in operating our website, conducting business, or serving you (e.g., payment processors, shipping companies, email services).</p>
                       </div>
-                      
+
                       <div className="border-l-4 border-yellow-500 pl-4">
                         <h3 className="font-medium text-gray-900">Legal Requirements</h3>
                         <p className="text-sm">We may disclose your information if required by law, court order, or governmental request, or to protect our rights, property, or safety.</p>
                       </div>
-                      
+
                       <div className="border-l-4 border-green-500 pl-4">
                         <h3 className="font-medium text-gray-900">Business Transfers</h3>
                         <p className="text-sm">In the event of a merger, acquisition, or sale of all or part of our business, your information may be transferred to the acquiring entity.</p>
                       </div>
-                      
+
                       <div className="border-l-4 border-purple-500 pl-4">
                         <h3 className="font-medium text-gray-900">With Your Consent</h3>
                         <p className="text-sm">We may share your information for any other purpose with your explicit consent.</p>
@@ -229,10 +226,10 @@ export default function PrivacyPage() {
                     </span>
                     Data Security
                   </h2>
-                  
+
                   <div className="space-y-4 text-gray-700">
                     <p>We implement appropriate technical and organizational security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.</p>
-                    
+
                     <div className="bg-gray-50 rounded-lg p-6">
                       <h3 className="font-medium text-gray-900 mb-4">Our security measures include:</h3>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
@@ -266,7 +263,7 @@ export default function PrivacyPage() {
                         </ul>
                       </div>
                     </div>
-                    
+
                     <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                       <p className="text-yellow-800 text-sm">
                         <strong>Important:</strong> While we strive to protect your personal information, no method of transmission over the internet or electronic storage is 100% secure. We cannot guarantee absolute security, but we continuously work to improve our security measures.
@@ -283,32 +280,32 @@ export default function PrivacyPage() {
                     </span>
                     Your Rights and Choices
                   </h2>
-                  
+
                   <div className="space-y-4 text-gray-700">
                     <p>You have certain rights regarding your personal information:</p>
-                    
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="border border-gray-200 rounded-lg p-4">
                         <h3 className="font-medium text-gray-900 mb-2">🔍 Access and Review</h3>
                         <p className="text-sm">You can access and review your personal information through your account settings or by contacting us.</p>
                       </div>
-                      
+
                       <div className="border border-gray-200 rounded-lg p-4">
                         <h3 className="font-medium text-gray-900 mb-2">✏️ Update and Correct</h3>
                         <p className="text-sm">You can update or correct your personal information at any time through your account or by contacting customer service.</p>
                       </div>
-                      
+
                       <div className="border border-gray-200 rounded-lg p-4">
                         <h3 className="font-medium text-gray-900 mb-2">🗑️ Delete</h3>
                         <p className="text-sm">You can request deletion of your personal information, subject to certain legal and business requirements.</p>
                       </div>
-                      
+
                       <div className="border border-gray-200 rounded-lg p-4">
                         <h3 className="font-medium text-gray-900 mb-2">📧 Opt-out</h3>
                         <p className="text-sm">You can unsubscribe from marketing communications at any time by clicking the unsubscribe link in emails or contacting us.</p>
                       </div>
                     </div>
-                    
+
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                       <p className="text-blue-800 text-sm">
                         To exercise any of these rights, please contact us at <a href="mailto:privacy@saudisafety.com" className="font-medium underline">privacy@saudisafety.com</a> or use our <Link href="/customer-care" className="font-medium underline">contact form</Link>.
@@ -325,10 +322,10 @@ export default function PrivacyPage() {
                     </span>
                     Cookies and Tracking Technologies
                   </h2>
-                  
+
                   <div className="space-y-4 text-gray-700">
                     <p>We use cookies and similar tracking technologies to enhance your browsing experience, analyze site traffic, and personalize content.</p>
-                    
+
                     <div className="bg-gray-50 rounded-lg p-6">
                       <h3 className="font-medium text-gray-900 mb-4">Types of cookies we use:</h3>
                       <div className="space-y-3 text-sm">
@@ -369,7 +366,7 @@ export default function PrivacyPage() {
                     </span>
                     Changes to This Privacy Policy
                   </h2>
-                  
+
                   <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
                     <h3 className="font-medium text-orange-900 mb-2">📅 When we update our policy:</h3>
                     <ul className="text-sm text-orange-800 space-y-1">

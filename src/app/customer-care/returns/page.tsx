@@ -40,17 +40,14 @@ export default function ReturnsPage() {
                     <li key={item.id}>
                       <Link
                         href={item.path}
-                        className={`flex items-center px-4 py-3 text-sm rounded-md transition-colors ${
-                          item.isActive
-                            ? 'bg-purple-100 text-purple-700 font-medium border-r-4 border-purple-700'
+                        className={`block px-4 py-3 text-sm rounded-md transition-colors ${item.isActive
+                            ? 'bg-purple-50 text-purple-700 font-medium border-l-4 border-purple-600'
                             : 'text-gray-700 hover:bg-gray-50 hover:text-purple-600'
-                        }`}
+                          }`}
                       >
-                        <span className="mr-2">
-                          {item.isActive && <span className="text-purple-600">▶</span>}
-                        </span>
                         {item.label}
                       </Link>
+
                     </li>
                   ))}
                 </ul>
@@ -62,7 +59,7 @@ export default function ReturnsPage() {
           <div className="lg:col-span-3">
             <div className="bg-white rounded-lg shadow-sm border p-8">
               <h1 className="text-3xl font-bold text-gray-900 mb-8">Return and Exchange Policy</h1>
-              
+
               <div className="space-y-8">
                 {/* Overview */}
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
@@ -98,12 +95,12 @@ export default function ReturnsPage() {
                     </span>
                     Return Policy
                   </h2>
-                  
+
                   <div className="space-y-4 text-gray-700">
                     <h3 className="text-lg font-medium text-gray-900">Return Period</h3>
                     <p>
-                      You have <strong>14 days</strong> from the date of delivery to return most items. 
-                      For electronics and technical products, the return period may be reduced to 7 days. 
+                      You have <strong>14 days</strong> from the date of delivery to return most items.
+                      For electronics and technical products, the return period may be reduced to 7 days.
                       Holiday purchases made between November 1st and December 31st can be returned until January 31st.
                     </p>
 
@@ -150,7 +147,7 @@ export default function ReturnsPage() {
                     </span>
                     How to Return an Item
                   </h2>
-                  
+
                   <div className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                       <div className="text-center p-6 bg-gray-50 rounded-lg">
@@ -206,10 +203,10 @@ export default function ReturnsPage() {
                     </span>
                     Exchange Policy
                   </h2>
-                  
+
                   <div className="space-y-4 text-gray-700">
                     <p>
-                      Exchanges are available for the same product in a different size, color, or similar variation, 
+                      Exchanges are available for the same product in a different size, color, or similar variation,
                       subject to availability. The exchange process follows the same timeline as returns.
                     </p>
 
@@ -223,7 +220,7 @@ export default function ReturnsPage() {
 
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4">
                       <p className="text-blue-800">
-                        <strong>Price Differences:</strong> If the replacement item costs more, you&apos;ll be charged the difference. 
+                        <strong>Price Differences:</strong> If the replacement item costs more, you&apos;ll be charged the difference.
                         If it costs less, we&apos;ll refund the difference to your original payment method.
                       </p>
                     </div>
@@ -238,11 +235,11 @@ export default function ReturnsPage() {
                     </span>
                     Refund Information
                   </h2>
-                  
+
                   <div className="space-y-4 text-gray-700">
                     <h3 className="text-lg font-medium text-gray-900">Processing Time</h3>
                     <p>
-                      Refunds are processed within <strong>5-7 business days</strong> after we receive and inspect your returned item. 
+                      Refunds are processed within <strong>5-7 business days</strong> after we receive and inspect your returned item.
                       You&apos;ll receive an email confirmation once the refund is processed.
                     </p>
 
@@ -251,14 +248,14 @@ export default function ReturnsPage() {
                       <div className="border border-gray-200 rounded-lg p-4">
                         <h4 className="font-medium text-gray-900 mb-2">💳 Original Payment Method</h4>
                         <p className="text-sm text-gray-600">
-                          For card payments, refunds are credited to the original card. 
+                          For card payments, refunds are credited to the original card.
                           Bank processing may take additional 3-5 business days.
                         </p>
                       </div>
                       <div className="border border-gray-200 rounded-lg p-4">
                         <h4 className="font-medium text-gray-900 mb-2">💰 Cash on Delivery</h4>
                         <p className="text-sm text-gray-600">
-                          COD refunds are processed as bank transfers to your provided account 
+                          COD refunds are processed as bank transfers to your provided account
                           or as store credit for future purchases.
                         </p>
                       </div>

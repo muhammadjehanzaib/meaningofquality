@@ -5,6 +5,7 @@ import Container from "@/components/ui/Container";
 import { Mail, Phone, MapPin, MessageCircle, Clock } from "lucide-react";
 import { useLang } from "@/hooks/useLang";
 
+
 // Sidebar items
 const sidebarItems = [
   { id: 'contact', label: 'Contact Us', path: '/customer-care', isActive: true },
@@ -44,17 +45,14 @@ export default function CustomerCarePage() {
                   <li key={item.id}>
                     <Link
                       href={item.path}
-                      className={`flex items-center px-4 py-3 text-sm rounded-md transition-colors ${
-                        item.isActive
-                          ? 'bg-purple-100 text-purple-700 font-medium border-r-4 border-purple-700'
+                      className={`block px-4 py-3 text-sm rounded-md transition-colors ${item.isActive
+                          ? 'bg-purple-50 text-purple-700 font-medium border-l-4 border-purple-600'
                           : 'text-gray-700 hover:bg-gray-50 hover:text-purple-600'
-                      }`}
+                        }`}
                     >
-                      <span className="mr-2">
-                        {item.isActive && <span className="text-purple-600">▶</span>}
-                      </span>
                       {item.label}
                     </Link>
+
                   </li>
                 ))}
               </ul>
