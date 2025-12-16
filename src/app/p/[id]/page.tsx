@@ -118,6 +118,22 @@ export default async function ProductDetailPage({ params }: PageProps) {
               <L value={detail.description || { en: "High-performance product.", ar: "منتج عالي الأداء." }} />
             </p>
 
+            {/* Price range */}
+            {typeof item.priceRange?.min === "number" &&
+              typeof item.priceRange?.max === "number" && (
+                <div className="mt-4">
+                  <div className="inline-flex items-center gap-2 rounded-lg border border-foreground/10 bg-muted/40 px-4 py-2">
+                    <span className="text-sm text-muted-foreground">
+                      <LKey k="priceRange" />
+                    </span>
+                    <span className="text-sm font-semibold text-foreground">
+                      <LKey k="currency" /> {item.priceRange.min} – {item.priceRange.max}
+                    </span>
+                  </div>
+                </div>
+              )}
+
+
             {/* CTAs (show only if present) */}
             <div className="mt-6 flex flex-wrap gap-3">
               {/* {detail.tdsUrl && (
@@ -133,10 +149,11 @@ export default async function ProductDetailPage({ params }: PageProps) {
               <a className="inline-flex items-center justify-center rounded-lg border px-4 py-2 text-sm hover:bg-muted" href="/contact" role="button">
                 <LKey k="contactSales" />
               </a>
+
             </div>
 
             {/* Add to cart / inquiry */}
-            <AddToCart productId={item.id} name={item.name} img={img} packaging={detail.packaging} />
+            <AddToCart productId={item.id} name={item.name} img={img} packaging={detail.packaging} priceRange={item.priceRange} />
 
             {/* Properties */}
             {detail.properties && detail.properties.length > 0 && (

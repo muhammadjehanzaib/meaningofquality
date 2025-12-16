@@ -425,6 +425,9 @@ export default function CartPage() {
         if (it.volume) details.push(`Vol: ${it.volume}`);
         if (it.type) details.push(`Type: ${it.type}`);
         if (it.stockCode) details.push(`Stock: ${it.stockCode}`);
+        if (it.priceRange) {
+          details.push(`Price: ${it.priceRange.min} – ${it.priceRange.max}`);
+        }
         const detailLines = doc.splitTextToSize(details.join(" | "), metaW - 2);
         doc.text(detailLines, x, yRow + 6);
         x += metaW;
@@ -451,62 +454,62 @@ export default function CartPage() {
     const header = drawTableHeader(y);
     await renderRows(0, header.rowY);
 
-    // Add summary row after items table
-    const drawSummary = (yStart: number) => {
-      const totalTypes = items.length;
-      const totalQty = items.reduce((acc, it) => acc + it.qty, 0);
+    // // Add summary row after items table
+    // const drawSummary = (yStart: number) => {
+    //   const totalTypes = items.length;
+    //   const totalQty = items.reduce((acc, it) => acc + it.qty, 0);
 
-      const summaryY = yStart;
-      const summaryH = 12;
-      const fullWidth = pageW - DIMENSIONS.margin * 2;
+    //   const summaryY = yStart;
+    //   const summaryH = 12;
+    //   const fullWidth = pageW - DIMENSIONS.margin * 2;
 
-      // Draw summary row with green background
-      doc.setDrawColor(230).setLineWidth(0.3);
-      doc.setFillColor(COLORS.primary.r, COLORS.primary.g, COLORS.primary.b);
-      doc.rect(DIMENSIONS.margin, summaryY, fullWidth, summaryH, "FD");
+    //   // Draw summary row with green background
+    //   doc.setDrawColor(230).setLineWidth(0.3);
+    //   doc.setFillColor(COLORS.primary.r, COLORS.primary.g, COLORS.primary.b);
+    //   doc.rect(DIMENSIONS.margin, summaryY, fullWidth, summaryH, "FD");
 
-      // White text for contrast
-      doc.setTextColor(255, 255, 255);
-      doc.setFont("helvetica", "bold").setFontSize(11);
+    //   // White text for contrast
+    //   doc.setTextColor(255, 255, 255);
+    //   doc.setFont("helvetica", "bold").setFontSize(11);
 
-      // Left side - Total Items
-      doc.text(
-        `Total Items: ${totalTypes}`,
-        DIMENSIONS.margin + 4,
-        summaryY + 8
-      );
+    //   // Left side - Total Items
+    //   doc.text(
+    //     `Total Items: ${totalTypes}`,
+    //     DIMENSIONS.margin + 4,
+    //     summaryY + 8
+    //   );
 
-      // Right side - Total Quantity
-      doc.text(
-        `Total Quantity: ${totalQty}`,
-        pageW - DIMENSIONS.margin - 4,
-        summaryY + 8,
-        { align: "right" }
-      );
+    //   // Right side - Total Quantity
+    //   doc.text(
+    //     `Total Quantity: ${totalQty}`,
+    //     pageW - DIMENSIONS.margin - 4,
+    //     summaryY + 8,
+    //     { align: "right" }
+    //   );
 
-      // Reset color
-      doc.setTextColor(0, 0, 0);
-    };
+    //   // Reset color
+    //   doc.setTextColor(0, 0, 0);
+    // };
 
-    // Get last item position
-    const getLastItemY = (): number => {
-      const { minRowH } = DIMENSIONS.table;
-      const headerY = y;
-      const tableHeaderHeight = 11;
-      const itemsCount = items.length;
-      return headerY + tableHeaderHeight + (itemsCount * minRowH);
-    };
+    // // Get last item position
+    // const getLastItemY = (): number => {
+    //   const { minRowH } = DIMENSIONS.table;
+    //   const headerY = y;
+    //   const tableHeaderHeight = 11;
+    //   const itemsCount = items.length;
+    //   return headerY + tableHeaderHeight + (itemsCount * minRowH);
+    // };
 
-    const lastY = getLastItemY();
+    // const lastY = getLastItemY();
 
-    // Check if summary fits on current page
-    if (lastY + 20 > pageH - DIMENSIONS.bottomMargin) {
-      doc.addPage();
-      drawHeaderBar(false);
-      drawSummary(DIMENSIONS.headerBarH + 2);
-    } else {
-      drawSummary(lastY);
-    }
+    // // Check if summary fits on current page
+    // if (lastY + 20 > pageH - DIMENSIONS.bottomMargin) {
+    //   doc.addPage();
+    //   drawHeaderBar(false);
+    //   drawSummary(DIMENSIONS.headerBarH + 2);
+    // } else {
+    //   drawSummary(lastY);
+    // }
 
     const pages = doc.getNumberOfPages();
     for (let p = 1; p <= pages; p++) {
@@ -514,7 +517,7 @@ export default function CartPage() {
       drawFooter(p, pages);
     }
 
-    doc.save(`inquiry-${inquiryNumber}.pdf`);
+    doc.save(`Quotation#-${inquiryNumber}.pdf`);
   };
 
 
@@ -600,6 +603,12 @@ export default function CartPage() {
                           {it.name}
                         </Link>
                       </div>
+                      {it.priceRange && (
+                        <div className="text-xs text-muted-foreground mt-0.5">
+                          {t("priceRange", lang)}: {t("currency", lang)}{" "}
+                          {it.priceRange.min} – {it.priceRange.max}
+                        </div>
+                      )}
                       <div className="mt-1 flex flex-wrap gap-1.5 text-[10px] text-muted-foreground">
                         {it.productCode && (
                           <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 ring-1 ring-foreground/10">
@@ -773,24 +782,24 @@ export default function CartPage() {
                 </p>
               </div>
 
-              {/* Buttons */}
-              {/* Buttons with logos */}
               <button
                 className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-white text-sm font-medium transition hover:brightness-110"
                 onClick={handleSendWhatsApp}
                 type="button"
               >
-                {/* WhatsApp SVG Logo */}
+                {/* WhatsApp Icon */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 32 32"
                   className="h-5 w-5"
                   fill="currentColor"
-                  viewBox="0 0 24 24"
                 >
-                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.472-.149-.672.15-.198.297-.767.966-.94 1.164-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.297-.497.099-.198.05-.372-.025-.521-.075-.149-.672-1.611-.921-2.204-.242-.579-.487-.5-.672-.51l-.573-.01c-.198 0-.52.074-.793.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.29.173-1.413-.074-.124-.272-.198-.57-.347z" />
+                  <path d="M19.11 17.205c-.294-.147-1.734-.857-2.002-.955-.268-.098-.463-.147-.658.147-.195.294-.755.955-.926 1.151-.171.195-.341.22-.635.073-.294-.147-1.241-.458-2.366-1.458-.875-.779-1.466-1.741-1.637-2.035-.171-.294-.018-.453.128-.6.132-.132.294-.341.44-.512.147-.171.195-.294.294-.489.098-.195.049-.366-.025-.512-.073-.147-.658-1.587-.902-2.17-.238-.561-.478-.488-.658-.498l-.561-.01c-.195 0-.512.073-.78.366s-1.024.999-1.024 2.438 1.049 2.83 1.195 3.024c.147.195 2.066 3.146 5.002 4.41.703.304 1.253.486 1.681.62.702.224 1.342.192 1.846.116.563-.083 1.734-.707 1.98-1.39.245-.683.245-1.269.171-1.39-.073-.122-.268-.195-.561-.342z" />
                 </svg>
+
                 {t("sendWhatsAppInquiry", lang)}
               </button>
+
 
               <button
                 className="w-full inline-flex items-center justify-center gap-2 rounded-lg border px-4 py-2 text-sm transition hover:bg-muted"

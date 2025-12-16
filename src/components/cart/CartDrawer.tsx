@@ -8,7 +8,7 @@ import { useLang } from "@/hooks/useLang";
 import { t } from "@/data/labels";
 
 export default function CartDrawer() {
-  const { drawerOpen, closeDrawer, lastAdded, items, count, updateQty } = useCart();
+  const { drawerOpen, closeDrawer, lastAdded, items, count, updateQty, remove } = useCart();
   const lang = useLang();
 
   // close on Esc
@@ -80,27 +80,71 @@ export default function CartDrawer() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="truncate text-sm font-medium">{it.name}</div>
-                      <div className="mt-1 inline-flex items-center rounded-lg border bg-background/70 shadow-sm">
-                        <button
-                          type="button"
-                          aria-label="Decrease quantity"
-                          className="h-7 w-7 text-xs hover:bg-muted rounded-l-lg"
-                          onClick={() => updateQty(it.id, Math.max(1, it.qty - 1), key)}
-                        >
-                          −
-                        </button>
-                        <div className="h-7 w-10 border-x grid place-items-center text-xs select-none">
-                          {it.qty}
-                        </div>
-                        <button
-                          type="button"
-                          aria-label="Increase quantity"
-                          className="h-7 w-7 text-xs hover:bg-muted rounded-r-lg"
-                          onClick={() => updateQty(it.id, it.qty + 1, key)}
-                        >
-                          +
-                        </button>
+                      {typeof it.priceRange?.min === "number" &&
+                        typeof it.priceRange?.max === "number" && (
+                          <div className="text-xs text-muted-foreground mt-0.5">
+                            {t("priceRange", lang)}: {t("currency", lang)}{" "}
+                            {it.priceRange.min} – {it.priceRange.max}
+                          </div>
+                        )}
+                      <div className="mt-1 flex flex-wrap gap-1.5 text-[10px] text-muted-foreground">
+                        {it.productCode && (
+                          <span className="rounded-full bg-muted px-2 py-0.5 ring-1 ring-foreground/10">
+                            {t("productCode", lang)}: {it.productCode}
+                          </span>
+                        )}
+                        {it.volume && (
+                          <span className="rounded-full bg-muted px-2 py-0.5 ring-1 ring-foreground/10">
+                            {t("volume", lang)}: {it.volume}
+                          </span>
+                        )}
                       </div>
+
+
+                      <div className="mt-1 flex items-center gap-2">
+                        {/* Quantity counter */}
+                        <div className="inline-flex items-center rounded-lg border bg-background/70 shadow-sm">
+                          <button
+                            type="button"
+                            aria-label="Decrease quantity"
+                            className="h-7 w-7 text-xs hover:bg-muted rounded-l-lg"
+                            onClick={() => updateQty(it.id, Math.max(1, it.qty - 1), key)}
+                          >
+                            −
+                          </button>
+                          <div className="h-7 w-10 border-x grid place-items-center text-xs select-none">
+                            {it.qty}
+                          </div>
+                          <button
+                            type="button"
+                            aria-label="Increase quantity"
+                            className="h-7 w-7 text-xs hover:bg-muted rounded-r-lg"
+                            onClick={() => updateQty(it.id, it.qty + 1, key)}
+                          >
+                            +
+                          </button>
+                        </div>
+
+                        <button
+                          className="ml-1 inline-flex h-8 w-8 items-center justify-center rounded-lg hover:bg-red-50 text-red-600"
+                          onClick={() => remove(it.id, key)}
+                          type="button"
+                          aria-label={t("remove", lang)}
+                          title={t("remove", lang)}
+                        >
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
+                            <path
+                              d="M6 7h12M10 7v11m4-11v11M4 7h16l-1 12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 7Zm3-2h8l-1 2H8l-1-2Z"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        </button>
+
+                      </div>
+
                     </div>
                   </div>
                 );

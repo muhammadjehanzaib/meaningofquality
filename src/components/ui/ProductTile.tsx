@@ -45,7 +45,7 @@ export default function ProductTile({
 
   const onAdd = () => {
     if (!productId) return;
-    add({ id: productId, name, img: imgSrc, qty: 1 });
+    add({ id: productId, name, img: imgSrc, qty: 1, priceRange, useDefaultPackaging: true});
   };
 
   return (

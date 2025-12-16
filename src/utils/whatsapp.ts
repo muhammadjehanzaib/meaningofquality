@@ -25,6 +25,7 @@ export function buildWhatsAppMessage(items: CartItem[], info: ClientInfo = {}): 
       it.volume ? `Volume: ${it.volume}` : undefined,
       it.type ? `Type: ${it.type}` : undefined,
       it.stockCode ? `Stock: ${it.stockCode}` : undefined,
+      it.priceRange ? `Price: ${it.priceRange.min} - ${it.priceRange.max}` : undefined,
       `Qty: ${it.qty}`,
     ].filter(Boolean);
     lines.push(parts.join(" | "));

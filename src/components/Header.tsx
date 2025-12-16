@@ -17,7 +17,7 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const lang = useLang();
-  const { count } = useCart();
+  const { count, openDrawer } = useCart();
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-foreground/10 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -98,7 +98,7 @@ export default function Header() {
 
         <div className="hidden md:flex items-center gap-3">
           <Search />
-          <Link href="/cart" className="relative inline-flex items-center gap-2 text-sm text-foreground/80 hover:text-foreground" aria-label={t("cart", lang)}>
+          <button onClick={openDrawer} className="relative inline-flex items-center gap-2 text-sm text-foreground/80 hover:fext-foreground" aria-label={t("cart", lang)}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
               <path d="M6 6h15l-1.5 9h-12L6 6z" stroke="currentColor" strokeWidth="2" fill="none" />
               <circle cx="9" cy="20" r="1.5" fill="currentColor" />
@@ -110,7 +110,7 @@ export default function Header() {
                 {count}
               </span>
             )}
-          </Link>
+          </button>
           <LanguageToggle />
         </div>
 

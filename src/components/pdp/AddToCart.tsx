@@ -13,11 +13,16 @@ export default function AddToCart({
   name,
   img,
   packaging = [],
+  priceRange
 }: {
   productId: string;
   name: string | { en: string; ar: string };
   img?: string;
   packaging?: PackagingRow[];
+  priceRange?: {
+    min: number;
+    max: number;
+  };
 }) {
   const { add } = useCart();
   const lang = useLang();
@@ -35,6 +40,7 @@ export default function AddToCart({
       volume: selected?.volume,
       stockCode: selected?.stockCode,
       type: selected?.type,
+      priceRange,
     });
   };
 

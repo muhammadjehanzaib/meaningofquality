@@ -17,6 +17,10 @@ export type ProductDetail = {
   sdsUrl?: string; // Safety Data Sheet (MSDS)
   isNew?: boolean;
   images?: string[];
+  priceRange?: {
+    min: number;
+    max: number;
+  };
 };
 
 export const productDetailsById: Record<string, ProductDetail> = {

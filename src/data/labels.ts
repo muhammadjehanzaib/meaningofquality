@@ -65,6 +65,10 @@ sendEmailInquiry: {
 addProducts: {
   en: "Add Products",
   ar: "إضافة منتجات"
+},
+removeItem:{
+  en: "Remove item",
+  ar: "إزالة المنتج"
 }
 
 } as const;

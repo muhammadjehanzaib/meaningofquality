@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { productDetailsById } from "@/data/productDetails";
 
 export type CartItem = {
   id: string;
@@ -11,11 +12,19 @@ export type CartItem = {
   volume?: string;
   stockCode?: string;
   type?: string;
+    priceRange?: {
+    min: number;
+    max: number;
+  };
+  // useDefaultPackaging?: boolean;
+};
+export type CartItemInput = CartItem & {
+  useDefaultPackaging?: boolean;
 };
 
 export type CartContextType = {
   items: CartItem[];
-  add: (item: CartItem) => void;
+  add: (item: CartItemInput) => void;
   updateQty: (id: string, qty: number, key?: string) => void;
   remove: (id: string, key?: string) => void;
   clear: () => void;
@@ -71,26 +80,51 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const api = useMemo<CartContextType>(() => ({
     items,
-add: (item) => {
-      setItems((prev) => {
-        const key = itemKey(item.id, item.productCode, item.volume, item.stockCode, item.type);
-        const idx = prev.findIndex((p) => itemKey(p.id, p.productCode, p.volume, p.stockCode, p.type) === key);
-        let added: CartItem = item;
-        if (idx >= 0) {
-          const next = [...prev];
-          const updated = { ...next[idx], qty: next[idx].qty + item.qty };
-          next[idx] = updated;
-          added = updated;
-          setLastAdded(added);
-          setDrawerOpen(true);
-          return next;
-        }
-        const next = [...prev, item];
-        setLastAdded(item);
-        setDrawerOpen(true);
-        return next;
-      });
-    },
+add: (item: CartItemInput) => {
+  setItems((prev) => {
+    const detail = productDetailsById[item.id];
+
+    // Ensure priceRange is always attached from product details
+    let finalItem: CartItem = {
+      ...item,
+      priceRange: detail?.priceRange ?? item.priceRange, // <- always fallback to product's range
+    };
+
+    // If flagged to use default packaging
+    if (item.useDefaultPackaging) {
+      const defaultPack = detail?.packaging?.[0];
+      if (defaultPack) {
+        finalItem = {
+          ...finalItem,
+          productCode: defaultPack.productCode,
+          volume: defaultPack.volume,
+          stockCode: defaultPack.stockCode,
+          type: defaultPack.type,
+        };
+      }
+    }
+
+    const key = itemKey(finalItem.id, finalItem.productCode, finalItem.volume, finalItem.stockCode, finalItem.type);
+    const idx = prev.findIndex((p) => itemKey(p.id, p.productCode, p.volume, p.stockCode, p.type) === key);
+
+    let added: CartItem = finalItem;
+
+    if (idx >= 0) {
+      const next = [...prev];
+      const updated = { ...next[idx], qty: next[idx].qty + finalItem.qty, priceRange: finalItem.priceRange };
+      next[idx] = updated;
+      added = updated;
+      setLastAdded(added);
+      setDrawerOpen(true);
+      return next;
+    }
+
+    const next = [...prev, finalItem];
+    setLastAdded(finalItem);
+    setDrawerOpen(true);
+    return next;
+  });
+},
 updateQty: (id, qty, key) => {
       setItems((prev) => {
         const next = prev.map((p) => {

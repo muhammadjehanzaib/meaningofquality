@@ -1,56 +1,142 @@
 import Container from "./ui/Container";
+import Image from "next/image";
 import Link from "next/link";
+import { FaLinkedin, FaInstagram, FaFacebookF } from "react-icons/fa";
 
 export default function Footer() {
   return (
-    <footer className="mt-20 border-t border-foreground/10 bg-muted">
-      <Container className="py-10 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-        <div>
+    <footer className="bg-gray-50 border-t border-gray-200 mt-20">
+      <Container className="py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+        {/* Logo & Description */}
+        <div className="flex flex-col gap-4 col-span-1 lg:col-span-1">
           <div className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded bg-primary/10 grid place-items-center text-primary text-sm font-bold">
-              MQ
-            </div>
-            <span className="text-base font-semibold">Meaning of Quality</span>
+            <Image
+              src="/images/logo/sultanlogo.png"
+              alt="Sultan Logo"
+              width={150}
+              height={100}
+              className="object-contain"
+            />
           </div>
-          <p className="mt-4 text-sm text-muted-foreground max-w-sm">
-            Industrial adhesives, sealants, foams and spray solutions for
-            professional builders and manufacturers.
+          <p className="text-sm text-gray-500 max-w-sm">
+            Premium industrial adhesives, sealants, foams, and spray solutions for professional builders and manufacturers.
           </p>
+          <div className="flex gap-3 mt-2">
+            <a
+              href="#"
+              aria-label="LinkedIn"
+              className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-600 hover:bg-primary hover:text-white transition"
+            >
+              <FaLinkedin size={16} />
+            </a>
+            <a
+              href="#"
+              aria-label="Instagram"
+              className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-600 hover:bg-primary hover:text-white transition"
+            >
+              <FaInstagram size={16} />
+            </a>
+            <a
+              href="#"
+              aria-label="Facebook"
+              className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-600 hover:bg-primary hover:text-white transition"
+            >
+              <FaFacebookF size={16} />
+            </a>
+          </div>
         </div>
 
+        {/* Products */}
         <div>
-          <h3 className="text-sm font-semibold">Products</h3>
-          <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-            <li><Link href="/products">All Products</Link></li>
-            <li><Link href="/products#adhesives">Adhesives</Link></li>
-            <li><Link href="/products#sealants">Sealants</Link></li>
-            <li><Link href="/products#foams">PU Foams</Link></li>
+          <h3 className="text-sm font-semibold text-gray-800 mb-4">Products</h3>
+          <ul className="space-y-2 text-gray-500 text-sm">
+            <li>
+              <Link href="/products" className="hover:text-primary transition">
+                All Products
+              </Link>
+            </li>
           </ul>
         </div>
 
+        {/* Company */}
         <div>
-          <h3 className="text-sm font-semibold">Company</h3>
-          <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-            <li><Link href="/about">About</Link></li>
-            <li><Link href="/contact">Contact</Link></li>
+          <h3 className="text-sm font-semibold text-gray-800 mb-4">Company</h3>
+          <ul className="space-y-2 text-gray-500 text-sm">
+            <li>
+              <Link href="/about" className="hover:text-primary transition">
+                About
+              </Link>
+            </li>
+            <li>
+              <Link href="/contact" className="hover:text-primary transition">
+                Contact
+              </Link>
+            </li>
+            <li>
+              <Link href="#" className="hover:text-primary transition">
+                Careers
+              </Link>
+            </li>
           </ul>
         </div>
 
+        {/* Customer Care */}
         <div>
-          <h3 className="text-sm font-semibold">Follow</h3>
-          <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-            <li><a href="#" aria-disabled>LinkedIn</a></li>
-            <li><a href="#" aria-disabled>Instagram</a></li>
-            <li><a href="#" aria-disabled>Facebook</a></li>
+          <h3 className="text-sm font-semibold text-gray-800 mb-4">Customer Care</h3>
+          <ul className="space-y-2 text-gray-500 text-sm">
+            <li>
+              <Link href="/customer-care" className="hover:text-primary transition">
+                Contact Us
+              </Link>
+            </li>
+            <li>
+              <Link href="/customer-care/faq" className="hover:text-primary transition">
+                FAQ
+              </Link>
+            </li>
+            <li>
+              <Link href="/customer-care/shopping-guide" className="hover:text-primary transition">
+                Shopping Guide
+              </Link>
+            </li>
+            <li>
+              <Link href="/customer-care/returns" className="hover:text-primary transition">
+                Return & Exchange
+              </Link>
+            </li>
+            <li>
+              <Link href="/customer-care/privacy" className="hover:text-primary transition">
+                Privacy Policy
+              </Link>
+            </li>
+          </ul>
+        </div>
+
+        {/* Legal */}
+        <div>
+          <h3 className="text-sm font-semibold text-gray-800 mb-4">Legal</h3>
+          <ul className="space-y-2 text-gray-500 text-sm">
+            <li>
+              <Link href="#" className="hover:text-primary transition">
+                Privacy
+              </Link>
+            </li>
+            <li>
+              <Link href="#" className="hover:text-primary transition">
+                Terms & Conditions
+              </Link>
+            </li>
           </ul>
         </div>
       </Container>
-      <div className="border-t border-foreground/10">
-        <Container className="py-6 text-xs text-muted-foreground flex flex-col sm:flex-row items-center justify-between gap-2">
-          <p>© {new Date().getFullYear()} Meaning of Quality. All rights reserved.</p>
+
+      {/* Bottom */}
+      <div className="border-t border-gray-200">
+        <Container className="py-6 flex flex-col md:flex-row items-center justify-between text-sm text-gray-400 gap-2">
+          <p>© {new Date().getFullYear()} Sultan Co. All rights reserved.</p>
           <div className="flex gap-4">
-            <Link href="#">Privacy</Link>
-            <Link href="#">Terms</Link>
+            <Link href="#" className="hover:text-primary transition">Privacy</Link>
+            <Link href="#" className="hover:text-primary transition">Terms</Link>
           </div>
         </Container>
       </div>
