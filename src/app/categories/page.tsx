@@ -3,8 +3,8 @@ import Image from "next/image";
 import Container from "@/components/ui/Container";
 import { categories } from "@/data/catalog";
 import { categoryIconById, categoryThemeById } from "@/data/assets";
-import { subcategoriesByCategoryId } from "@/data/subcategories";
 import L, { LKey } from "@/components/i18n/L";
+import { subcategoriesByCategoryId } from "@/data/subcategories";
 
 export default function CategoriesIndexPage() {
   return (

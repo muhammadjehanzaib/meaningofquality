@@ -33,7 +33,7 @@ export default function CategoryClient({ items, subcategories }: { items: Item[]
     router.replace(`${pathname}${params.toString() ? `?${params.toString()}` : ""}`);
   };
 
-  const filtered = useMemo(() => (active ? items.filter((i) => i.tags?.includes(active)) : items), [active, items]);
+  const filtered = useMemo(() => (active ? items.filter((i) => i.subcategoryId === active) : items), [active, items]);
 
   return (
     <div>

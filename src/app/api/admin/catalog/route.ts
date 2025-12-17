@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { readFileSync, writeFileSync } from "fs";
 import { join } from "path";
-import type { Category, Item } from "@/data/catalog";
+import type { Category, Subcategory, Item } from "@/data/catalog";
 import type { ProductDetail } from "@/data/productDetails";
 
 // Note: This route only works in development mode and is excluded from static builds
@@ -28,7 +28,6 @@ function formatArray<T>(items: T[], formatter: (item: T) => string, indent = 2):
 }
 
 function formatLString(obj: { en: string; ar: string }): string {
-  // const spaces = " ".repeat(indent);
   return `{ en: ${JSON.stringify(obj.en)}, ar: ${JSON.stringify(obj.ar)} }`;
 }
 
@@ -44,13 +43,17 @@ function formatItem(item: Item): string {
     `name: ${formatLString(item.name)}`,
     `categoryId: ${JSON.stringify(item.categoryId)}`,
   ];
-  if (item.tags && item.tags.length > 0) {
-    parts.push(`tags: [${item.tags.map((t) => JSON.stringify(t)).join(", ")}]`);
+  if (item.subcategoryId) {
+    parts.push(`subcategoryId: ${JSON.stringify(item.subcategoryId)}`);
   }
   if (item.priceRange) {
     parts.push(`priceRange: { min: ${item.priceRange.min}, max: ${item.priceRange.max} }`);
   }
   return `{ ${parts.join(", ")} }`;
+}
+
+function formatSubcategory(sub: Subcategory): string {
+  return `{ id: ${JSON.stringify(sub.id)}, title: ${formatLString(sub.title)}, categoryId: ${JSON.stringify(sub.categoryId)} }`;
 }
 
 function formatProductDetail(detail: ProductDetail): string {
@@ -112,9 +115,6 @@ export async function GET() {
     const detailsContent = readFileSync(detailsPath, "utf-8");
     const assetsContent = readFileSync(assetsPath, "utf-8");
 
-    // Import and evaluate the data (in a safe way)
-    // We'll parse the TypeScript files to extract the data
-    // For now, return the file paths and let the frontend handle parsing
     return NextResponse.json({
       success: true,
       files: {
@@ -149,7 +149,7 @@ export async function POST(request: NextRequest) {
     const assetsPath = join(DATA_DIR, "assets.ts");
 
     if (type === "updateCatalog") {
-      const { categories, newProducts, mostVisited } = data;
+      const { categories, subcategories, newProducts, mostVisited, productImageByItemId } = data;
       
       const content = `import type { LString } from "@/data/i18n";
 
@@ -159,14 +159,23 @@ export type Category = {
   desc?: LString;
 };
 
+export type Subcategory = {
+  id: string;
+  title: LString;
+  categoryId: string;
+};
+
 export type Item = {
   id: string;
   name: LString;
   categoryId: string;
-  tags?: string[];
+  subcategoryId?: string;
+  priceRange?: { min: number; max: number };
 };
 
 export const categories: Category[] = ${formatArray(categories, formatCategory)};
+
+export const subcategories: Subcategory[] = ${formatArray(subcategories, formatSubcategory)};
 
 export const solutions: Category[] = [
   { id: "hvac", title: { en: "HVAC", ar: "التكييف والتهوية والتبريد" } },
@@ -187,6 +196,80 @@ export const allItems: Item[] = [...newProducts, ...mostVisited];
 `;
 
       writeFileSync(catalogPath, content, "utf-8");
+
+      // If productImageByItemId is provided, also update assets
+      if (productImageByItemId) {
+        console.log("Updating assets with productImageByItemId:", productImageByItemId);
+        console.log("Number of entries:", Object.keys(productImageByItemId).length);
+
+        if (typeof productImageByItemId !== 'object') {
+          return NextResponse.json(
+            { success: false, error: "Invalid productImageByItemId data" },
+            { status: 400 }
+          );
+        }
+
+        // Sort the entries by ID for consistent ordering
+        const sortedEntries = Object.entries(productImageByItemId).sort(([a], [b]) => a.localeCompare(b));
+
+        const imageEntries = sortedEntries
+          .map(([id, img]) => `  "${id}": ${JSON.stringify(img)}`)
+          .join(",\n");
+
+        const assetsContent = `export type Banner = { src: string; alt: string; href?: string };
+
+export const sliderBanners: Banner[] = [
+  { src: "/images/sliders/100AQ-aquarium-silicone.jpg", alt: "Aquarium silicone sealant banner" },
+  { src: "/images/sliders/705-universal-fast-adhesive.jpg", alt: "705 Universal Fast Adhesive banner" },
+  { src: "/images/sliders/967P-fast-adhesive.jpg", alt: "967P Fast Adhesive banner" },
+  { src: "/images/sliders/Aquazero.jpg", alt: "Aquazero waterproofing banner" },
+  { src: "/images/sliders/C900-chemical-anchor.jpg", alt: "C900 Chemical Anchor banner" },
+  { src: "/images/sliders/Fence-post-fix.jpg", alt: "Fence Post Fix foam banner" },
+  { src: "/images/sliders/High-tack-adhesive.jpg", alt: "High Tack adhesive banner" },
+  { src: "/images/sliders/Multiseal.jpg", alt: "Multiseal multipurpose banner" },
+  { src: "/images/sliders/akfix-safe-use-handling-of-diisocyanates-trainings.jpg", alt: "Safe use and handling of diisocyanates training" },
+  { src: "/images/sliders/akfix-spray-paint-banner-en.jpg", alt: "Akfix spray paint color range" },
+  { src: "/images/sliders/thermcoat-thermal-acoustic-insulation-spray-foam_en.jpg", alt: "Thermcoat thermal acoustic insulation spray foam" },
+];
+
+export const categoryIconById: Record<string, string> = {
+  "adhesives": "/images/product-categories/categories-icons/adhesives.png",
+  "sealants": "/images/product-categories/categories-icons/sealants.png",
+  "pu-foams": "/images/product-categories/categories-icons/pu-foams.png",
+  "aerosols": "/images/product-categories/categories-icons/aerosols.png",
+  "fire-rated": "/images/product-categories/categories-icons/fire-rated-series.png",
+  "accessories": "/images/product-categories/categories-icons/accessories.png",
+  "spray-paint":"/images/product-categories/categories-icons/spray-paints.png",
+  "coating-system": "/images/product-categories/categories-icons/coatings.png",
+  "anaerobics": "/images/product-categories/categories-icons/anaerobics.png",
+  "industrial": "/images/product-categories/categories-icons/industrials.png",
+  "automotive": "/images/product-categories/categories-icons/automotive.png",
+};
+
+// Visual theme (Tailwind classes) for each category
+export const categoryThemeById: Record<string, { bg: string; ring: string; text: string; hoverBg: string; hoverRing: string; hoverText: string }> = {
+  adhesives: { bg: "bg-emerald-50", ring: "ring-emerald-200", text: "text-emerald-700", hoverBg: "group-hover:bg-emerald-100", hoverRing: "group-hover:ring-emerald-300", hoverText: "group-hover:text-emerald-800" },
+  sealants: { bg: "bg-sky-50", ring: "ring-sky-200", text: "text-sky-700", hoverBg: "group-hover:bg-sky-100", hoverRing: "group-hover:ring-sky-300", hoverText: "group-hover:text-sky-800" },
+  "pu-foams": { bg: "bg-lime-50", ring: "ring-lime-200", text: "text-lime-700", hoverBg: "group-hover:bg-lime-100", hoverRing: "group-hover:ring-lime-300", hoverText: "group-hover:text-lime-800" },
+  aerosols: { bg: "bg-rose-50", ring: "ring-rose-200", text: "text-rose-700", hoverBg: "group-hover:bg-rose-100", hoverRing: "group-hover:ring-rose-300", hoverText: "group-hover:text-rose-800" },
+  "fire-rated": { bg: "bg-orange-50", ring: "ring-orange-200", text: "text-orange-700", hoverBg: "group-hover:bg-orange-100", hoverRing: "group-hover:ring-orange-300", hoverText: "group-hover:text-orange-800" },
+  accessories: { bg: "bg-slate-50", ring: "ring-slate-200", text: "text-slate-700", hoverBg: "group-hover:bg-slate-100", hoverRing: "group-hover:ring-slate-300", hoverText: "group-hover:text-slate-800" },
+};
+
+// Map item IDs from data/catalog to product images
+export const productImageByItemId: Record<string, string> = {
+${imageEntries}
+};
+`;
+
+        console.log("Writing to assets file:", assetsPath);
+        console.log("Content length:", assetsContent.length);
+
+        writeFileSync(assetsPath, assetsContent, "utf-8");
+
+        console.log("Assets file written successfully");
+      }
+
       return NextResponse.json({ success: true, message: "Catalog updated" });
     }
 
@@ -230,26 +313,62 @@ ${entries}
     if (type === "updateAssets") {
       const { productImageByItemId } = data;
       
-      const imageEntries = Object.entries(productImageByItemId)
+      console.log("Received productImageByItemId:", productImageByItemId);
+      console.log("Number of entries:", Object.keys(productImageByItemId || {}).length);
+      
+      if (!productImageByItemId || typeof productImageByItemId !== 'object') {
+        return NextResponse.json(
+          { success: false, error: "Invalid productImageByItemId data" },
+          { status: 400 }
+        );
+      }
+      
+      // Sort the entries by ID for consistent ordering
+      const sortedEntries = Object.entries(productImageByItemId).sort(([a], [b]) => a.localeCompare(b));
+      
+      const imageEntries = sortedEntries
         .map(([id, img]) => `  "${id}": ${JSON.stringify(img)}`)
         .join(",\n");
 
-      // Keep existing banners and category data, just update product images
-      const existingAssets = readFileSync(assetsPath, "utf-8");
-      
-      // Extract banners and category data (simple regex approach)
-      const bannerMatch = existingAssets.match(/export const sliderBanners: Banner\[\] = \[([\s\S]*?)\];/);
-      const categoryIconMatch = existingAssets.match(/export const categoryIconById: Record<string, string> = \{([\s\S]*?)\};/);
-      const categoryThemeMatch = existingAssets.match(/export const categoryThemeById: Record<string, \{[\s\S]*?\}> = \{([\s\S]*?)\};/);
-
       const content = `export type Banner = { src: string; alt: string; href?: string };
 
-export const sliderBanners: Banner[] = [${bannerMatch ? bannerMatch[1] : ""}];
+export const sliderBanners: Banner[] = [
+  { src: "/images/sliders/100AQ-aquarium-silicone.jpg", alt: "Aquarium silicone sealant banner" },
+  { src: "/images/sliders/705-universal-fast-adhesive.jpg", alt: "705 Universal Fast Adhesive banner" },
+  { src: "/images/sliders/967P-fast-adhesive.jpg", alt: "967P Fast Adhesive banner" },
+  { src: "/images/sliders/Aquazero.jpg", alt: "Aquazero waterproofing banner" },
+  { src: "/images/sliders/C900-chemical-anchor.jpg", alt: "C900 Chemical Anchor banner" },
+  { src: "/images/sliders/Fence-post-fix.jpg", alt: "Fence Post Fix foam banner" },
+  { src: "/images/sliders/High-tack-adhesive.jpg", alt: "High Tack adhesive banner" },
+  { src: "/images/sliders/Multiseal.jpg", alt: "Multiseal multipurpose banner" },
+  { src: "/images/sliders/akfix-safe-use-handling-of-diisocyanates-trainings.jpg", alt: "Safe use and handling of diisocyanates training" },
+  { src: "/images/sliders/akfix-spray-paint-banner-en.jpg", alt: "Akfix spray paint color range" },
+  { src: "/images/sliders/thermcoat-thermal-acoustic-insulation-spray-foam_en.jpg", alt: "Thermcoat thermal acoustic insulation spray foam" },
+];
 
-export const categoryIconById: Record<string, string> = {${categoryIconMatch ? categoryIconMatch[1] : ""}};
+export const categoryIconById: Record<string, string> = {
+  "adhesives": "/images/product-categories/categories-icons/adhesives.png",
+  "sealants": "/images/product-categories/categories-icons/sealants.png",
+  "pu-foams": "/images/product-categories/categories-icons/pu-foams.png",
+  "aerosols": "/images/product-categories/categories-icons/aerosols.png",
+  "fire-rated": "/images/product-categories/categories-icons/fire-rated-series.png",
+  "accessories": "/images/product-categories/categories-icons/accessories.png",
+  "spray-paint":"/images/product-categories/categories-icons/spray-paints.png",
+  "coating-system": "/images/product-categories/categories-icons/coatings.png",
+  "anaerobics": "/images/product-categories/categories-icons/anaerobics.png",
+  "industrial": "/images/product-categories/categories-icons/industrials.png",
+  "automotive": "/images/product-categories/categories-icons/automotive.png",
+};
 
 // Visual theme (Tailwind classes) for each category
-export const categoryThemeById: Record<string, { bg: string; ring: string; text: string; hoverBg: string; hoverRing: string; hoverText: string }> = {${categoryThemeMatch ? categoryThemeMatch[1] : ""}};
+export const categoryThemeById: Record<string, { bg: string; ring: string; text: string; hoverBg: string; hoverRing: string; hoverText: string }> = {
+  adhesives: { bg: "bg-emerald-50", ring: "ring-emerald-200", text: "text-emerald-700", hoverBg: "group-hover:bg-emerald-100", hoverRing: "group-hover:ring-emerald-300", hoverText: "group-hover:text-emerald-800" },
+  sealants: { bg: "bg-sky-50", ring: "ring-sky-200", text: "text-sky-700", hoverBg: "group-hover:bg-sky-100", hoverRing: "group-hover:ring-sky-300", hoverText: "group-hover:text-sky-800" },
+  "pu-foams": { bg: "bg-lime-50", ring: "ring-lime-200", text: "text-lime-700", hoverBg: "group-hover:bg-lime-100", hoverRing: "group-hover:ring-lime-300", hoverText: "group-hover:text-lime-800" },
+  aerosols: { bg: "bg-rose-50", ring: "ring-rose-200", text: "text-rose-700", hoverBg: "group-hover:bg-rose-100", hoverRing: "group-hover:ring-rose-300", hoverText: "group-hover:text-rose-800" },
+  "fire-rated": { bg: "bg-orange-50", ring: "ring-orange-200", text: "text-orange-700", hoverBg: "group-hover:bg-orange-100", hoverRing: "group-hover:ring-orange-300", hoverText: "group-hover:text-orange-800" },
+  accessories: { bg: "bg-slate-50", ring: "ring-slate-200", text: "text-slate-700", hoverBg: "group-hover:bg-slate-100", hoverRing: "group-hover:ring-slate-300", hoverText: "group-hover:text-slate-800" },
+};
 
 // Map item IDs from data/catalog to product images
 export const productImageByItemId: Record<string, string> = {
@@ -257,8 +376,14 @@ ${imageEntries}
 };
 `;
 
+      console.log("Writing to file:", assetsPath);
+      console.log("Content length:", content.length);
+      
       writeFileSync(assetsPath, content, "utf-8");
-      return NextResponse.json({ success: true, message: "Assets updated" });
+      
+      console.log("File written successfully");
+      
+      return NextResponse.json({ success: true, message: "Assets updated successfully" });
     }
 
     return NextResponse.json(
@@ -266,10 +391,10 @@ ${imageEntries}
       { status: 400 }
     );
   } catch (error) {
+    console.error("Error in admin API:", error);
     return NextResponse.json(
       { success: false, error: error instanceof Error ? error.message : "Unknown error" },
       { status: 500 }
     );
   }
 }
-

@@ -21,7 +21,6 @@ export const categoryIconById: Record<string, string> = {
   "aerosols": "/images/product-categories/categories-icons/aerosols.png",
   "fire-rated": "/images/product-categories/categories-icons/fire-rated-series.png",
   "accessories": "/images/product-categories/categories-icons/accessories.png",
-  // Optional extra category icons present under public/images/product-categories/categories-icons
   "spray-paint":"/images/product-categories/categories-icons/spray-paints.png",
   "coating-system": "/images/product-categories/categories-icons/coatings.png",
   "anaerobics": "/images/product-categories/categories-icons/anaerobics.png",
@@ -41,18 +40,18 @@ export const categoryThemeById: Record<string, { bg: string; ring: string; text:
 
 // Map item IDs from data/catalog to product images
 export const productImageByItemId: Record<string, string> = {
-  // newProducts
-  "np-1": "/images/all-products/sealants/AC578-sanitary-sealant-bath-kitchen.png",
-  "np-2": "/images/all-products/adhesives/Akfix-744-Allbond-Hybrid.png",
-  "np-3": "/images/all-products/sealants/AC580-rapid-seal.png",
-  "np-4": "/images/all-products/adhesives/702HV-super-glue.png",
-  "np-5": "/images/all-products/adhesives/E360-Plast-Weld.png",
-  "np-6": "/images/all-products/adhesives/HB262-hybrid-wood-flooring-adhesive.png",
-  // mostVisited
-  "mv-1": "/images/all-products/pu-foams/fast55-mega-pu-foam.png", // closest available to 805P
+  "840P": "/images/all-products/adhesives/HB262-hybrid-wood-flooring-adhesive.png",
+  "mv-1": "/images/all-products/pu-foams/fast55-mega-pu-foam.png",
   "mv-2": "/images/all-products/pu-foams/fast70-mega-pu-foam.png",
   "mv-3": "/images/all-products/adhesives/610-pu-express-montage-adhesive.png",
   "mv-4": "/images/all-products/adhesives/PA370-express-pu-wood-marine-adhesive.png",
   "mv-5": "/images/all-products/sealants/1500-Heat-Fighter.png",
   "mv-6": "/images/all-products/adhesives/705-universal-fast-adhesive.png",
+  "np-1": "/images/all-products/sealants/AC578-sanitary-sealant-bath-kitchen.png",
+  "np-1765966726374": "/images/all-products/adhesives/HB262-hybrid-wood-flooring-adhesive.png",
+  "np-2": "/images/all-products/adhesives/Akfix-744-Allbond-Hybrid.png",
+  "np-3": "/images/all-products/sealants/AC580-rapid-seal.png",
+  "np-4": "/images/all-products/adhesives/702HV-super-glue.png",
+  "np-5": "/images/all-products/adhesives/E360-Plast-Weld.png",
+  "np-6": "/images/all-products/adhesives/HB262-hybrid-wood-flooring-adhesive.png"
 };

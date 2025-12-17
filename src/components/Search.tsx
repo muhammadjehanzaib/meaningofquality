@@ -16,8 +16,7 @@ export default function Search() {
     return allItems.filter((i) => {
       const name = pickAny(i.name, lang).toLowerCase();
       const inName = name.includes(query);
-      const inTags = i.tags?.some((t) => t.toLowerCase().includes(query));
-      return inName || inTags;
+      return inName;
     });
   }, [q, lang]);
 

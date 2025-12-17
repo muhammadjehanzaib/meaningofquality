@@ -3,16 +3,18 @@
 import { useState, useEffect } from "react";
 import Container from "@/components/ui/Container";
 import { categories, newProducts, mostVisited, type Category, type Item } from "@/data/catalog";
-import { productDetailsById, type ProductDetail } from "@/data/productDetails";
+import { subcategories, type Subcategory } from "@/data/subcategories";
+import { productDetailsById, type ProductDetail, type PackagingRow } from "@/data/productDetails";
 import { productImageByItemId } from "@/data/assets";
 
 export default function AdminPage() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
-  const [activeTab, setActiveTab] = useState<"products" | "categories" | "details">("products");
+  const [activeTab, setActiveTab] = useState<"products" | "categories" | "subcategories" | "details">("products");
   
   // Form states
   const [categoriesData, setCategoriesData] = useState<Category[]>(categories);
+  const [subcategoriesData, setSubcategoriesData] = useState<Subcategory[]>(subcategories);
   const [newProductsData, setNewProductsData] = useState<Item[]>(newProducts);
   const [mostVisitedData, setMostVisitedData] = useState<Item[]>(mostVisited);
   const [productDetailsData, setProductDetailsData] = useState<Record<string, ProductDetail>>(productDetailsById);
@@ -33,7 +35,42 @@ export default function AdminPage() {
     setTimeout(() => setMessage(null), 5000);
   };
 
+  const validateData = () => {
+    const errors: string[] = [];
+
+    // Validate categories exist
+    const categoryIds = new Set(categoriesData.map(c => c.id));
+
+    // Validate subcategories reference valid categories
+    subcategoriesData.forEach(sub => {
+      if (!categoryIds.has(sub.categoryId)) {
+        errors.push(`Subcategory "${sub.title.en}" references invalid category "${sub.categoryId}"`);
+      }
+    });
+
+    // Validate products
+    [...newProductsData, ...mostVisitedData].forEach(product => {
+      if (!categoryIds.has(product.categoryId)) {
+        errors.push(`Product "${product.name.en}" references invalid category "${product.categoryId}"`);
+      }
+      if (product.subcategoryId && !subcategoriesData.some(sub => sub.id === product.subcategoryId)) {
+        errors.push(`Product "${product.name.en}" references invalid subcategory "${product.subcategoryId}"`);
+      }
+      if (product.priceRange && product.priceRange.min > product.priceRange.max) {
+        errors.push(`Product "${product.name.en}" has invalid price range (min > max)`);
+      }
+    });
+
+    return errors;
+  };
+
   const saveCatalog = async () => {
+    const validationErrors = validateData();
+    if (validationErrors.length > 0) {
+      showMessage("error", `Validation errors:\n${validationErrors.join("\n")}`);
+      return;
+    }
+
     setLoading(true);
     try {
       const response = await fetch("/api/admin/catalog", {
@@ -43,8 +80,10 @@ export default function AdminPage() {
           type: "updateCatalog",
           data: {
             categories: categoriesData,
+            subcategories: subcategoriesData,
             newProducts: newProductsData,
             mostVisited: mostVisitedData,
+            productImageByItemId: productImagesData,
           },
         }),
       });
@@ -118,7 +157,10 @@ export default function AdminPage() {
       id: newId,
       name: { en: "New Product", ar: "منتج جديد" },
       categoryId: categoriesData[0]?.id || "adhesives",
-      tags: [],
+      priceRange: {
+        min: 0,
+        max: 0
+      }
     };
 
     if (list === "new") {
@@ -182,6 +224,24 @@ export default function AdminPage() {
     setCategoriesData(categoriesData.map(c => c.id === id ? { ...c, ...updates } : c));
   };
 
+  const addSubcategory = () => {
+    const newId = `subcategory-${Date.now()}`;
+    const newSubcategory: Subcategory = {
+      id: newId,
+      title: { en: "New Subcategory", ar: "فئة فرعية جديدة" },
+      categoryId: categoriesData[0]?.id || "adhesives",
+    };
+    setSubcategoriesData([...subcategoriesData, newSubcategory]);
+  };
+
+  const deleteSubcategory = (id: string) => {
+    setSubcategoriesData(subcategoriesData.filter(s => s.id !== id));
+  };
+
+  const updateSubcategory = (id: string, updates: Partial<Subcategory>) => {
+    setSubcategoriesData(subcategoriesData.map(s => s.id === id ? { ...s, ...updates } : s));
+  };
+
   if (process.env.NODE_ENV === "production") {
     return (
       <Container className="py-10">
@@ -239,6 +299,16 @@ export default function AdminPage() {
             Categories
           </button>
           <button
+            onClick={() => setActiveTab("subcategories")}
+            className={`px-4 py-2 text-sm font-medium ${
+              activeTab === "subcategories"
+                ? "border-b-2 border-primary text-primary"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            Subcategories
+          </button>
+          <button
             onClick={() => setActiveTab("details")}
             className={`px-4 py-2 text-sm font-medium ${
               activeTab === "details"
@@ -281,6 +351,7 @@ export default function AdminPage() {
                     key={product.id}
                     product={product}
                     categories={categoriesData}
+                    subcategories={subcategoriesData}
                     onUpdate={(updates) => updateProduct(product.id, updates, "new")}
                     onDelete={() => deleteProduct(product.id, "new")}
                     image={productImagesData[product.id]}
@@ -309,6 +380,7 @@ export default function AdminPage() {
                     key={product.id}
                     product={product}
                     categories={categoriesData}
+                    subcategories={subcategoriesData}
                     onUpdate={(updates) => updateProduct(product.id, updates, "mostVisited")}
                     onDelete={() => deleteProduct(product.id, "mostVisited")}
                     image={productImagesData[product.id]}
@@ -367,6 +439,51 @@ export default function AdminPage() {
           </div>
         )}
 
+        {/* Subcategories Tab */}
+        {activeTab === "subcategories" && (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-semibold">Subcategories</h2>
+              <div className="flex gap-2">
+                <button
+                  onClick={addSubcategory}
+                  className="rounded bg-primary px-4 py-2 text-sm font-medium text-white hover:brightness-110"
+                >
+                  + Add Subcategory
+                </button>
+                <button
+                  onClick={saveCatalog}
+                  disabled={loading}
+                  className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white hover:brightness-110 disabled:opacity-50"
+                >
+                  {loading ? "Saving..." : "Save"}
+                </button>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              {categoriesData.map((category) => (
+                <div key={category.id} className="rounded-lg border bg-background p-4">
+                  <h3 className="mb-3 font-semibold">{category.title.en}</h3>
+                  <div className="space-y-2">
+                    {subcategoriesData
+                      .filter((sub) => sub.categoryId === category.id)
+                      .map((subcategory) => (
+                        <SubcategoryEditor
+                          key={subcategory.id}
+                          subcategory={subcategory}
+                          categories={categoriesData}
+                          onUpdate={(updates) => updateSubcategory(subcategory.id, updates)}
+                          onDelete={() => deleteSubcategory(subcategory.id)}
+                        />
+                      ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Product Details Tab */}
         {activeTab === "details" && (
           <div className="space-y-6">
@@ -406,10 +523,159 @@ export default function AdminPage() {
   );
 }
 
+// Packaging Editor Component
+function PackagingEditor({
+  packaging,
+  onUpdate,
+}: {
+  packaging: PackagingRow[];
+  onUpdate: (packaging: PackagingRow[]) => void;
+}) {
+  const addRow = () => {
+    onUpdate([...packaging, {}]);
+  };
+
+  const updateRow = (index: number, updates: Partial<PackagingRow>) => {
+    const newPackaging = [...packaging];
+    newPackaging[index] = { ...newPackaging[index], ...updates };
+    onUpdate(newPackaging);
+  };
+
+  const removeRow = (index: number) => {
+    onUpdate(packaging.filter((_, i) => i !== index));
+  };
+
+  return (
+    <div className="space-y-2">
+      {packaging.map((row, index) => (
+        <div key={index} className="flex gap-2 items-end">
+          <div className="flex-1">
+            <label className="block text-xs font-medium text-muted-foreground">Stock Code</label>
+            <input
+              type="text"
+              value={row.stockCode || ""}
+              onChange={(e) => updateRow(index, { stockCode: e.target.value })}
+              className="mt-1 w-full rounded border px-2 py-1 text-sm"
+              placeholder="Optional"
+            />
+          </div>
+          <div className="flex-1">
+            <label className="block text-xs font-medium text-muted-foreground">Product Code</label>
+            <input
+              type="text"
+              value={row.productCode || ""}
+              onChange={(e) => updateRow(index, { productCode: e.target.value })}
+              className="mt-1 w-full rounded border px-2 py-1 text-sm"
+              placeholder="Optional"
+            />
+          </div>
+          <div className="flex-1">
+            <label className="block text-xs font-medium text-muted-foreground">Type</label>
+            <input
+              type="text"
+              value={row.type || ""}
+              onChange={(e) => updateRow(index, { type: e.target.value })}
+              className="mt-1 w-full rounded border px-2 py-1 text-sm"
+              placeholder="Optional"
+            />
+          </div>
+          <div className="flex-1">
+            <label className="block text-xs font-medium text-muted-foreground">Volume</label>
+            <input
+              type="text"
+              value={row.volume || ""}
+              onChange={(e) => updateRow(index, { volume: e.target.value })}
+              className="mt-1 w-full rounded border px-2 py-1 text-sm"
+              placeholder="e.g. 310 ml"
+            />
+          </div>
+          <div className="flex-1">
+            <label className="block text-xs font-medium text-muted-foreground">Box Qty</label>
+            <input
+              type="text"
+              value={row.boxQty || ""}
+              onChange={(e) => updateRow(index, { boxQty: e.target.value })}
+              className="mt-1 w-full rounded border px-2 py-1 text-sm"
+              placeholder="e.g. 12"
+            />
+          </div>
+          <button
+            onClick={() => removeRow(index)}
+            className="rounded bg-red-100 px-2 py-1 text-xs text-red-700 hover:bg-red-200"
+          >
+            Remove
+          </button>
+        </div>
+      ))}
+      <button
+        onClick={addRow}
+        className="rounded bg-primary px-3 py-1 text-sm text-white hover:brightness-110"
+      >
+        + Add Packaging
+      </button>
+    </div>
+  );
+}
+
+// Images Editor Component
+function ImagesEditor({
+  images,
+  onUpdate,
+}: {
+  images: string[];
+  onUpdate: (images: string[]) => void;
+}) {
+  const addImage = () => {
+    onUpdate([...images, ""]);
+  };
+
+  const updateImage = (index: number, value: string) => {
+    const newImages = [...images];
+    newImages[index] = value;
+    onUpdate(newImages);
+  };
+
+  const removeImage = (index: number) => {
+    onUpdate(images.filter((_, i) => i !== index));
+  };
+
+  return (
+    <div className="space-y-2">
+      {images.map((image, index) => (
+        <div key={index} className="flex gap-2 items-end">
+          <div className="flex-1">
+            <label className="block text-xs font-medium text-muted-foreground">Image URL {index + 1}</label>
+            <input
+              type="text"
+              value={image}
+              onChange={(e) => updateImage(index, e.target.value)}
+              className="mt-1 w-full rounded border px-2 py-1 text-sm"
+              placeholder="/images/all-products/category/product.png"
+            />
+          </div>
+          <button
+            onClick={() => removeImage(index)}
+            className="rounded bg-red-100 px-2 py-1 text-xs text-red-700 hover:bg-red-200"
+          >
+            Remove
+          </button>
+        </div>
+      ))}
+      <button
+        onClick={addImage}
+        className="rounded bg-primary px-3 py-1 text-sm text-white hover:brightness-110"
+      >
+        + Add Image
+      </button>
+    </div>
+  );
+}
+
 // Product Editor Component
 function ProductEditor({
   product,
   categories,
+  subcategories,
   onUpdate,
   onDelete,
   image,
@@ -417,6 +683,7 @@ function ProductEditor({
 }: {
   product: Item;
   categories: Category[];
+  subcategories: Subcategory[];
   onUpdate: (updates: Partial<Item>) => void;
   onDelete: () => void;
   image?: string;
@@ -511,17 +778,21 @@ function ProductEditor({
           />
         </div>
         <div className="md:col-span-2">
-          <label className="block text-xs font-medium text-muted-foreground">Tags (comma-separated)</label>
-          <input
-            type="text"
-            value={product.tags?.join(", ") || ""}
-            onChange={(e) =>
-              onUpdate({
-                tags: e.target.value.split(",").map((t) => t.trim()).filter(Boolean),
-              })
-            }
+          <label className="block text-xs font-medium text-muted-foreground">Subcategory</label>
+          <select
+            value={product.subcategoryId || ""}
+            onChange={(e) => onUpdate({ subcategoryId: e.target.value || undefined })}
             className="mt-1 w-full rounded border px-2 py-1 text-sm"
-          />
+          >
+            <option value="">None</option>
+            {subcategories
+              .filter((sub) => sub.categoryId === product.categoryId)
+              .map((sub) => (
+                <option key={sub.id} value={sub.id}>
+                  {sub.title.en}
+                </option>
+              ))}
+          </select>
         </div>
       </div>
       <div className="mt-3 flex justify-end">
@@ -548,7 +819,7 @@ function CategoryEditor({
 }) {
   return (
     <div className="rounded border bg-background p-4">
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-5">
         <div>
           <label className="block text-xs font-medium text-muted-foreground">ID</label>
           <input
@@ -576,11 +847,98 @@ function CategoryEditor({
             className="mt-1 w-full rounded border px-2 py-1 text-sm"
           />
         </div>
+        <div>
+          <label className="block text-xs font-medium text-muted-foreground">Description (EN)</label>
+          <textarea
+            value={category.desc?.en || ""}
+            onChange={(e) => onUpdate({ desc: { en: e.target.value, ar: category.desc?.ar || "" } })}
+            className="mt-1 w-full rounded border px-2 py-1 text-sm"
+            rows={2}
+          />
+        </div>
+        <div>
+          <label className="block text-xs font-medium text-muted-foreground">Description (AR)</label>
+          <textarea
+            value={category.desc?.ar || ""}
+            onChange={(e) => onUpdate({ desc: { en: category.desc?.en || "", ar: e.target.value } })}
+            className="mt-1 w-full rounded border px-2 py-1 text-sm"
+            rows={2}
+          />
+        </div>
       </div>
       <div className="mt-3 flex justify-end">
         <button
           onClick={onDelete}
           className="rounded bg-red-100 px-3 py-1 text-sm text-red-700 hover:bg-red-200"
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// Subcategory Editor Component
+function SubcategoryEditor({
+  subcategory,
+  categories,
+  onUpdate,
+  onDelete,
+}: {
+  subcategory: Subcategory;
+  categories: Category[];
+  onUpdate: (updates: Partial<Subcategory>) => void;
+  onDelete: () => void;
+}) {
+  return (
+    <div className="rounded border p-3">
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-4">
+        <div>
+          <label className="block text-xs font-medium text-muted-foreground">ID</label>
+          <input
+            type="text"
+            value={subcategory.id}
+            onChange={(e) => onUpdate({ id: e.target.value })}
+            className="mt-1 w-full rounded border px-2 py-1 text-sm"
+          />
+        </div>
+        <div>
+          <label className="block text-xs font-medium text-muted-foreground">Category</label>
+          <select
+            value={subcategory.categoryId}
+            onChange={(e) => onUpdate({ categoryId: e.target.value })}
+            className="mt-1 w-full rounded border px-2 py-1 text-sm"
+          >
+            {categories.map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {cat.title.en}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className="block text-xs font-medium text-muted-foreground">Title (EN)</label>
+          <input
+            type="text"
+            value={subcategory.title.en}
+            onChange={(e) => onUpdate({ title: { ...subcategory.title, en: e.target.value } })}
+            className="mt-1 w-full rounded border px-2 py-1 text-sm"
+          />
+        </div>
+        <div>
+          <label className="block text-xs font-medium text-muted-foreground">Title (AR)</label>
+          <input
+            type="text"
+            value={subcategory.title.ar}
+            onChange={(e) => onUpdate({ title: { ...subcategory.title, ar: e.target.value } })}
+            className="mt-1 w-full rounded border px-2 py-1 text-sm"
+          />
+        </div>
+      </div>
+      <div className="mt-2 flex justify-end">
+        <button
+          onClick={onDelete}
+          className="rounded bg-red-100 px-2 py-1 text-xs text-red-700 hover:bg-red-200"
         >
           Delete
         </button>
@@ -703,6 +1061,20 @@ function ProductDetailEditor({
             }
             className="mt-1 w-full rounded border px-2 py-1 text-sm"
             rows={4}
+          />
+        </div>
+        <div>
+          <label className="block text-xs font-medium text-muted-foreground">Packaging</label>
+          <PackagingEditor
+            packaging={detail.packaging || []}
+            onUpdate={(packaging) => onUpdate({ packaging })}
+          />
+        </div>
+        <div>
+          <label className="block text-xs font-medium text-muted-foreground">Images</label>
+          <ImagesEditor
+            images={detail.images || []}
+            onUpdate={(images) => onUpdate({ images })}
           />
         </div>
         <div>

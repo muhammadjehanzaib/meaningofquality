@@ -66,11 +66,11 @@ export default async function ProductDetailPage({ params }: PageProps) {
         <nav className="text-xs text-muted-foreground">
           <Link href="/" className="hover:underline"><LKey k="home" /></Link>
           <span className="mx-1">/</span>
-          <Link href="/products" className="hover:underline"><LKey k="products" /></Link>
+          <Link href="/categories" className="hover:underline"><LKey k="products" /></Link>
           {cat && (
             <>
               <span className="mx-1">/</span>
-              <Link href={`/products#${cat.id}`} className="hover:underline">
+              <Link href="" className="hover:underline">
                 <L value={cat.title} />
               </Link>
             </>
