@@ -143,7 +143,7 @@ export default function HumanRightsDueDiligencePage() {
                                 <>
                                     <span className="font-semibold text-gray-800">الدليل:</span>{' '}
                                     <Link
-                                        href="/documents/Human-Rights-Risk-Analysis-Process-Description.pdf"
+                                        href="/customer-care/humanRightsAnalysisProcessDescription"
                                         target="_blank"
                                         className="text-purple-600 underline hover:text-purple-700 font-medium"
                                     >
@@ -154,7 +154,7 @@ export default function HumanRightsDueDiligencePage() {
                                 <>
                                     <span className="font-semibold text-gray-800">Evidence:</span>{' '}
                                     <Link
-                                        href="/documents/Human-Rights-Risk-Analysis-Process-Description.pdf"
+                                        href="/customer-care/humanRightsAnalysisProcessDescription"
                                         target="_blank"
                                         className="text-purple-600 underline hover:text-purple-700 font-medium"
                                     >
@@ -229,7 +229,7 @@ export default function HumanRightsDueDiligencePage() {
                                 <>
                                     <span className="font-semibold text-gray-800">الدليل:</span>{' '}
                                     <Link
-                                        href="/documents/Human-Rights-Risk-Analysis-Process-Description.pdf"
+                                        href="/customer-care/supplierIncentiveProcessDescription"
                                         target="_blank"
                                         className="text-purple-600 underline hover:text-purple-700 font-medium"
                                     >
@@ -239,7 +239,7 @@ export default function HumanRightsDueDiligencePage() {
                                 <>
                                     <span className="font-semibold text-gray-800">Evidence:</span>{' '}
                                     <Link
-                                        href="/documents/Human-Rights-Risk-Analysis-Process-Description.pdf"
+                                        href="/customer-care/supplierIncentiveProcessDescription"
                                         target="_blank"
                                         className="text-purple-600 underline hover:text-purple-700 font-medium"
                                     >

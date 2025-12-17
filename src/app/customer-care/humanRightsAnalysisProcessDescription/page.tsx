@@ -180,10 +180,22 @@ export default function HumanRightsAnalysisProcessDescription() {
                             {isAr ? "" : "Evidence"}
                         </h2>
 
-                        <p className='text-gray-600'>
-                            {isAr ? ""
-                                : "This process is documented in our Human Rights Policy (Paragraphs 12-14) and applied across operations and supplier relationships."}
+                        <p className="text-gray-600">
+                            {isAr ? "" : (
+                                <>
+                                    This process is documented in our{" "}
+                                    <Link
+                                        href="/customer-care/humanRightPolicy"
+                                        target="_blank"
+                                        className="text-purple-600 underline hover:text-purple-700 font-medium"
+                                    >
+                                        Human Rights Policy (Paragraphs 12–14)
+                                    </Link>{" "}
+                                    and applied across operations and supplier relationships.
+                                </>
+                            )}
                         </p>
+
                     </section>
 
 

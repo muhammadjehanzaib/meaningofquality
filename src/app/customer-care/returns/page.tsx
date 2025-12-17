@@ -2,6 +2,8 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Container from '@/components/ui/Container';
+import { useLang } from "@/hooks/useLang";
 
 // Sidebar items (reuse the same as other pages)
 const sidebarItems = [
@@ -19,6 +21,9 @@ const sidebarItems = [
 ];
 
 export default function ReturnsPage() {
+    const lang = useLang();
+  const isAr = lang === "ar";
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Breadcrumb */}
@@ -311,28 +316,31 @@ export default function ReturnsPage() {
         </div>
       </div>
 
-      {/* Footer Section - Company Information */}
-      <div className="bg-white border-t py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <footer className="bg-white border-t py-8">
+        <Container>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-sm text-gray-600">
             <div>
-              <h3 className="font-medium text-gray-900 mb-2">Saudi Safety</h3>
-              <p><strong>P.O. Box:</strong> 3196, Riyadh 11471</p>
-              <p><strong>Unified Number:</strong> 920000089</p>
+              <h3 className="font-medium text-gray-900 mb-2">{isAr ? "السعودية للسلامة" : "The Meaning of Quality Trading Establishment"}</h3>
+              <p className="whitespace-pre-line">
+                <strong>Address:</strong>{" "}
+                Jarallah Bin Fahad Street{"\n"}
+                Al Jazeerah District 14262{"\n"}
+                Riyadh, Saudi Arabia
+              </p>
+
+              <p><strong>Contact Number:</strong> +966 590 019 826</p>
             </div>
             <div>
-              <p><strong>For after sales service requests follow up:</strong> 8003314444</p>
-              <p><strong>Fax:</strong> 011-4656363</p>
-              <p><strong>Email:</strong> <a href="mailto:support@saudisafety.com" className="text-purple-600 hover:underline">care@saudisafety.com</a></p>
+              <p><strong>{isAr ? "لخدمات ما بعد البيع:" : "After Sales Service:"}</strong> +966 590 019 826</p>
+              <p><strong>Email:</strong> <a href="mailto:sales@moq.com.sa" className="text-purple-600 hover:underline">sales@moq.com.sa</a></p>
             </div>
             <div>
-              <p><strong>Call Center Working Hours:</strong> Friday – Thursday: 8:00 AM – 10:00 PM</p>
-              <p><strong>Friday:</strong> 4:00 PM – 10:00 PM</p>
-              <p>For showroom locations &amp; Working hours Please click <a href="/store-locations" className="text-purple-600 hover:underline">Store locations</a></p>
+              <p><strong>{isAr ? "ساعات عمل مركز الاتصال:" : "Call Center Working Hours:"}</strong> Sunday – Thursday: 9:00 AM – 6:00 PM</p>
+              <p>{isAr ? "للموقع والفروع:" : "For showroom locations & hours"} <Link href="https://maps.app.goo.gl/JHX2DVrRzomWQjeE8?g_st=ipc" className="text-purple-600 hover:underline">Store locations</Link></p>
             </div>
           </div>
-        </div>
-      </div>
+        </Container>
+      </footer>
     </div>
   );
 }

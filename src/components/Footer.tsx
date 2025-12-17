@@ -64,17 +64,12 @@ export default function Footer() {
           <ul className="space-y-2 text-gray-500 text-sm">
             <li>
               <Link href="/customer-care/about" className="hover:text-primary transition">
-                About
+                About Us
               </Link>
             </li>
             <li>
               <Link href="/customer-care" className="hover:text-primary transition">
-                Contact
-              </Link>
-            </li>
-            <li>
-              <Link href="#" className="hover:text-primary transition">
-                Careers
+                Contact Us
               </Link>
             </li>
           </ul>
@@ -123,7 +118,7 @@ export default function Footer() {
             </li>
             <li>
               <Link href="/customer-care/humanRightsAnalysisProcessDescription" className="hover:text-primary transition">
-                Human Rights Analysis Process Description
+                Human Rights Analysis Process
               </Link>
             </li>
                         <li>
@@ -145,8 +140,8 @@ export default function Footer() {
         <Container className="py-6 flex flex-col md:flex-row items-center justify-between text-sm text-gray-400 gap-2">
           <p>© {new Date().getFullYear()} Sultan Co. All rights reserved.</p>
           <div className="flex gap-4">
-            <Link href="#" className="hover:text-primary transition">Privacy</Link>
-            <Link href="#" className="hover:text-primary transition">Terms</Link>
+            <Link href="/customer-care/privacy" className="hover:text-primary transition">Privacy</Link>
+            <Link href="/customer-care/returns" className="hover:text-primary transition">Terms</Link>
           </div>
         </Container>
       </div>

@@ -139,12 +139,27 @@ export default function SupplierIncentiveProcessDescription() {
                             {isAr ? "" : "Evidence"}
                         </h2>
 
-                        <p className='text-gray-600'>
-                            {isAr ? ""
-                                : "This process is documented in our Human Rights Policy (Paragraph 7) and applied in supplier selection and evaluation."}
+                        <p className="text-gray-600">
+                            {isAr
+                                ? ""
+                                : (
+                                    <>
+                                        This process is documented in our{" "}
+                                        <Link
+                                            href="/customer-care/humanRightPolicy"
+                                            target="_blank"
+                                            className="text-purple-600 underline hover:text-purple-700 font-medium"
+                                        >
+                                            Human Rights Policy (Paragraph 7)
+                                        </Link>{" "}
+                                        and applied in supplier selection and evaluation.
+                                    </>
+                                )}
                         </p>
+
+
                     </section>
-                 
+
 
 
                 </main>
