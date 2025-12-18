@@ -5,7 +5,6 @@ import { useCart } from "@/contexts/CartContext";
 import type { PackagingRow } from "@/data/productDetails";
 import { t } from "@/data/labels";
 import { useLang } from "@/hooks/useLang";
-import { pickAny } from "@/data/i18n";
 import Link from "next/link";
 
 export default function AddToCart({
@@ -33,7 +32,7 @@ export default function AddToCart({
   const onAdd = () => {
     add({
       id: productId,
-      name: pickAny(name, lang),
+      name: name,
       img,
       qty: Math.max(1, qty),
       productCode: selected?.productCode,

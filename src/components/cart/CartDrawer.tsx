@@ -6,6 +6,7 @@ import { useCart } from "@/contexts/CartContext";
 import { useEffect } from "react";
 import { useLang } from "@/hooks/useLang";
 import { t } from "@/data/labels";
+import { pickAny } from "@/data/i18n";
 
 export default function CartDrawer() {
   const { drawerOpen, closeDrawer, lastAdded, items, count, updateQty, remove } = useCart();
@@ -49,13 +50,13 @@ export default function CartDrawer() {
                 <div className="flex items-center gap-3">
                   <div className="relative h-16 w-16 rounded bg-background ring-1 ring-foreground/10 overflow-hidden">
                     {lastAdded.img ? (
-                      <Image src={lastAdded.img} alt={lastAdded.name} fill sizes="64px" className="object-contain" />
+                      <Image src={lastAdded.img} alt={pickAny(lastAdded.name, lang)} fill sizes="64px" className="object-contain" />
                     ) : (
                       <div className="grid h-full w-full place-items-center text-xs text-muted-foreground">IMG</div>
                     )}
                   </div>
                   <div className="flex-1">
-                    <div className="text-sm font-medium line-clamp-2">{lastAdded.name}</div>
+                    <div className="text-sm font-medium line-clamp-2">{pickAny(lastAdded.name, lang)}</div>
                     <div className="text-xs text-muted-foreground">
                       {lastAdded.productCode ? <span className="mr-2">Code: {lastAdded.productCode}</span> : null}
                       {lastAdded.volume ? <span>Volume: {lastAdded.volume}</span> : null}
@@ -73,13 +74,13 @@ export default function CartDrawer() {
                   <div key={key} className="flex items-center gap-3 rounded border border-foreground/10 bg-background p-2">
                     <div className="relative h-12 w-12 rounded bg-background ring-1 ring-foreground/10 overflow-hidden">
                       {it.img ? (
-                        <Image src={it.img} alt={it.name} fill sizes="48px" className="object-contain" />
+                        <Image src={it.img} alt={pickAny(it.name, lang)} fill sizes="48px" className="object-contain" />
                       ) : (
                         <div className="grid h-full w-full place-items-center text-[10px] text-muted-foreground">IMG</div>
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="truncate text-sm font-medium">{it.name}</div>
+                      <div className="truncate text-sm font-medium">{pickAny(it.name, lang)}</div>
                       {typeof it.priceRange?.min === "number" &&
                         typeof it.priceRange?.max === "number" && (
                           <div className="text-xs text-muted-foreground mt-0.5">

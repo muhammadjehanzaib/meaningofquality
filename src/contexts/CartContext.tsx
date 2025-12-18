@@ -2,10 +2,11 @@
 
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { productDetailsById } from "@/data/productDetails";
+import type { LText } from "@/data/i18n";
 
 export type CartItem = {
   id: string;
-  name: string;
+  name: LText;
   img?: string;
   qty: number;
   productCode?: string;
