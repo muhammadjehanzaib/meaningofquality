@@ -5,22 +5,9 @@ import React from 'react';
 import Link from 'next/link';
 import Container from '@/components/ui/Container';
 import { useLang } from "@/hooks/useLang";
+import CustomerCareSidebar from '@/components/customer-care/CustomerCareSidebar';
 
 // import { Footer } from '@/components';
-// Sidebar items (reuse the same as other pages)
-const sidebarItems = [
-  { id: 'contact', label: 'Contact Us', path: '/customer-care', isActive: false },
-  { id: 'about', label: 'About Us', path: '/customer-care/about', isActive: false },
-  { id: 'faq', label: 'Frequently Asked Questions', path: '/customer-care/faq', isActive: false },
-  { id: 'shopping-guide', label: 'Shopping Guide', path: '/customer-care/shopping-guide', isActive: true },
-  { id: 'returns', label: 'Return and Exchange', path: '/customer-care/returns', isActive: false },
-  { id: 'privacy', label: 'Privacy Policy', path: '/customer-care/privacy', isActive: false },
-  { id: 'human-rights', label: 'Human Rights Due Diligence', path: '/customer-care/humanRightsDueDiligance', isActive: false },
-  { id: 'human-rights-policy', label: 'Human Rights Policy', path: '/customer-care/humanRightPolicy', isActive: false },
-  { id: 'human-rights-analysis', label: 'Human Rights Analysis Process Description', path: '/customer-care/humanRightsAnalysisProcessDescription', isActive: false },
-  { id: 'supplier-incentive', label: 'Supplier Incentive Process Description', path: '/customer-care/supplierIncentiveProcessDescription', isActive: false },
-
-];
 
 export default function ShoppingGuidePage() {
   // const { t, isRTL, language } = useLanguage();
@@ -46,28 +33,7 @@ export default function ShoppingGuidePage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Sidebar */}
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow-sm border">
-              <nav className="p-4">
-                <ul className="space-y-1">
-                  {sidebarItems.map((item) => (
-                    <li key={item.id}>
-                      <Link
-                        href={item.path}
-                        className={`block px-4 py-3 text-sm rounded-md transition-colors ${item.isActive
-                          ? 'bg-purple-50 text-purple-700 font-medium border-l-4 border-purple-600'
-                          : 'text-gray-700 hover:bg-gray-50 hover:text-purple-600'
-                          }`}
-                      >
-                        {item.label}
-                      </Link>
-
-                    </li>
-                  ))}
-                </ul>
-              </nav>
-            </div>
-          </div>
+          <CustomerCareSidebar />
 
           {/* Main Content */}
           <div className="lg:col-span-3">

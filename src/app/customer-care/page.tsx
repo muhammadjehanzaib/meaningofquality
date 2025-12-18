@@ -4,29 +4,12 @@ import Link from 'next/link';
 import Container from "@/components/ui/Container";
 import { Mail, Phone, MapPin, MessageCircle, Clock } from "lucide-react";
 import { useLang } from "@/hooks/useLang";
-
-
-// Sidebar items
-const sidebarItems = [
-  { id: 'contact', label: 'Contact Us', path: '/customer-care', isActive: true },
-  { id: 'about', label: 'About Us', path: '/customer-care/about', isActive: false },
-  { id: 'faq', label: 'Frequently Asked Questions', path: '/customer-care/faq', isActive: false },
-  { id: 'shopping-guide', label: 'Shopping Guide', path: '/customer-care/shopping-guide', isActive: false },
-  { id: 'returns', label: 'Return and Exchange', path: '/customer-care/returns', isActive: false },
-  { id: 'privacy', label: 'Privacy Policy', path: '/customer-care/privacy', isActive: false },
-  { id: 'human-rights', label: 'Human Rights Due Diligence', path: '/customer-care/humanRightsDueDiligance', isActive: false },
-  { id: 'human-rights-policy', label: 'Human Rights Policy', path: '/customer-care/humanRightPolicy', isActive: false },
-  { id: 'human-rights-analysis', label: 'Human Rights Analysis Process Description', path: '/customer-care/humanRightsAnalysisProcessDescription', isActive: false },
-  { id: 'supplier-incentive', label: 'Supplier Incentive Process Description', path: '/customer-care/supplierIncentiveProcessDescription', isActive: false },
-
-
-];
+import CustomerCareSidebar from "@/components/customer-care/CustomerCareSidebar";
 
 export default function CustomerCarePage() {
   const lang = useLang();
   const isAr = lang === "ar";
-
-  return (
+    return (
     <div className="min-h-screen bg-gray-50">
       {/* Breadcrumb */}
       <div className="bg-white border-b">
@@ -43,28 +26,7 @@ export default function CustomerCarePage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-1 lg:grid-cols-4 gap-8">
         {/* Sidebar */}
-        <aside className="lg:col-span-1">
-          <div className="bg-white shadow rounded-lg border">
-            <nav className="p-4">
-              <ul className="space-y-1">
-                {sidebarItems.map((item) => (
-                  <li key={item.id}>
-                    <Link
-                      href={item.path}
-                      className={`block px-4 py-3 text-sm rounded-md transition-colors ${item.isActive
-                        ? 'bg-purple-50 text-purple-700 font-medium border-l-4 border-purple-600'
-                        : 'text-gray-700 hover:bg-gray-50 hover:text-purple-600'
-                        }`}
-                    >
-                      {item.label}
-                    </Link>
-
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          </div>
-        </aside>
+        <CustomerCareSidebar />
 
         {/* Main Content */}
         <div className="lg:col-span-3 space-y-16" dir={isAr ? "rtl" : "ltr"}>

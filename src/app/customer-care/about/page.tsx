@@ -4,300 +4,264 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Users, Target, Award, Clock } from "lucide-react";
 import { useLang } from "@/hooks/useLang";
-import { usePathname } from 'next/navigation';
 import Container from '@/components/ui/Container';
-
-const sidebarItems = [
-    { id: 'contact', label: 'Contact Us', path: '/customer-care', isActive: false },
-    { id: 'about', label: 'About Us', path: '/customer-care/about', isActive: true },
-    { id: 'faq', label: 'Frequently Asked Questions', path: '/customer-care/faq', isActive: false },
-    { id: 'shopping-guide', label: 'Shopping Guide', path: '/customer-care/shopping-guide', isActive: false },
-    { id: 'returns', label: 'Return and Exchange', path: '/customer-care/returns', isActive: false },
-    { id: 'privacy', label: 'Privacy Policy', path: '/customer-care/privacy', isActive: false },
-    { id: 'human-rights', label: 'Human Rights Due Diligence', path: '/customer-care/humanRightsDueDiligance', isActive: false },
-    { id: 'human-rights-policy', label: 'Human Rights Policy', path: '/customer-care/humanRightPolicy', isActive: false },
-    { id: 'human-rights-analysis', label: 'Human Rights Analysis Process Description', path: '/customer-care/humanRightsAnalysisProcessDescription', isActive: false },
-    { id: 'supplier-incentive', label: 'Supplier Incentive Process Description', path: '/customer-care/supplierIncentiveProcessDescription', isActive: false },
-
-];
+import CustomerCareSidebar from '@/components/customer-care/CustomerCareSidebar';
 
 export default function AboutPage() {
-    const lang = useLang();
-    const isAr = lang === "ar";
-    const pathname = usePathname();
-    const HandshakeIcon = (
-        <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12l2-2m0 0l2 2m-2-2v6m4-6l2-2m0 0l2 2m-2-2v6" />
-        </svg>
-    );
+  const lang = useLang();
+  const isAr = lang === "ar";
+  const HandshakeIcon = (
+    <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12l2-2m0 0l2 2m-2-2v6m4-6l2-2m0 0l2 2m-2-2v6" />
+    </svg>
+  );
 
-    return (
-        <div className="min-h-screen bg-gray-50">
-            {/* Breadcrumb */}
-            <div className="bg-white border-b">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-                    <nav className="flex text-sm text-gray-500">
-                        <Link href="/" className="hover:text-purple-600">Home</Link>
-                        <span className="mx-2">&gt;</span>
-                        <Link href="/customer-care" className="hover:text-purple-600">Customer Care</Link>
-                        <span className="mx-2">&gt;</span>
-                        <span className="text-gray-900">{isAr ? "من نحن" : "About Us"}</span>
-                    </nav>
-                </div>
-            </div>
-
-            {/* Main Layout */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-1 lg:grid-cols-4 gap-8">
-                {/* Sidebar */}
-                <aside className="lg:col-span-1">
-                    <div className="bg-white shadow rounded-lg border">
-                        <nav className="p-4">
-                            <ul>
-                                {sidebarItems.map(item => (
-                                    <li key={item.id}>
-                                        <Link
-                                            href={item.path}
-                                            replace
-                                            className={`block px-4 py-3 text-sm rounded-md transition-colors ${pathname === item.path
-                                                ? 'bg-purple-50 text-purple-700 font-medium border-l-4 border-purple-600'
-                                                : 'text-gray-700 hover:bg-gray-50 hover:text-purple-600'
-                                                }`}
-                                        >
-                                            {item.label}
-                                        </Link>
-                                    </li>
-                                ))}
-                            </ul>
-                        </nav>
-                    </div>
-                </aside>
-
-                {/* Main Content */}
-                <main className="lg:col-span-3 space-y-16" dir={isAr ? "rtl" : "ltr"}>
-                    {/* Header Section */}
-                    <section className="text-center space-y-4">
-                        <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight">
-                            {isAr ? "ملف الشركة" : "Company Profile"}
-                        </h1>
-                        <p className="mt-2 max-w-3xl mx-auto text-lg text-gray-600 leading-relaxed">
-                            {isAr
-                                ? "مؤسسة معنى الجودة للتجارة (سلطان) شركة رائدة في توريد منتجات عالية الجودة وخدمات موثوقة، تلتزم بمعايير الجودة والأداء وتجربة العملاء."
-                                : "The Meaning of Quality Trading Establishment (Sultan) is a leading provider of high-quality products and reliable services, committed to quality, performance, and customer experience."}
-                        </p>
-                    </section>
-
-
-
-                    {/* History & Operations */}
-                    <section className="space-y-6">
-                        <h2 className="text-2xl font-semibold">{isAr ? "التاريخ والعمليات" : "History & Operations"}</h2>
-                        <p className="text-gray-600 leading-relaxed">``
-                            {isAr
-                                ? "تأسست الشركة عام 2015 في الرياض، المملكة العربية السعودية، وتعمل تحت العلامة التجارية 'سلطان'. منذ إنشائها، تلتزم الشركة بتقديم منتجات عالية الجودة وخدمات موثوقة لعملائها، لتصبح اسمًا معروفًا وموثوقًا في قطاع التجارة والاستيراد بالجملة."
-                                : "The company was founded in 2015 in Riyadh, Saudi Arabia, operating under the brand name 'Sultan'. Since its inception, Sultan has been committed to delivering premium-quality products and reliable services, becoming a recognized and respected name in wholesale trading and importing."}
-                        </p>
-                        <p className="text-gray-600 leading-relaxed">
-                            {isAr
-                                ? "تختص الشركة بالتجارة والاستيراد بالجملة لمجموعة متنوعة من المنتجات عالية الجودة، لتلبية احتياجات الأسواق المحلية والموزعين وتجار التجزئة والمصانع وورش العمل في جميع أنحاء المملكة."
-                                : "Sultan specializes in wholesale trading and importing high-quality products, serving retail markets, wholesale distributors, factories, and workshops across Saudi Arabia."}
-                        </p>
-                    </section>
-
-                    {/* Mission, Vision & Core Values */}
-                    <section className="grid gap-12 md:grid-cols-2 items-center">
-                        <div className="space-y-6">
-                            <h2 className="text-2xl font-semibold">{isAr ? "مهمتنا" : "Our Mission"}</h2>
-                            <p className="text-gray-600 leading-relaxed">
-                                {isAr
-                                    ? "تقديم منتجات عالية الجودة وخدمة عملاء استثنائية، وبناء شراكات طويلة الأمد تقوم على الثقة والمصلحة المشتركة."
-                                    : "To provide clients with premium-quality products and exceptional customer service, fostering long-term partnerships built on trust and mutual benefit."}
-                            </p>
-
-                            <h2 className="text-2xl font-semibold">{isAr ? "رؤيتنا" : "Our Vision"}</h2>
-                            <p className="text-gray-600 leading-relaxed">
-                                {isAr
-                                    ? "أن نكون من أبرز وأوثق مؤسسات التجارة في المنطقة، معروفين بالجودة والموثوقية ورضا العملاء."
-                                    : "To be one of the leading and most trusted trading establishments in the region, renowned for quality, reliability, and customer satisfaction."}
-                            </p>
-
-
-                        </div>
-
-                        <div className="rounded-xl overflow-hidden shadow-lg">
-                            <Image
-                                src="/images/aboutus.jpg"
-                                alt={isAr ? "صورة عن الشركة" : "About Us Image"}
-                                className="w-full h-full object-cover"
-                                width={600}
-                                height={800}
-                            />
-                        </div>
-                    </section>
-
-                    {/* Our Values */}
-                    <section className="space-y-8">
-                        <h2 className="text-2xl font-semibold text-center">
-                            {isAr ? "قيمنا الأساسية" : "Our Core Values"}
-                        </h2>
-                        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                            <ValueCard
-                                icon={<Users className="w-6 h-6" />}
-                                title={isAr ? "العملاء" : "Customers"}
-                                description={isAr ? "نحن نضع عملاءنا في قلب كل ما نقوم به، مع التركيز على احتياجاتهم وتطلعاتهم." : "We prioritize our customers, ensuring their needs and expectations are at the heart of everything we do."}
-                            />
-                            <ValueCard
-                                icon={HandshakeIcon}
-                                title={isAr ? "الشراكات" : "Partnerships"}
-                                description={isAr ? "نحن نؤمن بأن النجاح يأتي من خلال بناء شراكات قوية مع موردينا وشركائنا." : "We believe success comes from building strong partnerships with our suppliers and partners."}
-                            />
-                            <ValueCard
-                                icon={<Award className="w-6 h-6" />}
-                                title={isAr ? "الجودة" : "Quality"}
-                                description={isAr ? "نحن ملتزمون بتوفير منتجات عالية الجودة تلبي معاييرنا الشديدة." : "We are committed to delivering high-quality products that meet our stringent standards."}
-                            />
-                            <ValueCard
-                                icon={<Clock className="w-6 h-6" />}
-                                title={isAr ? "الوقت" : "Time"}
-                                description={isAr ? "نحن نقدر الوقت ونضمن تقديم منتجاتنا في الوقت المحدد." : "We value time and ensure our products are delivered on schedule."}
-                            />
-                        </div>
-                    </section>
-
-
-
-                    {/* Product & Services */}
-                    <section className="space-y-8">
-                        <h2 className="text-3xl font-bold text-center">{isAr ? "المنتجات والخدمات" : "Products & Services"}</h2>
-                        <p className="text-gray-600 leading-relaxed text-center max-w-3xl mx-auto">
-                            {isAr
-                                ? "تشمل منتجاتنا مجموعة متنوعة من الفئات عالية الجودة من موردين موثوقين عالميًا، لتلبية احتياجات قطاعات مختلفة."
-                                : "Our catalogue includes a wide range of high-quality products sourced from reputable suppliers worldwide, serving diverse industries."}
-                        </p>
-
-                        {/* Features */}
-                        <div className="grid gap-8 sm:grid-cols-3">
-                            <FeatureCard
-                                icon={<Award className="w-6 h-6" />}
-                                title={isAr ? "الملابس الموحدة" : "Uniforms"}
-                                description={isAr ? "توفير الملابس الموحدة عالية الجودة للمؤسسات والشركات." : "Providing high-quality uniforms for businesses and institutions."}
-                            />
-                            <FeatureCard
-                                icon={<Target className="w-6 h-6" />}
-                                title={isAr ? "مواد السلامة" : "Safety Materials"}
-                                description={isAr ? "منتجات السلامة لضمان بيئة عمل آمنة." : "Safety products to ensure a secure working environment."}
-                            />
-                            <FeatureCard
-                                icon={<Users className="w-6 h-6" />}
-                                title={isAr ? "معدات الحماية الشخصية" : "PPE Equipment"}
-                                description={isAr ? "معدات الحماية الشخصية لتلبية متطلبات العمال والمصانع." : "Personal protective equipment to meet worker and factory requirements."}
-                            />
-                        </div>
-
-                        <div className="grid gap-8 sm:grid-cols-3">
-                            <FeatureCard
-                                icon={<Award className="w-6 h-6" />}
-                                title={isAr ? "اللاصقات والرغوة" : "Adhesives & PU Foam"}
-                                description={isAr ? "منتجات لاصقة ورغوية عالية الأداء." : "High-performance adhesives and PU foam products."}
-                            />
-                            <FeatureCard
-                                icon={<Target className="w-6 h-6" />}
-                                title={isAr ? "السيليكون والمواد العازلة" : "Silicones & Sealants"}
-                                description={isAr ? "حلول سيليكون ومواد عازلة لمختلف التطبيقات." : "Silicone and sealant solutions for various applications."}
-                            />
-                            <FeatureCard
-                                icon={<Users className="w-6 h-6" />}
-                                title={isAr ? "أثاث وإكسسوارات" : "Furniture Hardware & Fabrics"}
-                                description={isAr ? "إكسسوارات الأثاث والأقمشة عالية الجودة." : "Furniture hardware accessories and upholstery fabrics."}
-                            />
-                        </div>
-                    </section>
-
-                    {/* Logistics */}
-                    <section className="space-y-4">
-                        <h2 className="text-2xl font-semibold">{isAr ? "اللوجستيات" : "Logistics"}</h2>
-                        <p className="text-gray-600 leading-relaxed">
-                            {isAr
-                                ? "يقع المستودع في حي الجزيرة، الرياض، مما يضمن تسليم الطلبات بسرعة في جميع أنحاء المملكة. تعتمد الشركة أنظمة فعالة لإدارة المخزون وتتعاون مع شركاء اللوجستيات لضمان الإمداد المستمر والتنفيذ السريع للطلبات."
-                                : "The warehouse is located in the Al Jazeerah District, Riyadh, ensuring prompt deliveries across Saudi Arabia. The company maintains efficient inventory management systems and works closely with logistics partners to ensure consistent supply and quick order fulfillment."}
-                        </p>
-                    </section>
-
-                    {/* CTA */}
-                    <div className="text-center">
-                        <a
-                            href="/customer-care"
-                            className="inline-flex items-center justify-center rounded-full bg-purple-600 px-8 py-3 text-sm font-medium text-white shadow-md hover:bg-purple-700 transition"
-                        >
-                            {isAr ? "تواصل معنا الآن" : "Get in Touch"}
-                        </a>
-                    </div>
-                    
-                </main>
-                
-            </div>
-
-                  {/* Footer / Company Info */}
-                  <footer className="bg-white border-t py-8">
-                    <Container>
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-sm text-gray-600">
-                        <div>
-                          <h3 className="font-medium text-gray-900 mb-2">{isAr ? "السعودية للسلامة" : "The Meaning of Quality Trading Establishment"}</h3>
-                          <p className="whitespace-pre-line">
-                            <strong>Address:</strong>{" "}
-                            Jarallah Bin Fahad Street{"\n"}
-                            Al Jazeerah District 14262{"\n"}
-                            Riyadh, Saudi Arabia
-                          </p>
-            
-                          <p><strong>Contact Number:</strong> +966 590 019 826</p>
-                        </div>
-                        <div>
-                          <p><strong>{isAr ? "لخدمات ما بعد البيع:" : "After Sales Service:"}</strong> +966 590 019 826</p>
-                          <p><strong>Email:</strong> <a href="mailto:sales@moq.com.sa" className="text-purple-600 hover:underline">sales@moq.com.sa</a></p>
-                        </div>
-                        <div>
-                          <p><strong>{isAr ? "ساعات عمل مركز الاتصال:" : "Call Center Working Hours:"}</strong> Sunday – Thursday: 9:00 AM – 6:00 PM</p>
-                          <p>{isAr ? "للموقع والفروع:" : "For showroom locations & hours"} <Link href="https://maps.app.goo.gl/JHX2DVrRzomWQjeE8?g_st=ipc" className="text-purple-600 hover:underline">Store locations</Link></p>
-                        </div>
-                      </div>
-                    </Container>
-                  </footer>
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Breadcrumb */}
+      <div className="bg-white border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <nav className="flex text-sm text-gray-500">
+            <Link href="/" className="hover:text-purple-600">Home</Link>
+            <span className="mx-2">&gt;</span>
+            <Link href="/customer-care" className="hover:text-purple-600">Customer Care</Link>
+            <span className="mx-2">&gt;</span>
+            <span className="text-gray-900">{isAr ? "من نحن" : "About Us"}</span>
+          </nav>
         </div>
-    );
+      </div>
+
+      {/* Main Layout */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-1 lg:grid-cols-4 gap-8">
+        {/* Sidebar */}
+        <CustomerCareSidebar />
+
+        {/* Main Content */}
+        <main className="lg:col-span-3 space-y-16" dir={isAr ? "rtl" : "ltr"}>
+          {/* Header Section */}
+          <section className="text-center space-y-4">
+            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight">
+              {isAr ? "ملف الشركة" : "Company Profile"}
+            </h1>
+            <p className="mt-2 max-w-3xl mx-auto text-lg text-gray-600 leading-relaxed">
+              {isAr
+                ? "مؤسسة معنى الجودة للتجارة (سلطان) شركة رائدة في توريد منتجات عالية الجودة وخدمات موثوقة، تلتزم بمعايير الجودة والأداء وتجربة العملاء."
+                : "The Meaning of Quality Trading Establishment (Sultan) is a leading provider of high-quality products and reliable services, committed to quality, performance, and customer experience."}
+            </p>
+          </section>
+
+
+
+          {/* History & Operations */}
+          <section className="space-y-6">
+            <h2 className="text-2xl font-semibold">{isAr ? "التاريخ والعمليات" : "History & Operations"}</h2>
+            <p className="text-gray-600 leading-relaxed">``
+              {isAr
+                ? "تأسست الشركة عام 2015 في الرياض، المملكة العربية السعودية، وتعمل تحت العلامة التجارية 'سلطان'. منذ إنشائها، تلتزم الشركة بتقديم منتجات عالية الجودة وخدمات موثوقة لعملائها، لتصبح اسمًا معروفًا وموثوقًا في قطاع التجارة والاستيراد بالجملة."
+                : "The company was founded in 2015 in Riyadh, Saudi Arabia, operating under the brand name 'Sultan'. Since its inception, Sultan has been committed to delivering premium-quality products and reliable services, becoming a recognized and respected name in wholesale trading and importing."}
+            </p>
+            <p className="text-gray-600 leading-relaxed">
+              {isAr
+                ? "تختص الشركة بالتجارة والاستيراد بالجملة لمجموعة متنوعة من المنتجات عالية الجودة، لتلبية احتياجات الأسواق المحلية والموزعين وتجار التجزئة والمصانع وورش العمل في جميع أنحاء المملكة."
+                : "Sultan specializes in wholesale trading and importing high-quality products, serving retail markets, wholesale distributors, factories, and workshops across Saudi Arabia."}
+            </p>
+          </section>
+
+          {/* Mission, Vision & Core Values */}
+          <section className="grid gap-12 md:grid-cols-2 items-center">
+            <div className="space-y-6">
+              <h2 className="text-2xl font-semibold">{isAr ? "مهمتنا" : "Our Mission"}</h2>
+              <p className="text-gray-600 leading-relaxed">
+                {isAr
+                  ? "تقديم منتجات عالية الجودة وخدمة عملاء استثنائية، وبناء شراكات طويلة الأمد تقوم على الثقة والمصلحة المشتركة."
+                  : "To provide clients with premium-quality products and exceptional customer service, fostering long-term partnerships built on trust and mutual benefit."}
+              </p>
+
+              <h2 className="text-2xl font-semibold">{isAr ? "رؤيتنا" : "Our Vision"}</h2>
+              <p className="text-gray-600 leading-relaxed">
+                {isAr
+                  ? "أن نكون من أبرز وأوثق مؤسسات التجارة في المنطقة، معروفين بالجودة والموثوقية ورضا العملاء."
+                  : "To be one of the leading and most trusted trading establishments in the region, renowned for quality, reliability, and customer satisfaction."}
+              </p>
+
+
+            </div>
+
+            <div className="rounded-xl overflow-hidden shadow-lg">
+              <Image
+                src="/images/aboutus.jpg"
+                alt={isAr ? "صورة عن الشركة" : "About Us Image"}
+                className="w-full h-full object-cover"
+                width={600}
+                height={800}
+              />
+            </div>
+          </section>
+
+          {/* Our Values */}
+          <section className="space-y-8">
+            <h2 className="text-2xl font-semibold text-center">
+              {isAr ? "قيمنا الأساسية" : "Our Core Values"}
+            </h2>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              <ValueCard
+                icon={<Users className="w-6 h-6" />}
+                title={isAr ? "العملاء" : "Customers"}
+                description={isAr ? "نحن نضع عملاءنا في قلب كل ما نقوم به، مع التركيز على احتياجاتهم وتطلعاتهم." : "We prioritize our customers, ensuring their needs and expectations are at the heart of everything we do."}
+              />
+              <ValueCard
+                icon={HandshakeIcon}
+                title={isAr ? "الشراكات" : "Partnerships"}
+                description={isAr ? "نحن نؤمن بأن النجاح يأتي من خلال بناء شراكات قوية مع موردينا وشركائنا." : "We believe success comes from building strong partnerships with our suppliers and partners."}
+              />
+              <ValueCard
+                icon={<Award className="w-6 h-6" />}
+                title={isAr ? "الجودة" : "Quality"}
+                description={isAr ? "نحن ملتزمون بتوفير منتجات عالية الجودة تلبي معاييرنا الشديدة." : "We are committed to delivering high-quality products that meet our stringent standards."}
+              />
+              <ValueCard
+                icon={<Clock className="w-6 h-6" />}
+                title={isAr ? "الوقت" : "Time"}
+                description={isAr ? "نحن نقدر الوقت ونضمن تقديم منتجاتنا في الوقت المحدد." : "We value time and ensure our products are delivered on schedule."}
+              />
+            </div>
+          </section>
+
+
+
+          {/* Product & Services */}
+          <section className="space-y-8">
+            <h2 className="text-3xl font-bold text-center">{isAr ? "المنتجات والخدمات" : "Products & Services"}</h2>
+            <p className="text-gray-600 leading-relaxed text-center max-w-3xl mx-auto">
+              {isAr
+                ? "تشمل منتجاتنا مجموعة متنوعة من الفئات عالية الجودة من موردين موثوقين عالميًا، لتلبية احتياجات قطاعات مختلفة."
+                : "Our catalogue includes a wide range of high-quality products sourced from reputable suppliers worldwide, serving diverse industries."}
+            </p>
+
+            {/* Features */}
+            <div className="grid gap-8 sm:grid-cols-3">
+              <FeatureCard
+                icon={<Award className="w-6 h-6" />}
+                title={isAr ? "الملابس الموحدة" : "Uniforms"}
+                description={isAr ? "توفير الملابس الموحدة عالية الجودة للمؤسسات والشركات." : "Providing high-quality uniforms for businesses and institutions."}
+              />
+              <FeatureCard
+                icon={<Target className="w-6 h-6" />}
+                title={isAr ? "مواد السلامة" : "Safety Materials"}
+                description={isAr ? "منتجات السلامة لضمان بيئة عمل آمنة." : "Safety products to ensure a secure working environment."}
+              />
+              <FeatureCard
+                icon={<Users className="w-6 h-6" />}
+                title={isAr ? "معدات الحماية الشخصية" : "PPE Equipment"}
+                description={isAr ? "معدات الحماية الشخصية لتلبية متطلبات العمال والمصانع." : "Personal protective equipment to meet worker and factory requirements."}
+              />
+            </div>
+
+            <div className="grid gap-8 sm:grid-cols-3">
+              <FeatureCard
+                icon={<Award className="w-6 h-6" />}
+                title={isAr ? "اللاصقات والرغوة" : "Adhesives & PU Foam"}
+                description={isAr ? "منتجات لاصقة ورغوية عالية الأداء." : "High-performance adhesives and PU foam products."}
+              />
+              <FeatureCard
+                icon={<Target className="w-6 h-6" />}
+                title={isAr ? "السيليكون والمواد العازلة" : "Silicones & Sealants"}
+                description={isAr ? "حلول سيليكون ومواد عازلة لمختلف التطبيقات." : "Silicone and sealant solutions for various applications."}
+              />
+              <FeatureCard
+                icon={<Users className="w-6 h-6" />}
+                title={isAr ? "أثاث وإكسسوارات" : "Furniture Hardware & Fabrics"}
+                description={isAr ? "إكسسوارات الأثاث والأقمشة عالية الجودة." : "Furniture hardware accessories and upholstery fabrics."}
+              />
+            </div>
+          </section>
+
+          {/* Logistics */}
+          <section className="space-y-4">
+            <h2 className="text-2xl font-semibold">{isAr ? "اللوجستيات" : "Logistics"}</h2>
+            <p className="text-gray-600 leading-relaxed">
+              {isAr
+                ? "يقع المستودع في حي الجزيرة، الرياض، مما يضمن تسليم الطلبات بسرعة في جميع أنحاء المملكة. تعتمد الشركة أنظمة فعالة لإدارة المخزون وتتعاون مع شركاء اللوجستيات لضمان الإمداد المستمر والتنفيذ السريع للطلبات."
+                : "The warehouse is located in the Al Jazeerah District, Riyadh, ensuring prompt deliveries across Saudi Arabia. The company maintains efficient inventory management systems and works closely with logistics partners to ensure consistent supply and quick order fulfillment."}
+            </p>
+          </section>
+
+          {/* CTA */}
+          <div className="text-center">
+            <a
+              href="/customer-care"
+              className="inline-flex items-center justify-center rounded-full bg-purple-600 px-8 py-3 text-sm font-medium text-white shadow-md hover:bg-purple-700 transition"
+            >
+              {isAr ? "تواصل معنا الآن" : "Get in Touch"}
+            </a>
+          </div>
+
+        </main>
+
+      </div>
+
+      {/* Footer / Company Info */}
+      <footer className="bg-white border-t py-8">
+        <Container>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-sm text-gray-600">
+            <div>
+              <h3 className="font-medium text-gray-900 mb-2">{isAr ? "السعودية للسلامة" : "The Meaning of Quality Trading Establishment"}</h3>
+              <p className="whitespace-pre-line">
+                <strong>Address:</strong>{" "}
+                Jarallah Bin Fahad Street{"\n"}
+                Al Jazeerah District 14262{"\n"}
+                Riyadh, Saudi Arabia
+              </p>
+
+              <p><strong>Contact Number:</strong> +966 590 019 826</p>
+            </div>
+            <div>
+              <p><strong>{isAr ? "لخدمات ما بعد البيع:" : "After Sales Service:"}</strong> +966 590 019 826</p>
+              <p><strong>Email:</strong> <a href="mailto:sales@moq.com.sa" className="text-purple-600 hover:underline">sales@moq.com.sa</a></p>
+            </div>
+            <div>
+              <p><strong>{isAr ? "ساعات عمل مركز الاتصال:" : "Call Center Working Hours:"}</strong> Sunday – Thursday: 9:00 AM – 6:00 PM</p>
+              <p>{isAr ? "للموقع والفروع:" : "For showroom locations & hours"} <Link href="https://maps.app.goo.gl/JHX2DVrRzomWQjeE8?g_st=ipc" className="text-purple-600 hover:underline">Store locations</Link></p>
+            </div>
+          </div>
+        </Container>
+      </footer>
+    </div>
+  );
 }
 
 interface FeatureCardProps {
-    icon: React.ReactNode;
-    title: string;
-    description: string;
+  icon: React.ReactNode;
+  title: string;
+  description: string;
 }
 
 function FeatureCard({ icon, title, description }: FeatureCardProps) {
-    return (
-        <div className="p-6 bg-white rounded-2xl shadow hover:shadow-lg transition text-center space-y-4">
-            <div className="flex items-center justify-center w-12 h-12 mx-auto rounded-full bg-purple-100 text-purple-600">
-                {icon}
-            </div>
-            <h3 className="font-semibold text-lg">{title}</h3>
-            <p className="text-sm text-gray-600">{description}</p>
-        </div>
-    );
+  return (
+    <div className="p-6 bg-white rounded-2xl shadow hover:shadow-lg transition text-center space-y-4">
+      <div className="flex items-center justify-center w-12 h-12 mx-auto rounded-full bg-purple-100 text-purple-600">
+        {icon}
+      </div>
+      <h3 className="font-semibold text-lg">{title}</h3>
+      <p className="text-sm text-gray-600">{description}</p>
+    </div>
+  );
 }
 
 interface ValueCardProps {
-    icon: React.ReactNode;
-    title: string;
-    description: string;
+  icon: React.ReactNode;
+  title: string;
+  description: string;
 }
 
 function ValueCard({ icon, title, description }: ValueCardProps) {
-    return (
-        <div className="p-6 bg-white rounded-2xl shadow hover:shadow-lg transition text-center space-y-4">
-            <div className="flex items-center justify-center w-12 h-12 mx-auto rounded-full bg-purple-100 text-purple-600">
-                {icon}
-            </div>
-            <h3 className="font-semibold text-lg">{title}</h3>
-            <p className="text-sm text-gray-600">{description}</p>
-        </div>
-    );
+  return (
+    <div className="p-6 bg-white rounded-2xl shadow hover:shadow-lg transition text-center space-y-4">
+      <div className="flex items-center justify-center w-12 h-12 mx-auto rounded-full bg-purple-100 text-purple-600">
+        {icon}
+      </div>
+      <h3 className="font-semibold text-lg">{title}</h3>
+      <p className="text-sm text-gray-600">{description}</p>
+    </div>
+  );
 }
