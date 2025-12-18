@@ -19,16 +19,23 @@ const sidebarItems = {
     { id: 'about', label: 'About Us', path: '/customer-care/about' },
   ],
   humanRights: [
+      { id: 'human-rights-policy', label: 'Human Rights Policy', path: '/customer-care/humanRightPolicy' },
     { id: 'human-rights', label: 'Human Rights Due Diligence', path: '/customer-care/humanRightsDueDiligance' },
-    { id: 'human-rights-policy', label: 'Human Rights Policy', path: '/customer-care/humanRightPolicy' },
     { id: 'human-rights-analysis', label: 'Human Rights Analysis Process Description', path: '/customer-care/humanRightsAnalysisProcessDescription' },
   ],
 };
 
 export default function CustomerCareSidebar() {
-  const pathname = usePathname();
-  const [aboutOpen, setAboutOpen] = useState(pathname.includes("/about"));
-  const [humanRightsOpen, setHumanRightsOpen] = useState(pathname.includes("/humanRights"));
+const pathname = usePathname();
+
+// Initialize dropdown open states based on current pathname
+const [aboutOpen, setAboutOpen] = useState(
+  sidebarItems.aboutUs.some(item => item.path === pathname)
+);
+const [humanRightsOpen, setHumanRightsOpen] = useState(
+  sidebarItems.humanRights.some(item => item.path === pathname)
+);
+
 
   return (
     <aside className="lg:col-span-1">
