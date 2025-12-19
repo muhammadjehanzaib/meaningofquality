@@ -34,7 +34,7 @@ export default function ProductTile({
   productId,
   showCtas = false,
   priceRange,
-  brand = "Akfix",
+  brand
 }: ProductTileProps) {
   
   const lang = useLang();

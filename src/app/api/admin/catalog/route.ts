@@ -49,6 +49,9 @@ function formatItem(item: Item): string {
   if (item.priceRange) {
     parts.push(`priceRange: { min: ${item.priceRange.min}, max: ${item.priceRange.max} }`);
   }
+  if (item.Brand) {
+    parts.push(`Brand : "${item.Brand}"`)
+  } 
   return `{ ${parts.join(", ")} }`;
 }
 
@@ -171,22 +174,12 @@ export type Item = {
   categoryId: string;
   subcategoryId?: string;
   priceRange?: { min: number; max: number };
+  Brand: string;
 };
 
 export const categories: Category[] = ${formatArray(categories, formatCategory)};
 
 export const subcategories: Subcategory[] = ${formatArray(subcategories, formatSubcategory)};
-
-export const solutions: Category[] = [
-  { id: "hvac", title: { en: "HVAC", ar: "التكييف والتهوية والتبريد" } },
-  { id: "automotive", title: { en: "Automotive", ar: "السيارات" } },
-  { id: "parks", title: { en: "Parks & Social Areas", ar: "الحدائق والمساحات العامة" } },
-  { id: "trucks", title: { en: "Trucks & Long Vehicles", ar: "الشاحنات والمركبات الطويلة" } },
-  { id: "pool", title: { en: "Pool & Aqua", ar: "المسابح والمياه" } },
-  { id: "caravans", title: { en: "Caravans", ar: "الكرافانات" } },
-  { id: "bike", title: { en: "Bike / Motorbike", ar: "الدراجات والدراجات النارية" } },
-  { id: "work-machines", title: { en: "Work & Agriculture", ar: "الآلات والعمل الزراعي" } },
-];
 
 export const newProducts: Item[] = ${formatArray(newProducts, formatItem)};
 
