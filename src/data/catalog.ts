@@ -49,7 +49,7 @@ export const subcategories: Subcategory[] = [
 ];
 
 export const newProducts: Item[] = [
-  { id: "np-1", name: { en: "AC578 Sanitary Bath & Kitchen Acrylic Sealant", ar: "AC578 مانع تسرب أكريليك للمطبخ والحمام" }, categoryId: "adhesives", subcategoryId: "hybrid", priceRange: { min: 10, max: 50 }, Brand : "Sultan" },
+  { id: "np-1", name: { en: "AC578 Sanitary Bath & Kitchen Acrylic Sealant", ar: "AC578 مانع تسرب أكريليك للمطبخ والحمام" }, categoryId: "adhesives", subcategoryId: "hybrid", priceRange: { min: 10, max: 50 }, Brand : "Akfix" },
   { id: "np-2", name: { en: "740 Allbond Hybrid", ar: "740 أولبوند هجين" }, categoryId: "adhesives", subcategoryId: "hybrid", priceRange: { min: 10, max: 20 }, Brand : "Sultan" },
   { id: "np-3", name: { en: "AC580 Rapid Seal", ar: "AC580 رابيد سيل" }, categoryId: "sealants", subcategoryId: "rapid", priceRange: { min: 10, max: 20 }, Brand : "Sultan" },
   { id: "np-4", name: { en: "702HY Super Glue Cyanoacrylate", ar: "702HY لاصق فائق سيانو أكريلات" }, categoryId: "adhesives", subcategoryId: "cyanoacrylate", priceRange: { min: 10, max: 20 }, Brand : "Sultan" },

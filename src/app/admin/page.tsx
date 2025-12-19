@@ -734,12 +734,12 @@ function ProductEditor({
             className="mt-1 w-full rounded border px-2 py-1 text-sm"
           />
         </div>
-                <div>
+        <div>
           <label className="block text-xs font-medium text-muted-foreground">Brand (EN)</label>
           <input
             type="text"
             value={product.Brand}
-            onChange={(e) => onUpdate({ name: { ...product.name, en: e.target.value } })}
+            onChange={(e) => onUpdate({ Brand : e.target.value })}
             className="mt-1 w-full rounded border px-2 py-1 text-sm"
           />
         </div>
