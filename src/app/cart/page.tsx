@@ -14,6 +14,8 @@ import ArabicReshaper from 'arabic-reshaper';
 import { pickAny } from "@/data/i18n";
 import type { jsPDF } from "jspdf";
 import { AmiriRegular, AmiriBold } from "@/utils/fonts/amiri";
+import { FaWhatsapp, FaFilePdf } from "react-icons/fa";
+import { HiOutlineMail } from "react-icons/hi";
 
 
 export const hasArabic = (text: string): boolean => {
@@ -1193,40 +1195,16 @@ export default function CartPage() {
                 onClick={handleSendWhatsApp}
                 type="button"
               >
-                {/* WhatsApp Icon */}
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 32 32"
-                  className="h-5 w-5"
-                  fill="currentColor"
-                >
-                  <path d="M19.11 17.205c-.294-.147-1.734-.857-2.002-.955-.268-.098-.463-.147-.658.147-.195.294-.755.955-.926 1.151-.171.195-.341.22-.635.073-.294-.147-1.241-.458-2.366-1.458-.875-.779-1.466-1.741-1.637-2.035-.171-.294-.018-.453.128-.6.132-.132.294-.341.44-.512.147-.171.195-.294.294-.489.098-.195.049-.366-.025-.512-.073-.147-.658-1.587-.902-2.17-.238-.561-.478-.488-.658-.498l-.561-.01c-.195 0-.512.073-.78.366s-1.024.999-1.024 2.438 1.049 2.83 1.195 3.024c.147.195 2.066 3.146 5.002 4.41.703.304 1.253.486 1.681.62.702.224 1.342.192 1.846.116.563-.083 1.734-.707 1.98-1.39.245-.683.245-1.269.171-1.39-.073-.122-.268-.195-.561-.342z" />
-                </svg>
-
+                <FaWhatsapp className="h-5 w-5" />
                 {t("sendWhatsAppInquiry", lang)}
               </button>
-
 
               <button
                 className="w-full inline-flex items-center justify-center gap-2 rounded-lg border px-4 py-2 text-sm transition hover:bg-muted"
                 onClick={handleSendEmail}
                 type="button"
               >
-                {/* Email SVG Logo */}
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M16 12h.01M12 12h.01M8 12h.01M21 12c0 4.418-3.582 8-8 8s-8-3.582-8-8 3.582-8 8-8 8 3.582 8 8z"
-                  />
-                </svg>
+                <HiOutlineMail className="h-5 w-5" />
                 {t("sendEmailInquiry", lang)}
               </button>
 
@@ -1235,18 +1213,9 @@ export default function CartPage() {
                 onClick={handleDownloadPDF}
                 type="button"
               >
-                {/* PDF SVG Logo */}
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M6 2h9l5 5v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zM15 2v5h5M8 12h8M8 16h8M8 20h8" />
-                </svg>
+                <FaFilePdf className="h-5 w-5" />
                 {t("downloadPDF", lang)}
               </button>
-
 
             </aside>
           </div>

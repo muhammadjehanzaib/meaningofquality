@@ -47,16 +47,16 @@ export const subcategories: Subcategory[] = [
   { id: "lubricant", title: { en: "Lubricants", ar: "زيوت" }, categoryId: "aerosols" }
 ];
 
-export const solutions: Category[] = [
-  { id: "hvac", title: { en: "HVAC", ar: "التكييف والتهوية والتبريد" } },
-  { id: "automotive", title: { en: "Automotive", ar: "السيارات" } },
-  { id: "parks", title: { en: "Parks & Social Areas", ar: "الحدائق والمساحات العامة" } },
-  { id: "trucks", title: { en: "Trucks & Long Vehicles", ar: "الشاحنات والمركبات الطويلة" } },
-  { id: "pool", title: { en: "Pool & Aqua", ar: "المسابح والمياه" } },
-  { id: "caravans", title: { en: "Caravans", ar: "الكرافانات" } },
-  { id: "bike", title: { en: "Bike / Motorbike", ar: "الدراجات والدراجات النارية" } },
-  { id: "work-machines", title: { en: "Work & Agriculture", ar: "الآلات والعمل الزراعي" } },
-];
+// export const solutions: Category[] = [
+//   { id: "hvac", title: { en: "HVAC", ar: "التكييف والتهوية والتبريد" } },
+//   { id: "automotive", title: { en: "Automotive", ar: "السيارات" } },
+//   { id: "parks", title: { en: "Parks & Social Areas", ar: "الحدائق والمساحات العامة" } },
+//   { id: "trucks", title: { en: "Trucks & Long Vehicles", ar: "الشاحنات والمركبات الطويلة" } },
+//   { id: "pool", title: { en: "Pool & Aqua", ar: "المسابح والمياه" } },
+//   { id: "caravans", title: { en: "Caravans", ar: "الكرافانات" } },
+//   { id: "bike", title: { en: "Bike / Motorbike", ar: "الدراجات والدراجات النارية" } },
+//   { id: "work-machines", title: { en: "Work & Agriculture", ar: "الآلات والعمل الزراعي" } },
+// ];
 
 export const newProducts: Item[] = [
   { id: "np-1", name: { en: "AC578 Sanitary Bath & Kitchen Acrylic Sealant", ar: "AC578 مانع تسرب أكريليك للمطبخ والحمام" }, categoryId: "adhesives", subcategoryId: "hybrid", priceRange: { min: 10, max: 50 } },
