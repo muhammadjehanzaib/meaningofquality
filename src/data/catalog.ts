@@ -79,3 +79,4 @@ export const mostVisited: Item[] = [
 ];
 
 export const allItems: Item[] = [...newProducts, ...mostVisited];
+

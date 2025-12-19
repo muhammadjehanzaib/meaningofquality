@@ -11,7 +11,6 @@ import { WHATSAPP_NUMBER } from "@/data/site";
 import { buildWhatsAppMessage, type ClientInfo } from "@/utils/whatsapp";
 import { useRef, useState } from "react";
 import ArabicReshaper from 'arabic-reshaper';
-import bidiJs from 'bidi-js';
 import { pickAny } from "@/data/i18n";
 import type { jsPDF } from "jspdf";
 import { AmiriRegular, AmiriBold } from "@/utils/fonts/amiri";
@@ -134,11 +133,17 @@ export default function CartPage() {
       return /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/.test(text);
     };
 
-const arabicText = (text: string): string => {
-  if (typeof text !== "string") text = String(text);
+    const arabicText = (text: string): string => {
+      if (typeof text !== "string") text = String(text);
 
-  return text;
-};
+      // Use ArabicReshaper for proper text processing
+      try {
+        return ArabicReshaper.convertArabic(text);
+      } catch (e) {
+        console.error("Arabic reshaping failed:", e);
+        return text;
+      }
+    };
 
 
     // ===== INITIALIZE PDF =====
@@ -182,40 +187,40 @@ const arabicText = (text: string): string => {
     const inquiryNumber = `${day}${month}${year}${hours}${minutes}${seconds}`;
 
     // ===== IMPROVED TEXT DRAWING HELPERS =====
-const drawText = (
-  text: string,
-  x: number,
-  y: number,
-  options?: {
-    align?: "left" | "center" | "right";
-    maxWidth?: number;
-    fontSize?: number;
-    fontStyle?: "normal" | "bold";
-  }
-) => {
-  const fontSize = options?.fontSize || 10;
-  const fontStyle = options?.fontStyle || "normal";
+    const drawText = (
+      text: string,
+      x: number,
+      y: number,
+      options?: {
+        align?: "left" | "center" | "right";
+        maxWidth?: number;
+        fontSize?: number;
+        fontStyle?: "normal" | "bold";
+      }
+    ) => {
+      const fontSize = options?.fontSize || 10;
+      const fontStyle = options?.fontStyle || "normal";
 
-  doc.setFontSize(fontSize);
+      doc.setFontSize(fontSize);
 
-  const needsArabic = hasArabic(text) || isArabic;
+      const needsArabic = hasArabic(text) || isArabic;
 
-  if (needsArabic) {
-    doc.setFont("Amiri", fontStyle);
-    const processed = hasArabic(text) ? arabicText(text) : text;
+      if (needsArabic) {
+        doc.setFont("Amiri", fontStyle);
+        const processed = hasArabic(text) ? arabicText(text) : text;
 
-    doc.text(processed, x, y, {
-      align: options?.align || (isArabic ? "right" : "left"),
-      maxWidth: options?.maxWidth
-    });
-  } else {
-    doc.setFont("helvetica", fontStyle);
-    doc.text(text, x, y, {
-      align: options?.align || "left",
-      maxWidth: options?.maxWidth
-    });
-  }
-};
+        doc.text(processed, x, y, {
+          align: options?.align || (isArabic ? "right" : "left"),
+          maxWidth: options?.maxWidth
+        });
+      } else {
+        doc.setFont("helvetica", fontStyle);
+        doc.text(text, x, y, {
+          align: options?.align || "left",
+          maxWidth: options?.maxWidth
+        });
+      }
+    };
 
 
 
@@ -310,11 +315,19 @@ const drawText = (
           });
 
           // Date on left
-          const generatedAt = saudiTime.toLocaleString('ar-SA', {
-            dateStyle: 'short',
-            timeStyle: 'short'
+          let generatedAt = saudiTime.toLocaleString("ar-SA", {
+            dateStyle: "short",
+            timeStyle: "short"
           });
-          drawText(generatedAt, DIMENSIONS.margin, 14, { fontSize: 9 });
+
+          // Reverse the string for basic RTL support
+          generatedAt = generatedAt.split("").reverse().join("");
+
+          // Draw using your current drawText
+          drawText(generatedAt, DIMENSIONS.margin, 14, {
+            fontSize: 9,
+            align: "left"
+          });
         } else {
           // English layout - logo on left
           const logoX = DIMENSIONS.margin;
@@ -351,26 +364,20 @@ const drawText = (
       doc.line(0, DIMENSIONS.headerBarH, pageW, DIMENSIONS.headerBarH);
     };
 
-    // ===== COMPANY AND CUSTOMER INFO =====
     const drawCompanyAndCustomer = async (yStart: number) => {
       const colW = (pageW - DIMENSIONS.margin * 2 - 6) / 2;
-      const companyBoxX = isArabic
-        ? DIMENSIONS.margin + colW + 6
-        : DIMENSIONS.margin;
 
-      const customerBoxX = isArabic
-        ? DIMENSIONS.margin
-        : DIMENSIONS.margin + colW + 6;
+      // Determine box positions based on language
+      const companyBoxX = isArabic ? DIMENSIONS.margin + colW + 6 : DIMENSIONS.margin;
+      const customerBoxX = isArabic ? DIMENSIONS.margin : DIMENSIONS.margin + colW + 6;
 
-
-      // Company box
+      // ========================================
+      // COMPANY BOX
+      // ========================================
       doc.setDrawColor(220).setLineWidth(0.4);
       doc.roundedRect(companyBoxX, yStart, colW, DIMENSIONS.infoBoxH, 2, 2, "S");
 
-
-      const companyX = isArabic
-  ? companyBoxX + colW - 4
-  : companyBoxX + 4;
+      const companyX = isArabic ? companyBoxX + colW - 4 : companyBoxX + 4;
 
       drawText(labels.companyInfo, companyX, yStart + 6, {
         fontSize: 11,
@@ -387,32 +394,54 @@ const drawText = (
         `${labels.email}: sale@moq.com.sa`,
       ];
 
-companyLines.forEach((l) => {
-  if (isArabic) {
-    doc.setFont("Amiri", "normal");
-    doc.setFontSize(9);
-    doc.text(
-      arabicText(l),
-      companyX,
-      y,
-      { align: "right" }
-    );
-  } else {
-    drawText(l, companyX, y, {
-      fontSize: 9,
-      align: "left",
-      maxWidth: colW - 8
-    });
-  }
-  y += 5;
-});
+      companyLines.forEach((line) => {
+        if (isArabic) {
+          // For Arabic mode, process each line
+          const parts = line.split(':');
+          if (parts.length === 2) {
+            // Has colon - it's a label: value pair
+            const label = parts[0].trim();
+            const value = parts[1].trim();
+
+            // Check if value has Arabic
+            if (hasArabic(value)) {
+              // Both Arabic
+              doc.setFont("Amiri", "normal");
+              doc.setFontSize(9);
+              const fullText = arabicText(`${label} : ${value}`);
+              doc.text(fullText, companyX, y, { align: "right" });
+            } else {
+              // Arabic label, English value
+              doc.setFont("Amiri", "normal");
+              doc.setFontSize(9);
+              const labelText = arabicText(':' + label);
+              doc.text(labelText, companyX, y, { align: "right" });
+
+              const labelWidth = doc.getTextWidth(labelText);
+              doc.setFont("helvetica", "normal");
+              doc.text(value, companyX - labelWidth - 2, y, { align: "right" });
+            }
+          } else {
+            // No colon - just Arabic text
+            doc.setFont("Amiri", "normal");
+            doc.setFontSize(9);
+            doc.text(arabicText(line), companyX, y, { align: "right" });
+          }
+        } else {
+          // English mode
+          drawText(line, companyX, y, {
+            fontSize: 9,
+            align: "left",
+            maxWidth: colW - 8
+          });
+        }
+        y += 5;
+      });
 
 
-      // Customer box
       doc.roundedRect(customerBoxX, yStart, colW, DIMENSIONS.infoBoxH, 2, 2, "S");
 
-
-      const customerX = isArabic? customerBoxX + colW - 4: customerBoxX + 4;
+      const customerX = isArabic ? customerBoxX + colW - 4 : customerBoxX + 4;
 
       drawText(labels.customerInfo, customerX, yStart + 6, {
         fontSize: 11,
@@ -423,104 +452,68 @@ companyLines.forEach((l) => {
       let cy = yStart + 12;
       const customerFields: Array<{ label: string; value: string }> = [];
 
-      if (info.name) {
-        customerFields.push({ label: labels.name, value: info.name });
-      }
-      if (info.company) {
-        customerFields.push({ label: labels.company, value: info.company });
-      }
-      if (info.email) {
-        customerFields.push({ label: labels.email, value: info.email });
-      }
-      if (info.phone) {
-        customerFields.push({ label: labels.phone, value: info.phone });
-      }
+      if (info.name) customerFields.push({ label: labels.name, value: info.name });
+      if (info.company) customerFields.push({ label: labels.company, value: info.company });
+      if (info.email) customerFields.push({ label: labels.email, value: info.email });
+      if (info.phone) customerFields.push({ label: labels.phone, value: info.phone });
 
-      // Render each customer field with proper language handling
       customerFields.forEach(field => {
-        // Determine text direction based on content
         const valueHasArabic = hasArabic(field.value);
+        doc.setFontSize(9);
 
-if (isArabic) {
-  doc.setFontSize(9);
+        if (isArabic) {
+          if (valueHasArabic) {
+            // Both Arabic
+            doc.setFont("Amiri", "normal");
+            const fullText = arabicText(`${field.label}: ${field.value}`);
+            doc.text(fullText, customerX, cy, { align: "right" });
+          } else {
+            // Arabic label + English value
+            doc.setFont("Amiri", "normal");
+            const labelText = arabicText(`: ${field.label}`);
+            doc.text(labelText, customerX, cy, { align: "right" });
 
-  if (valueHasArabic) {
-    // Arabic label + Arabic value
-    doc.setFont("Amiri", "normal");
-    doc.text(
-      arabicText(`${field.label}: ${field.value}`),
-      customerX,
-      cy,
-      { align: "right" }
-    );
-  } else {
-    // Arabic label + English value
-    // Step 1: draw Arabic label
-    doc.setFont("Amiri", "normal");
-    const labelText = arabicText(`${field.label}:`);
-    doc.text(labelText, customerX, cy, { align: "right" });
+            const labelWidth = doc.getTextWidth(labelText);
+            doc.setFont("helvetica", "normal");
+            doc.text(field.value, customerX - labelWidth - 2, cy, { align: "right" });
+          }
+        } else {
+          if (valueHasArabic) {
+            // English label + Arabic value
+            doc.setFont("helvetica", "normal");
+            const labelPart = `${field.label}: `;
+            doc.text(labelPart, customerX, cy);
 
-    // Step 2: draw English value to the LEFT of label
-    const labelWidth = doc.getTextWidth(labelText);
-    doc.setFont("helvetica", "normal");
-    doc.text(
-      field.value,
-      customerX - labelWidth - 2,
-      cy,
-      { align: "right" }
-    );
-  }
-
-} else {
-  // English mode
-  doc.setFontSize(9);
-
-  if (valueHasArabic) {
-    // English label + Arabic value
-    doc.setFont("helvetica", "normal");
-    const labelPart = `${field.label}: `;
-    doc.text(labelPart, customerX, cy);
-
-    const labelWidth = doc.getTextWidth(labelPart);
-    doc.setFont("Amiri", "normal");
-    doc.text(
-      arabicText(field.value),
-      customerX + labelWidth,
-      cy
-    );
-  } else {
-    // Both English
-    drawText(`${field.label}: ${field.value}`, customerX, cy, {
-      fontSize: 9,
-      align: "left",
-      maxWidth: colW - 8
-    });
-  }
-}
-
-
+            const labelWidth = doc.getTextWidth(labelPart);
+            doc.setFont("Amiri", "normal");
+            doc.text(arabicText(field.value), customerX + labelWidth, cy);
+          } else {
+            // Both English
+            drawText(`${field.label}: ${field.value}`, customerX, cy, {
+              fontSize: 9,
+              align: "left",
+              maxWidth: colW - 8
+            });
+          }
+        }
         cy += 5;
       });
 
       let nextY = Math.max(y, cy);
 
+      // ========================================
+      // NOTE SECTION
+      // ========================================
       if (info.note) {
         const noteY = nextY + 10;
         const maxWidth = pageW - DIMENSIONS.margin * 2 - 10;
-
-        // Detect if note has Arabic
         const noteHasArabic = hasArabic(info.note);
 
-        // Process note text
         let processedNote = info.note;
         if (noteHasArabic) {
-          // Use Arabic reshaper for proper text shaping
-          const reshaped = ArabicReshaper.convertArabic(info.note);
-          const bidi = bidiJs();
-          processedNote = bidi.getVisualText(reshaped);
+          processedNote = ArabicReshaper.convertArabic(info.note);
         }
 
-        // Split text with appropriate font
         doc.setFont(noteHasArabic || isArabic ? "Amiri" : "helvetica", "normal");
         doc.setFontSize(9);
         const wrapped = doc.splitTextToSize(processedNote, maxWidth);
@@ -533,9 +526,7 @@ if (isArabic) {
           noteY,
           pageW - DIMENSIONS.margin * 2,
           boxHeight,
-          2,
-          2,
-          "S"
+          2, 2, "S"
         );
 
         const noteX = isArabic ? pageW - DIMENSIONS.margin - 4 : DIMENSIONS.margin + 4;
@@ -560,7 +551,10 @@ if (isArabic) {
 
         nextY = noteY + boxHeight + 6;
       }
-      // Generated by box with QR Code
+
+      // ========================================
+      // GENERATED BY BOX
+      // ========================================
       const genY = nextY;
       const boxHeight = 28;
       doc.setDrawColor(220);
@@ -569,9 +563,7 @@ if (isArabic) {
         genY,
         pageW - DIMENSIONS.margin * 2,
         boxHeight,
-        2,
-        2,
-        "S"
+        2, 2, "S"
       );
 
       const genX = isArabic ? pageW - DIMENSIONS.margin - 4 : DIMENSIONS.margin + 4;
@@ -646,87 +638,77 @@ if (isArabic) {
     };
 
     const drawFooter = (pageNum: number, pageCount: number) => {
-      const y = pageH - 6;
+      const y = pageH - 6; // single line position for footer
+      const rightX = pageW - DIMENSIONS.margin;
+      const leftX = DIMENSIONS.margin;
 
       if (isArabic) {
-        // ===== ARABIC FOOTER - SIMPLIFIED RTL LAYOUT =====
-        doc.setFontSize(8);
+        doc.setFontSize(10);
 
-        // Right side: Main text
-        const rightX = pageW - DIMENSIONS.margin;
-        doc.setTextColor(100);
+        // Arabic text prefix
         doc.setFont("Amiri", "normal");
+        doc.setTextColor(100);
+        const prefix = "للحصول على عرض أسعار يرجى إرسال هذا الملف إلى ";
+        doc.text(prefix, rightX, y, { align: "right" });
 
-        // Line 1: "للحصول على عرض أسعار"
-        const line1 = "للحصول على عرض أسعار";
-        drawText(line1, rightX, y - 4, { align: "right", fontSize: 8 });
-
-        // Line 2: "يرجى إرسال هذا الملف إلى"
-        const line2 = "يرجى إرسال هذا الملف إلى";
-        drawText(line2, rightX, y, { align: "right", fontSize: 8 });
-
-        // Email (blue, clickable) - right aligned
-        doc.setTextColor(0, 102, 204);
-        doc.setFont("helvetica", "normal");
-        const emailX = rightX - doc.getTextWidth(arabicText(line2)) - 2;
+        // Email (right after prefix)
+        doc.setFont("Amiri", "normal");
+        doc.setTextColor(26, 115, 232);
+        const emailX = rightX - doc.getTextWidth(prefix);
         doc.textWithLink("sales@moq.com.sa", emailX, y, {
-          url: "mailto:sales@moq.com.sa"
+          url: "mailto:sales@moq.com.sa",
+          align: "right"
         });
 
-        // Line 3: "أو إرساله عبر واتساب"
-        doc.setTextColor(100);
+        // Middle text (Arabic)
         doc.setFont("Amiri", "normal");
-        const line3 = "أو إرساله عبر واتساب";
-        drawText(line3, rightX, y + 4, { align: "right", fontSize: 8 });
+        doc.setTextColor(100);
+        const middle = " أو إرساله عبر واتساب: ";
+        const middleX = emailX - doc.getTextWidth("sales@moq.com.sa");
+        doc.text(middle, middleX, y, { align: "right" });
 
-        // WhatsApp number (green, clickable)
+        // WhatsApp link
+        doc.setFont("Amiri", "normal");
         doc.setTextColor(37, 211, 102);
-        doc.setFont("helvetica", "normal");
-        const whatsappX = rightX - doc.getTextWidth(arabicText(line3)) - 2;
-        doc.textWithLink("00966 590019826", whatsappX, y + 4, {
-          url: "https://wa.me/966590019826"
+        const whatsappX = middleX - doc.getTextWidth(middle);
+        doc.textWithLink("00966 590019826", whatsappX, y, {
+          url: "https://wa.me/966590019826",
+          align: "right"
         });
 
-        // Left side: Page number
-        doc.setTextColor(100);
+        // Page number on the left
         doc.setFont("Amiri", "normal");
-        drawText(`${labels.page} ${pageNum} ${labels.of} ${pageCount}`, DIMENSIONS.margin, y, {
-          fontSize: 8
-        });
+        doc.setTextColor(100);
+        doc.text(`${labels.page} ${pageNum} ${labels.of} ${pageCount}`, leftX, y, { align: "left" });
 
       } else {
-        // ===== ENGLISH FOOTER - LTR LAYOUT =====
+        // English footer stays unchanged
         doc.setFontSize(8);
         const startX = DIMENSIONS.margin;
 
-        // Build footer text with proper spacing
         doc.setTextColor(100);
         doc.setFont("helvetica", "normal");
 
         const prefix = "For Quotation: Please forward this PDF to ";
         doc.text(prefix, startX, y);
 
-        // Email (blue, clickable)
         const emailStart = startX + doc.getTextWidth(prefix);
         doc.setTextColor(0, 102, 204);
         doc.textWithLink("sales@moq.com.sa", emailStart, y, {
           url: "mailto:sales@moq.com.sa"
         });
 
-        // Middle text
         const middle = " or send via WhatsApp: ";
         const middleStart = emailStart + doc.getTextWidth("sales@moq.com.sa");
         doc.setTextColor(100);
         doc.text(middle, middleStart, y);
 
-        // WhatsApp (green, clickable)
         const whatsappStart = middleStart + doc.getTextWidth(middle);
         doc.setTextColor(37, 211, 102);
         doc.textWithLink("00966 590019826", whatsappStart, y, {
           url: "https://wa.me/966590019826"
         });
 
-        // Page number (right side)
         doc.setTextColor(100);
         doc.text(`${labels.page} ${pageNum} ${labels.of} ${pageCount}`, pageW - DIMENSIONS.margin, y, {
           align: "right"
@@ -735,7 +717,6 @@ if (isArabic) {
 
       doc.setTextColor(0, 0, 0);
     };
-
 
     // ===== TABLE ROWS =====
     const renderRows = async (startIdx: number, startY: number) => {

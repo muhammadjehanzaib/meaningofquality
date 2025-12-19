@@ -5,8 +5,9 @@ declare module 'arabic-reshaper' {
 }
 
 declare module 'bidi-js' {
-  export default function bidiJs(): {
-    getVisualText(text: string): string;
+  function bidiFactory(): {
+    getText(text: string): string;
   };
+  export default bidiFactory;
 }
 
