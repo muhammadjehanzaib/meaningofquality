@@ -12,6 +12,8 @@ export default function CartDrawer() {
   const { drawerOpen, closeDrawer, lastAdded, items, count, updateQty, remove } = useCart();
   const lang = useLang();
 
+  const isRTL = lang === "ar"; // Arabic => Right-to-Left
+
   // Close on Esc
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -34,7 +36,10 @@ export default function CartDrawer() {
 
       {/* Panel */}
       <aside
-        className={`absolute right-0 top-0 h-full w-[90%] max-w-md bg-background shadow-xl transition-transform duration-200 ${drawerOpen ? "translate-x-0" : "translate-x-full"}`}
+        className={`absolute top-0 h-full w-[90%] max-w-md bg-background shadow-xl transition-transform duration-200
+          ${drawerOpen ? "translate-x-0" : isRTL ? "-translate-x-full" : "translate-x-full"}
+          ${isRTL ? "left-0" : "right-0"}
+        `}
         role="dialog"
         aria-label={t("cart", lang)}
       >
