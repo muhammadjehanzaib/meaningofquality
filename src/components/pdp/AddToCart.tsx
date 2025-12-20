@@ -5,7 +5,7 @@ import { useCart } from "@/contexts/CartContext";
 import type { PackagingRow } from "@/data/productDetails";
 import { t } from "@/data/labels";
 import { useLang } from "@/hooks/useLang";
-import Link from "next/link";
+// import Link from "next/link";
 
 export default function AddToCart({
   productId,
@@ -82,12 +82,12 @@ export default function AddToCart({
           {t("addToCart", lang)}
         </button>
 
-        <Link
+        {/* <Link
           href="/cart"
           className="inline-flex items-center justify-center rounded-lg border px-4 py-2 text-sm hover:bg-muted"
         >
           {t("goToCart", lang)}
-        </Link>
+        </Link> */}
       </div>
     </div>
   );

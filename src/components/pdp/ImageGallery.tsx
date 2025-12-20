@@ -1,58 +1,77 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import { useState } from "react";
-import { useLang } from "@/hooks/useLang";
-import { t } from "@/data/labels";
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
+
+interface ImageGalleryProps {
+  images: string[];
+  isNew?: boolean;
+}
 
 export default function ImageGallery({
   images,
-  isNew,
-  tdsUrl,
-}: {
-  images: string[];
-  isNew?: boolean;
-  tdsUrl?: string;
-}) {
-  const [index, setIndex] = useState(0);
-  const lang = useLang();
-  const shown = images && images.length > 0 ? images : ["/images/file.svg"]; // fallback
+  isNew
+}: ImageGalleryProps) {
+  const gallery = images && images.length ? images : ['/images/file.svg'];
+  const [active, setActive] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (!isHovered) {
+        setActive((prev) => (prev + 1) % gallery.length);
+      }
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [isHovered, gallery.length]);
 
   return (
-    <div className="relative">
-      {/* Badges */}
-      {isNew && (
-        <span className="absolute left-3 top-3 z-10 inline-flex items-center rounded bg-red-600 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-white shadow">
-          {t("newProductBadge", lang)}
-        </span>
-      )}
-      {tdsUrl && tdsUrl !== "#" && (
-        <a
-          href={tdsUrl}
-          className="absolute right-3 top-3 z-10 grid h-8 w-8 place-items-center rounded-full bg-cyan-600 text-[11px] font-bold text-white shadow"
-          title={t("downloadTDS", lang)}
-        >
-          TDS
-        </a>
-      )}
+    <div
+      className="flex h-full flex-col"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {/* Main image container */}
+      <div className="relative flex-1 rounded-xl bg-background overflow-hidden h-80 lg:h-[400px]">
+        <Image
+          src={gallery[active]}
+          alt="Product image"
+          fill
+          priority
+          sizes="(max-width: 1024px) 100vw, 50vw"
+          className="object-contain"
+        />
 
-      {/* Main image */}
-      <div className="relative w-full overflow-hidden rounded-xl bg-background h-[320px] sm:h-[420px] md:h-[560px] lg:h-[70vh]">
-        <Image src={shown[index]} alt="product" fill sizes="(max-width:1024px) 100vw, 50vw" className="object-contain object-center" />
+        {/* NEW badge */}
+        {isNew && (
+          <span className="absolute left-3 top-3 rounded-full bg-green-600 px-3 py-1 text-xs font-semibold text-white">
+            New Product
+          </span>
+        )}
       </div>
 
       {/* Thumbnails */}
-      {shown.length > 1 && (
-        <div className="mt-3 flex gap-2">
-          {shown.map((src, i) => (
+      {gallery.length > 1 && (
+        <div className="mt-4 flex gap-2 overflow-x-auto">
+          {gallery.map((src, i) => (
             <button
               key={src + i}
+              onClick={() => setActive(i)}
+              className={`relative h-20 w-20 shrink-0 overflow-hidden rounded-lg border transition
+                ${active === i
+                  ? 'border-primary ring-2 ring-primary'
+                  : 'border-foreground/10 hover:border-foreground/30'
+                }`}
               type="button"
-              onClick={() => setIndex(i)}
-              className={`relative h-16 w-16 overflow-hidden rounded border ${i === index ? 'ring-2 ring-primary' : 'border-foreground/10'}` }
-              aria-label={`Image ${i + 1}`}
             >
-              <Image src={src} alt="thumb" fill sizes="64px" className="object-cover" />
+              <Image
+                src={src}
+                alt="Thumbnail"
+                fill
+                sizes="80px"
+                className="object-contain"
+              />
             </button>
           ))}
         </div>
@@ -60,4 +79,3 @@ export default function ImageGallery({
     </div>
   );
 }
-

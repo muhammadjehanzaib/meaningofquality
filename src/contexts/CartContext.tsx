@@ -34,6 +34,7 @@ export type CartContextType = {
   openDrawer: () => void;
   closeDrawer: () => void;
   lastAdded: CartItem | null;
+
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -88,7 +89,7 @@ add: (item: CartItemInput) => {
     // Ensure priceRange is always attached from product details
     let finalItem: CartItem = {
       ...item,
-      priceRange: detail?.priceRange ?? item.priceRange, // <- always fallback to product's range
+      // priceRange: detail?.priceRange ?? item.priceRange, // <- always fallback to product's range
     };
 
     // If flagged to use default packaging

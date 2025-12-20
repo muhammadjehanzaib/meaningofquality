@@ -17,10 +17,6 @@ export type ProductDetail = {
   sdsUrl?: string; // Safety Data Sheet (MSDS)
   isNew?: boolean;
   images?: string[];
-  priceRange?: {
-    min: number;
-    max: number;
-  };
 };
 
 export const productDetailsById: Record<string, ProductDetail> = {
@@ -46,7 +42,10 @@ export const productDetailsById: Record<string, ProductDetail> = {
     tdsUrl: "#",
     sdsUrl: "#",
     images: [
-      "/images/all-products/sealants/AC578-sanitary-sealant-bath-kitchen.png"
+      "/images/all-products/sealants/AC578-sanitary-sealant-bath-kitchen.png",
+      "/images/all-products/adhesives/740-allbond-glue.png",
+      "/images/all-products/adhesives/E360-Plast-Weld.png",
+      "/images/all-products/sealants/AC580-rapid-seal.png"
     ]
   },
   "np-2": {
