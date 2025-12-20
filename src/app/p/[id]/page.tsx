@@ -94,9 +94,11 @@ export default async function ProductDetailPage({ params }: PageProps) {
         {/* Main content grid */}
         <section className="mt-8 grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-8">
           {/* Image card */}
-          <div className="relative rounded-xl bg-background overflow-hidden max-h-[600px] h-full">
+          <div className="relative rounded-xl bg-background overflow-hidden 
+                h-[320px] sm:h-[420px] lg:h-full max-h-[600px]">
 
-            <ImageGallery images={galleryImages} isNew={detail.isNew}/>
+
+            <ImageGallery images={galleryImages} isNew={detail.isNew} />
             <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-foreground/10" />
           </div>
 
@@ -137,7 +139,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
 
 
             {/* <div className="mt-6 flex flex-wrap gap-3"> */}
-              {/* {detail.tdsUrl && (
+            {/* {detail.tdsUrl && (
                 <a className="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-white text-sm hover:brightness-110" href={detail.tdsUrl} role="button">
                   <LKey k="downloadTDS" />
                 </a>
@@ -147,7 +149,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
                   <LKey k="downloadSDS" />
                 </a>
               )} */}
-              {/* <a className="inline-flex items-center justify-center rounded-lg border px-4 py-2 text-sm hover:bg-muted" href="/contact" role="button">
+            {/* <a className="inline-flex items-center justify-center rounded-lg border px-4 py-2 text-sm hover:bg-muted" href="/contact" role="button">
                 <LKey k="contactSales" />
               </a> */}
 
