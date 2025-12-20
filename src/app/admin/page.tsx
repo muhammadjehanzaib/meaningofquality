@@ -739,7 +739,7 @@ function ProductEditor({
           <input
             type="text"
             value={product.Brand}
-            onChange={(e) => onUpdate({ Brand : e.target.value })}
+            onChange={(e) => onUpdate({ Brand: e.target.value })}
             className="mt-1 w-full rounded border px-2 py-1 text-sm"
           />
         </div>

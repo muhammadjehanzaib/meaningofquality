@@ -69,8 +69,11 @@ addProducts: {
 removeItem:{
   en: "Remove item",
   ar: "إزالة المنتج"
+},
+cartEmpty: {
+  en: "Quotation list is empty",
+  ar: "قائمة الاقتباسات فارغة"
 }
-
 } as const;
 
 
