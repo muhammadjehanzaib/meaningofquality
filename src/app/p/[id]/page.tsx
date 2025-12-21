@@ -286,7 +286,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
         <table className="w-full text-left text-xs">
           <thead className="text-muted-foreground">
             <tr className="border-b border-foreground/10">
-              <th className="py-2 pr-3">Specification</th>
+              <th className="py-2 pr-3">Title</th>
               <th className="py-2 pr-3">Description / Notes</th>
             </tr>
           </thead>
