@@ -73,21 +73,23 @@ export default function AddToCart({
             onChange={(e) => setQty(Math.max(1, Number(e.target.value) || 1))}
           />
         </label>
-
-        <button
-          type="button"
-          onClick={onAdd}
-          className="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-white text-sm hover:brightness-110"
-        >
-          {t("addToCart", lang)}
-        </button>
-
         {/* <Link
           href="/cart"
           className="inline-flex items-center justify-center rounded-lg border px-4 py-2 text-sm hover:bg-muted"
         >
           {t("goToCart", lang)}
         </Link> */}
+      </div>
+      <div className="mt-4 ">
+      <button
+          type="button"
+          onClick={onAdd}
+          className="inline-flex items-center ml-4 mb-2 w-[200px] justify-center rounded-lg bg-primary px-4 py-2 text-white text-sm hover:brightness-110"
+        >
+          {t("addToCart", lang)}
+        </button>
+
+      <p className="text-sm">(Add this product to your quote list. You can add multiple products and submit a single request for quotation.)</p>
       </div>
     </div>
   );

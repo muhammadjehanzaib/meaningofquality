@@ -24,10 +24,7 @@ export const productDetailsById: Record<string, ProductDetail> = {
     isNew: true,
     description: { en: "High-quality, one-component acrylic based joint sealant suitable for general sealing in and around kitchen and bathroom. Prevents mold growth thanks to a powerful fungicide.", ar: "مادة مانعة للتسرب عالية الجودة، أحادية المكون، مصنوعة من الأكريليك، مناسبة للاستخدام العام في سد الفواصل داخل وحول المطابخ والحمامات. تمنع نمو العفن بفضل مبيد فطري قوي." },
     properties: [
-      "Perfect adhesion without use of a primer on most, even slightly damp substrates.",
-      "Can be painted over after curing.",
-      "Colourfast and waterproof after curing.",
-      "Non-stringing, non-sag formula."
+      { en: "Perfect adhesion without use of a primer on most, even slightly damp substrates. Can be painted over after curing. Colourfast and waterproof after curing. Non-stringing, non-sag formula.", ar: "" }
     ],
     applications: [
       "Sealing around kitchen worktops etc.",
