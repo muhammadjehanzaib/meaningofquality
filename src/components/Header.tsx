@@ -131,7 +131,7 @@ export default function Header() {
           <button
             className="inline-flex h-9 w-9 items-center justify-center rounded hover:bg-muted"
             onClick={() => setMobileOpen((v) => !v)}
-            aria-label="Toggle menu"
+            aria-label={t("toggleMenu", lang)}
             type="button"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">

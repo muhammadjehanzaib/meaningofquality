@@ -51,7 +51,7 @@ function formatItem(item: Item): string {
   }
   if (item.Brand) {
     parts.push(`Brand : "${item.Brand}"`)
-  } 
+  }
   return `{ ${parts.join(", ")} }`;
 }
 
@@ -63,23 +63,43 @@ function formatProductDetail(detail: ProductDetail): string {
   const parts: string[] = [];
   if (detail.isNew !== undefined) parts.push(`isNew: ${detail.isNew}`);
   if (detail.description) {
-    const desc = typeof detail.description === "string" 
+    const desc = typeof detail.description === "string"
       ? JSON.stringify(detail.description)
       : formatLString(detail.description);
     parts.push(`description: ${desc}`);
   }
   if (detail.properties && detail.properties.length > 0) {
-    const props = detail.properties.map(p => 
+    const props = detail.properties.map(p =>
       typeof p === "string" ? JSON.stringify(p) : formatLString(p)
     );
     parts.push(`properties: [\n${props.map(p => `      ${p}`).join(",\n")}\n    ]`);
   }
   if (detail.applications && detail.applications.length > 0) {
-    const apps = detail.applications.map(a => 
+    const apps = detail.applications.map(a =>
       typeof a === "string" ? JSON.stringify(a) : formatLString(a)
     );
     parts.push(`applications: [\n${apps.map(a => `      ${a}`).join(",\n")}\n    ]`);
   }
+  if (detail.productSpecs && detail.productSpecs.length > 0) {
+    const specs = detail.productSpecs.map(p => {
+      const parts: string[] = [];
+      if (p.specification) parts.push(`specification: ${JSON.stringify(p.specification)}`);
+      if (p.value) parts.push(`value: ${JSON.stringify(p.value)}`);
+      return `      { ${parts.join(", ")} }`;
+    });
+    parts.push(`productSpecs: [\n${specs.join(",\n")}\n    ]`);
+  }
+
+  if (detail.technicalSpecs && detail.technicalSpecs.length > 0) {
+    const specs = detail.technicalSpecs.map(p => {
+      const parts: string[] = [];
+      if (p.title) parts.push(`title: ${JSON.stringify(p.title)}`);
+      if (p.description) parts.push(`description: ${JSON.stringify(p.description)}`);
+      return `      { ${parts.join(", ")} }`;
+    });
+    parts.push(`technicalSpecs: [\n${specs.join(",\n")}\n    ]`);
+  }
+
   if (detail.packaging && detail.packaging.length > 0) {
     const pkg = detail.packaging.map(p => {
       const pkgParts: string[] = [];
@@ -153,7 +173,7 @@ export async function POST(request: NextRequest) {
 
     if (type === "updateCatalog") {
       const { categories, subcategories, newProducts, mostVisited, productImageByItemId } = data;
-      
+
       const content = `import type { LString } from "@/data/i18n";
 
 export type Category = {
@@ -268,7 +288,7 @@ ${imageEntries}
 
     if (type === "updateProductDetails") {
       const { productDetailsById } = data;
-      
+
       const entries = Object.entries(productDetailsById)
         .map(([id, detail]) => `  "${id}": ${formatProductDetail(detail as ProductDetail)}`)
         .join(",\n");
@@ -283,17 +303,28 @@ export type PackagingRow = {
   boxQty?: string;
 };
 
+export type ProductSpecification = {
+  specification: string | LString;
+  value: string | LString;
+};
+
+export type TechnicalSpecification = {
+  title?: string | LString;
+  description?: string | LString;
+};
+
 export type ProductDetail = {
   description?: string | LString;
   properties?: Array<string | LString>;
   applications?: Array<string | LString>;
+  productSpecs?: ProductSpecification[];
+  technicalSpecs?: TechnicalSpecification[];
   packaging?: PackagingRow[];
-  tdsUrl?: string; // Technical Data Sheet
-  sdsUrl?: string; // Safety Data Sheet (MSDS)
+  tdsUrl?: string;
+  sdsUrl?: string;
   isNew?: boolean;
   images?: string[];
 };
-
 export const productDetailsById: Record<string, ProductDetail> = {
 ${entries}
 };
@@ -305,20 +336,20 @@ ${entries}
 
     if (type === "updateAssets") {
       const { productImageByItemId } = data;
-      
+
       console.log("Received productImageByItemId:", productImageByItemId);
       console.log("Number of entries:", Object.keys(productImageByItemId || {}).length);
-      
+
       if (!productImageByItemId || typeof productImageByItemId !== 'object') {
         return NextResponse.json(
           { success: false, error: "Invalid productImageByItemId data" },
           { status: 400 }
         );
       }
-      
+
       // Sort the entries by ID for consistent ordering
       const sortedEntries = Object.entries(productImageByItemId).sort(([a], [b]) => a.localeCompare(b));
-      
+
       const imageEntries = sortedEntries
         .map(([id, img]) => `  "${id}": ${JSON.stringify(img)}`)
         .join(",\n");
@@ -371,11 +402,11 @@ ${imageEntries}
 
       console.log("Writing to file:", assetsPath);
       console.log("Content length:", content.length);
-      
+
       writeFileSync(assetsPath, content, "utf-8");
-      
+
       console.log("File written successfully");
-      
+
       return NextResponse.json({ success: true, message: "Assets updated successfully" });
     }
 

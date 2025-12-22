@@ -4,14 +4,15 @@ import { useState, useEffect } from "react";
 import Container from "@/components/ui/Container";
 import { categories, newProducts, mostVisited, type Category, type Item } from "@/data/catalog";
 import { subcategories, type Subcategory } from "@/data/subcategories";
-import { productDetailsById, type ProductDetail, type PackagingRow } from "@/data/productDetails";
+import { productDetailsById, type ProductDetail, type PackagingRow, type ProductSpecification, type TechnicalSpecification } from "@/data/productDetails";
 import { productImageByItemId } from "@/data/assets";
+import { LString } from "@/data/i18n";
 
 export default function AdminPage() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
   const [activeTab, setActiveTab] = useState<"products" | "categories" | "subcategories" | "details">("products");
-  
+
   // Form states
   const [categoriesData, setCategoriesData] = useState<Category[]>(categories);
   const [subcategoriesData, setSubcategoriesData] = useState<Subcategory[]>(subcategories);
@@ -268,9 +269,8 @@ export default function AdminPage() {
           </div>
           {message && (
             <div
-              className={`rounded-lg px-4 py-2 text-sm ${
-                message.type === "success" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
-              }`}
+              className={`rounded-lg px-4 py-2 text-sm ${message.type === "success" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                }`}
             >
               {message.text}
             </div>
@@ -281,41 +281,37 @@ export default function AdminPage() {
         <div className="mb-6 flex gap-2 border-b">
           <button
             onClick={() => setActiveTab("products")}
-            className={`px-4 py-2 text-sm font-medium ${
-              activeTab === "products"
+            className={`px-4 py-2 text-sm font-medium ${activeTab === "products"
                 ? "border-b-2 border-primary text-primary"
                 : "text-muted-foreground hover:text-foreground"
-            }`}
+              }`}
           >
             Products
           </button>
           <button
             onClick={() => setActiveTab("categories")}
-            className={`px-4 py-2 text-sm font-medium ${
-              activeTab === "categories"
+            className={`px-4 py-2 text-sm font-medium ${activeTab === "categories"
                 ? "border-b-2 border-primary text-primary"
                 : "text-muted-foreground hover:text-foreground"
-            }`}
+              }`}
           >
             Categories
           </button>
           <button
             onClick={() => setActiveTab("subcategories")}
-            className={`px-4 py-2 text-sm font-medium ${
-              activeTab === "subcategories"
+            className={`px-4 py-2 text-sm font-medium ${activeTab === "subcategories"
                 ? "border-b-2 border-primary text-primary"
                 : "text-muted-foreground hover:text-foreground"
-            }`}
+              }`}
           >
             Subcategories
           </button>
           <button
             onClick={() => setActiveTab("details")}
-            className={`px-4 py-2 text-sm font-medium ${
-              activeTab === "details"
+            className={`px-4 py-2 text-sm font-medium ${activeTab === "details"
                 ? "border-b-2 border-primary text-primary"
                 : "text-muted-foreground hover:text-foreground"
-            }`}
+              }`}
           >
             Product Details
           </button>
@@ -613,6 +609,215 @@ function PackagingEditor({
         className="rounded bg-primary px-3 py-1 text-sm text-white hover:brightness-110"
       >
         + Add Packaging
+      </button>
+    </div>
+  );
+}
+
+function ProductSpecificationEditor({
+  specs,
+  onUpdate,
+}: {
+  specs: ProductSpecification[];
+  onUpdate: (specs: ProductSpecification[]) => void;
+}) {
+  const addRow = () => {
+    onUpdate([...specs, { specification: { en: "", ar: "" }, value: { en: "", ar: "" } }]);
+  };
+
+  const updateRow = (
+    index: number,
+    updates: Partial<ProductSpecification>
+  ) => {
+    const newSpecs = [...specs];
+    newSpecs[index] = { ...newSpecs[index], ...updates };
+    onUpdate(newSpecs);
+  };
+
+  const ensureLString = (v: string | LString): LString =>
+    typeof v === "string" ? { en: v, ar: "" } : v;
+
+  return (
+    <div className="space-y-2">
+      {specs.map((row, index) => {
+        const spec = ensureLString(row.specification);
+        const value = ensureLString(row.value);
+        return (
+          <div key={index} className="flex gap-2 items-end">
+            <div className="flex-1 space-y-1">
+              <label className="block text-xs font-medium text-muted-foreground">
+                Title (EN)
+              </label>
+              <input
+                type="text"
+                value={spec.en}
+                onChange={(e) =>
+                  updateRow(index, { specification: { ...spec, en: e.target.value } })
+                }
+                className="mt-1 w-full rounded border px-2 py-1 text-sm"
+                placeholder="e.g. Color"
+              />
+              <label className="block text-xs font-medium text-muted-foreground">
+                Title (AR)
+              </label>
+              <input
+                type="text"
+                value={spec.ar}
+                onChange={(e) =>
+                  updateRow(index, { specification: { ...spec, ar: e.target.value } })
+                }
+                className="mt-1 w-full rounded border px-2 py-1 text-sm"
+                placeholder="مثال: اللون"
+              />
+            </div>
+
+            <div className="flex-1 space-y-1">
+              <label className="block text-xs font-medium text-muted-foreground">
+                Value (EN)
+              </label>
+              <input
+                type="text"
+                value={value.en}
+                onChange={(e) =>
+                  updateRow(index, { value: { ...value, en: e.target.value } })
+                }
+                className="mt-1 w-full rounded border px-2 py-1 text-sm"
+                placeholder="e.g. White"
+              />
+              <label className="block text-xs font-medium text-muted-foreground">
+                Value (AR)
+              </label>
+              <input
+                type="text"
+                value={value.ar}
+                onChange={(e) =>
+                  updateRow(index, { value: { ...value, ar: e.target.value } })
+                }
+                className="mt-1 w-full rounded border px-2 py-1 text-sm"
+                placeholder="مثال: أبيض"
+              />
+            </div>
+
+            <button
+              onClick={() => updateRow(index, { specification: spec, value: value })}
+              className="rounded bg-red-100 px-2 py-1 text-xs text-red-700 hover:bg-red-200"
+            >
+              Remove
+            </button>
+          </div>
+        );
+      })}
+
+      <button
+        onClick={addRow}
+        className="rounded bg-primary px-3 py-1 text-sm text-white hover:brightness-110"
+      >
+        + Add Product Spec
+      </button>
+    </div>
+  );
+}
+
+
+function TechnicalSpecificationEditor({
+  specs,
+  onUpdate,
+}: {
+  specs: TechnicalSpecification[];
+  onUpdate: (specs: TechnicalSpecification[]) => void;
+}) {
+  const addRow = () => {
+    onUpdate([...specs, { title: { en: "", ar: "" }, description: { en: "", ar: "" } }]);
+  };
+
+  const updateRow = (
+    index: number,
+    updates: Partial<TechnicalSpecification>
+  ) => {
+    const newSpecs = [...specs];
+    newSpecs[index] = { ...newSpecs[index], ...updates };
+    onUpdate(newSpecs);
+  };
+
+  const ensureLString = (v: string | LString): LString =>
+    typeof v === "string" ? { en: v, ar: "" } : v;
+
+  return (
+    <div className="space-y-2">
+      {specs.map((row, index) => {
+        const title = ensureLString(row.title || "");
+        const description = ensureLString(row.description || "");
+        return (
+          <div key={index} className="flex gap-2 items-end">
+            <div className="flex-1 space-y-1">
+              <label className="block text-xs font-medium text-muted-foreground">
+                Specification (EN)
+              </label>
+              <input
+                type="text"
+                value={title.en}
+                onChange={(e) =>
+                  updateRow(index, { title: { ...title, en: e.target.value } })
+                }
+                className="mt-1 w-full rounded border px-2 py-1 text-sm"
+                placeholder="e.g. Density"
+              />
+              <label className="block text-xs font-medium text-muted-foreground">
+                Specification (AR)
+              </label>
+              <input
+                type="text"
+                value={title.ar}
+                onChange={(e) =>
+                  updateRow(index, { title: { ...title, ar: e.target.value } })
+                }
+                className="mt-1 w-full rounded border px-2 py-1 text-sm"
+                placeholder="مثال: الكثافة"
+              />
+            </div>
+
+            <div className="flex-[2] space-y-1">
+              <label className="block text-xs font-medium text-muted-foreground">
+                Value (EN)
+              </label>
+              <input
+                type="text"
+                value={description.en}
+                onChange={(e) =>
+                  updateRow(index, { description: { ...description, en: e.target.value } })
+                }
+                className="mt-1 w-full rounded border px-2 py-1 text-sm"
+                placeholder="e.g. 1.2 g/cm³ at 25°C"
+              />
+              <label className="block text-xs font-medium text-muted-foreground">
+                Value (AR)
+              </label>
+              <input
+                type="text"
+                value={description.ar}
+                onChange={(e) =>
+                  updateRow(index, { description: { ...description, ar: e.target.value } })
+                }
+                className="mt-1 w-full rounded border px-2 py-1 text-sm"
+                placeholder="مثال: 1.2 جم/سم³ عند 25°م"
+              />
+            </div>
+
+            <button
+              onClick={() => updateRow(index, { title, description })}
+              className="rounded bg-red-100 px-2 py-1 text-xs text-red-700 hover:bg-red-200"
+            >
+              Remove
+            </button>
+          </div>
+        );
+      })}
+
+      <button
+        onClick={addRow}
+        className="rounded bg-primary px-3 py-1 text-sm text-white hover:brightness-110"
+      >
+        + Add Technical Spec
       </button>
     </div>
   );
@@ -1074,6 +1279,28 @@ function ProductDetailEditor({
             rows={4}
           />
         </div>
+
+        <div>
+          <label className="block text-xs font-medium text-muted-foreground">
+            Product Specifications
+          </label>
+          <ProductSpecificationEditor
+            specs={detail.productSpecs || []}
+            onUpdate={(productSpecs) => onUpdate({ productSpecs })}
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs font-medium text-muted-foreground">
+            Technical Specifications
+          </label>
+          <TechnicalSpecificationEditor
+            specs={detail.technicalSpecs || []}
+            onUpdate={(technicalSpecs) => onUpdate({ technicalSpecs })}
+          />
+        </div>
+
+
         <div>
           <label className="block text-xs font-medium text-muted-foreground">Packaging</label>
           <PackagingEditor

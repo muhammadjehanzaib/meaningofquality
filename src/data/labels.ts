@@ -73,7 +73,52 @@ removeItem:{
 cartEmpty: {
   en: "Quotation list is empty",
   ar: "قائمة الاقتباسات فارغة"
-}
+},
+footerDescription: {
+  en: "Premium industrial adhesives, sealants, foams, and spray solutions for professional builders and manufacturers.",
+  ar: "مواد لاصقة صناعية عالية الجودة، مانعات تسرب، رغوات، وحلول رذاذ للبناة والمصنعين المحترفين."
+},
+productsSection: { en: "Products", ar: "المنتجات" },
+allProducts: { en: "All Products", ar: "جميع المنتجات" },
+companySection: { en: "Company", ar: "الشركة" },
+aboutUs: { en: "About Us", ar: "حولنا" },
+contactUs: { en: "Contact Us", ar: "اتصل بنا" },
+customerCareSection: { en: "Customer Care", ar: "خدمة العملاء" },
+faq: { en: "FAQ", ar: "الأسئلة الشائعة" },
+shoppingGuide: { en: "Shopping Guide", ar: "دليل التسوق" },
+returnExchange: { en: "Return & Exchange", ar: "الإرجاع والتبادل" },
+privacyPolicy: { en: "Privacy Policy", ar: "سياسة الخصوصية" },
+humanRightsSection: { en: "Human Rights", ar: "حقوق الإنسان" },
+humanRightsPolicy: { en: "Human Rights Policy", ar: "سياسة حقوق الإنسان" },
+humanRightsAnalysisProcess: { en: "Human Rights Analysis Process", ar: "عملية تحليل حقوق الإنسان" },
+humanRightsDueDiligance: { en: "Human Rights Due Diligance", ar: "الفحص الواجب لحقوق الإنسان" },
+supplierIncentiveProcess: { en: "Supplier Incentive Process", ar: "عملية حوافز الموردين" },
+copyright: { en: "© 2025 Sultan Co. All rights reserved.", ar: "© 2025 شركة سلطان. جميع الحقوق محفوظة." },
+privacy: { en: "Privacy", ar: "الخصوصية" },
+terms: { en: "Terms", ar: "الشروط" },
+productSpecifications: { en: "Product Specifications", ar: "مواصفات المنتج" },
+title: { en: "Title", ar: "العنوان" },
+descriptionNotes: { en: "Description / Notes", ar: "الوصف / الملاحظات" },
+technicalSpecifications: { en: "Technical Specifications", ar: "المواصفات التقنية" },
+specification: { en: "Specification", ar: "المواصفة" },
+value: { en: "Value", ar: "القيمة" },
+toggleMenu: { en: "Toggle menu", ar: "تبديل القائمة" },
+close: { en: "Close", ar: "إغلاق" },
+decreaseQuantity: { en: "Decrease quantity", ar: "تقليل الكمية" },
+increaseQuantity: { en: "Increase quantity", ar: "زيادة الكمية" },
+imgPlaceholder: { en: "IMG", ar: "صورة" },
+codeLabel: { en: "Code:", ar: "الكود:" },
+volumeLabel: { en: "Volume:", ar: "الحجم:" },
+typeLabel: { en: "Type:", ar: "النوع:" },
+stockLabel: { en: "Stock:", ar: "المخزون:" },
+infoNote: { en: "We will use this information to prepare your quotation and reply to your inquiry.", ar: "سنستخدم هذه المعلومات لإعداد عرض الأسعار والرد على استفسارك." },
+search: { en: "Search", ar: "بحث" },
+searchProducts: { en: "Search products…", ar: "البحث عن المنتجات…" },
+esc: { en: "Esc", ar: "خروج" },
+noResults: { en: "No results.", ar: "لا توجد نتائج." },
+all: { en: "All", ar: "الكل" },
+noProductsInSection: { en: "No products found under this section.", ar: "لا توجد منتجات في هذا القسم." },
+addToQuoteNote: { en: "(Add this product to your quote list. You can add multiple products and submit a single request for quotation.)", ar: "(أضف هذا المنتج إلى قائمة عرض الأسعار الخاصة بك. يمكنك إضافة منتجات متعددة وتقديم طلب عرض أسعار واحد.)" }
 } as const;
 
 

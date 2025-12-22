@@ -49,7 +49,7 @@ export default function CartDrawer() {
             <div className="text-base font-semibold">
               {t("cart", lang)} ({count})
             </div>
-            <button className="rounded p-2 hover:bg-muted" onClick={closeDrawer} aria-label="Close">
+            <button className="rounded p-2 hover:bg-muted" onClick={closeDrawer} aria-label={t("close", lang)}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                 <path d="M6 6l12 12M6 18L18 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
               </svg>
@@ -67,7 +67,7 @@ export default function CartDrawer() {
                     {lastAdded.img ? (
                       <Image src={lastAdded.img} alt={pickAny(lastAdded.name, lang)} fill sizes="64px" className="object-contain" />
                     ) : (
-                      <div className="grid h-full w-full place-items-center text-xs text-muted-foreground">IMG</div>
+                      <div className="grid h-full w-full place-items-center text-xs text-muted-foreground">{t("imgPlaceholder", lang)}</div>
                     )}
                   </div>
                   <div className="flex-1">
@@ -92,7 +92,7 @@ export default function CartDrawer() {
                         {it.img ? (
                           <Image src={it.img} alt={pickAny(it.name, lang)} fill sizes="48px" className="object-contain" />
                         ) : (
-                          <div className="grid h-full w-full place-items-center text-[10px] text-muted-foreground">IMG</div>
+                          <div className="grid h-full w-full place-items-center text-[10px] text-muted-foreground">{t("imgPlaceholder", lang)}</div>
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
@@ -120,7 +120,7 @@ export default function CartDrawer() {
                           <div className="inline-flex items-center rounded-lg border bg-background/70 shadow-sm">
                             <button
                               type="button"
-                              aria-label="Decrease quantity"
+                              aria-label={t("decreaseQuantity", lang)}
                               className="h-7 w-7 text-xs hover:bg-muted rounded-l-lg"
                               onClick={() => updateQty(it.id, Math.max(1, it.qty - 1), key)}
                             >
@@ -129,7 +129,7 @@ export default function CartDrawer() {
                             <div className="h-7 w-10 border-x grid place-items-center text-xs select-none">{it.qty}</div>
                             <button
                               type="button"
-                              aria-label="Increase quantity"
+                              aria-label={t("increaseQuantity", lang)}
                               className="h-7 w-7 text-xs hover:bg-muted rounded-r-lg"
                               onClick={() => updateQty(it.id, it.qty + 1, key)}
                             >

@@ -1001,7 +1001,7 @@ export default function CartPage() {
                         />
                       ) : (
                         <div className="grid h-full w-full place-items-center text-xs text-muted-foreground">
-                          IMG
+                          {t("imgPlaceholder", lang)}
                         </div>
                       )}
                     </div>
@@ -1020,22 +1020,22 @@ export default function CartPage() {
                       <div className="mt-1 flex flex-wrap gap-1.5 text-[10px] text-muted-foreground">
                         {it.productCode && (
                           <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 ring-1 ring-foreground/10">
-                            Code: {it.productCode}
+                            {t("codeLabel", lang)} {it.productCode}
                           </span>
                         )}
                         {it.volume && (
                           <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 ring-1 ring-foreground/10">
-                            Volume: {it.volume}
+                            {t("volumeLabel", lang)} {it.volume}
                           </span>
                         )}
                         {it.type && (
                           <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 ring-1 ring-foreground/10">
-                            Type: {it.type}
+                            {t("typeLabel", lang)} {it.type}
                           </span>
                         )}
                         {it.stockCode && (
                           <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 ring-1 ring-foreground/10">
-                            Stock: {it.stockCode}
+                            {t("stockLabel", lang)} {it.stockCode}
                           </span>
                         )}
                       </div>
@@ -1185,8 +1185,7 @@ export default function CartPage() {
                   />
                 </form>
                 <p className="text-xs text-muted-foreground">
-                  We will use this information to prepare your quotation and reply
-                  to your inquiry.
+                  {t("infoNote", lang)}
                 </p>
               </div>
 

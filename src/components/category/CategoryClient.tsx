@@ -7,11 +7,14 @@ import type { Subcategory } from "@/data/subcategories";
 import L from "@/components/i18n/L";
 import { useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useLang } from "@/hooks/useLang";
+import { t } from "@/data/labels";
 
 export default function CategoryClient({ items, subcategories }: { items: Item[]; subcategories: Subcategory[] }) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
+  const lang = useLang();
 
   const [active, setActive] = useState<string | null>(null);
 
@@ -45,7 +48,7 @@ export default function CategoryClient({ items, subcategories }: { items: Item[]
             onClick={() => setActiveAndUrl(null)}
             aria-pressed={active === null}
           >
-            All
+            {t("all", lang)}
           </button>
           {subcategories.map((sc) => (
             <button
@@ -68,7 +71,7 @@ export default function CategoryClient({ items, subcategories }: { items: Item[]
           ))}
         </div>
       ) : (
-        <p className="mt-8 text-sm text-muted-foreground">No products found under this section.</p>
+        <p className="mt-8 text-sm text-muted-foreground">{t("noProductsInSection", lang)}</p>
       )}
     </div>
   );

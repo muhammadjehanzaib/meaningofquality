@@ -48,7 +48,7 @@ export default function AddToCart({
       <div className="flex flex-wrap items-end gap-3">
         {packaging.length > 0 && (
           <label className="text-xs text-muted-foreground">
-            <div className="mb-1 font-medium">Packaging</div>
+            <div className="mb-1 font-medium">{t("packaging", lang)}</div>
             <select
               className="block rounded border px-2 py-1 text-sm"
               value={packIdx}
@@ -89,7 +89,7 @@ export default function AddToCart({
           {t("addToCart", lang)}
         </button>
 
-      <p className="text-sm">(Add this product to your quote list. You can add multiple products and submit a single request for quotation.)</p>
+      <p className="text-sm">{t("addToQuoteNote", lang)}</p>
       </div>
     </div>
   );

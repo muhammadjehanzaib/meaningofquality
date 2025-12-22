@@ -8,17 +8,28 @@ export type PackagingRow = {
   boxQty?: string;
 };
 
+export type ProductSpecification = {
+  specification: string | LString;
+  value: string | LString;
+};
+
+export type TechnicalSpecification = {
+  title?: string | LString;
+  description?: string | LString;
+};
+
 export type ProductDetail = {
   description?: string | LString;
   properties?: Array<string | LString>;
   applications?: Array<string | LString>;
+  productSpecs?: ProductSpecification[];
+  technicalSpecs?: TechnicalSpecification[];
   packaging?: PackagingRow[];
-  tdsUrl?: string; // Technical Data Sheet
-  sdsUrl?: string; // Safety Data Sheet (MSDS)
+  tdsUrl?: string;
+  sdsUrl?: string;
   isNew?: boolean;
   images?: string[];
 };
-
 export const productDetailsById: Record<string, ProductDetail> = {
   "np-1": {
     isNew: true,
@@ -32,12 +43,27 @@ export const productDetailsById: Record<string, ProductDetail> = {
       "Internal sealing around uPVC, timber and metal window and door frames.",
       "Filling gaps, cracks and joints in facades, walls and ceilings before painting."
     ],
+    productSpecs: [
+      { specification: {"en":"Grade","ar":"الصفحة الرئيسية"}, value: {"en":"Industrial / Laboratory","ar":"الصفحة الرئيسية"} },
+      { specification: "Molecular Formula", value: "C₂H₆O" },
+      { specification: "Molecular Weight", value: "46.07 g/mol" },
+      { specification: "Boiling Point", value: "78.37 °C" },
+      { specification: "Melting Point", value: "-114.1 °C" },
+      { specification: "Solubility", value: "Miscible with water" }
+    ],
+    technicalSpecs: [
+      { title: {"en":"Cas Number","ar":"الصفحة الرئيسية"}, description: {"en":"64-17-5","ar":"الصفحة الرئيسية2222"} },
+      { title: "Purity", description: "≥ 99.9%" },
+      { title: "Appearance", description: "Clear liquid" },
+      { title: "Density", description: "0.789 g/cm³" },
+      { title: "Storage", description: "Cool, dry place" }
+    ],
     packaging: [
       { stockCode: "-", productCode: "AC578", type: "-", volume: "310 ml", boxQty: "12" },
       { stockCode: "-", productCode: "AC579", type: "-", volume: "410 ml", boxQty: "19" }
     ],
-    tdsUrl: "#",
-    sdsUrl: "#",
+    tdsUrl: "www.google.com",
+    sdsUrl: "www.hbl.com",
     images: [
       "/images/all-products/sealants/AC578-sanitary-sealant-bath-kitchen.png",
       "/images/all-products/adhesives/740-allbond-glue.png",

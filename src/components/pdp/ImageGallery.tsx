@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { useLang } from '@/hooks/useLang';
+import { t } from '@/data/labels';
 
 interface ImageGalleryProps {
   images: string[];
@@ -12,6 +14,7 @@ export default function ImageGallery({
   images,
   isNew
 }: ImageGalleryProps) {
+  const lang = useLang();
   const gallery = images && images.length ? images : ['/images/file.svg'];
   const [active, setActive] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
@@ -46,7 +49,7 @@ export default function ImageGallery({
         {/* NEW badge */}
         {isNew && (
           <span className="absolute left-3 top-3 rounded-full bg-green-600 px-3 py-1 text-xs font-semibold text-white">
-            New Product
+            {t("newProductBadge", lang)}
           </span>
         )}
       </div>

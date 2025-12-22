@@ -24,102 +24,6 @@ export async function generateStaticParams() {
   return allItems.map((i) => ({ id: i.id }));
 }
 
-export const sampleProduct = {
-  id: "ethanol-99",
-  name: { en: "Ethanol 99.9%", ar: "إيثانول 99.9%" },
-  categoryId: "industrial-chemicals",
-  priceRange: { min: 50, max: 100 }, // optional for RFQ
-  description: {
-    en: "High-purity ethanol suitable for industrial applications.",
-    ar: "إيثانول عالي النقاء مناسب للتطبيقات الصناعية."
-  },
-
-  // Technical Specifications
-  technicalSpecs: {
-    casNumber: "64-17-5",
-    purity: "≥ 99.9%",
-    appearance: "Clear liquid",
-    density: "0.789 g/cm³",
-    storage: "Cool, dry place"
-  },
-
-  // Packaging
-  packaging: [
-    {
-      stockCode: "ETH-001",
-      productCode: "ET-100L",
-      type: "Drum",
-      volume: "100 L",
-      boxQty: "1"
-    },
-    {
-      stockCode: "ETH-002",
-      productCode: "ET-200L",
-      type: "Drum",
-      volume: "200 L",
-      boxQty: "1"
-    }
-  ],
-
-  // Attachments
-  attachments: {
-    tdsUrl: "/attachments/ethanol-tds.pdf",
-    sdsUrl: "/attachments/ethanol-sds.pdf"
-  },
-
-  // Use Cases
-  useCases: [
-    "Industrial cleaning",
-    "Laboratory use",
-    "Manufacturing applications"
-  ],
-
-  // Metadata for SEO
-  metadata: {
-    title: "Ethanol 99.9% | Industrial Grade Chemical Supplier",
-    description:
-      "High-purity ethanol 99.9% for industrial and manufacturing applications. SDS and TDS available. Request a quote today.",
-    keywords: ["ethanol", "industrial ethanol", "chemical supplier"],
-    canonical: "/p/ethanol-99"
-  },
-
-  // Images
-  images: [
-    "/images/products/ethanol-1.jpg",
-    "/images/products/ethanol-2.jpg"
-  ],
-
-  // Optional: mark new product
-  isNew: true
-};
-
-const sampleProduct2 =  {productSpecifications: [
-  {
-    name: "Grade",
-    value: "Industrial / Laboratory"
-  },
-  {
-    name: "Molecular Formula",
-    value: "C₂H₆O"
-  },
-  {
-    name: "Molecular Weight",
-    value: "46.07 g/mol"
-  },
-  {
-    name: "Boiling Point",
-    value: "78.37 °C"
-  },
-  {
-    name: "Melting Point",
-    value: "-114.1 °C"
-  },
-  {
-    name: "Solubility",
-    value: "Miscible with water"
-  }
-]
-}
 export default async function ProductDetailPage({ params }: PageProps) {
   const { id } = await params;
   const item = allItems.find((i) => i.id === id);
@@ -154,6 +58,10 @@ export default async function ProductDetailPage({ params }: PageProps) {
   const related = allItems.filter(
     (i) => i.categoryId === item.categoryId && i.id !== item.id
   );
+  function toAbsoluteUrl(url: string) {
+    if (!url) return "";
+    return /^https?:\/\//i.test(url) ? url : `https://${url}`;
+  }
 
   return (
     <div className="py-10 sm:py-12">
@@ -236,12 +144,23 @@ export default async function ProductDetailPage({ params }: PageProps) {
 
             <div className="mt-6 flex flex-wrap gap-3">
               {detail.tdsUrl && (
-                <a className="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-white text-sm hover:brightness-110" href={detail.tdsUrl} role="button">
+                <a
+                  href={toAbsoluteUrl(detail.tdsUrl)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm text-white hover:brightness-110"
+                >
                   <LKey k="downloadTDS" />
                 </a>
               )}
+
               {detail.sdsUrl && (
-                <a className="inline-flex items-center justify-center rounded-lg border px-4 py-2 text-sm hover:bg-muted" href={detail.sdsUrl} role="button">
+                <a
+                  href={toAbsoluteUrl(detail.sdsUrl)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center rounded-lg border px-4 py-2 text-sm hover:bg-muted"
+                >
                   <LKey k="downloadSDS" />
                 </a>
               )}
@@ -250,7 +169,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
             {/* Add to cart / inquiry */}
             <AddToCart productId={item.id} name={item.name} img={img} packaging={detail.packaging} priceRange={item.priceRange} />
 
-            {/* Properties */}
+            {/* Product Overview */}
             {detail.properties && detail.properties.length > 0 && (
               <div className="mt-8 rounded-2xl border border-foreground/10 bg-background p-5">
                 <h2 className="text-base font-semibold text-foreground"><LKey k="properties" /></h2>
@@ -262,7 +181,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
               </div>
             )}
 
-            {/* Applications */}
+            {/* Use cases */}
             {detail.applications && detail.applications.length > 0 && (
               <div className="mt-5 rounded-2xl border border-foreground/10 bg-background p-5">
                 <h2 className="text-base font-semibold text-foreground"><LKey k="applicationAreas" /></h2>
@@ -274,55 +193,56 @@ export default async function ProductDetailPage({ params }: PageProps) {
               </div>
             )}
 
-{/* Product Specifications */}
-{sampleProduct2.productSpecifications &&
-  sampleProduct2.productSpecifications.length > 0 && (
-    <div className="mt-5 rounded-2xl border border-foreground/10 bg-background p-5">
-      <h2 className="text-base font-semibold text-foreground">
-        Product Specifications
-      </h2>
+            {/* Product Specifications */}
+            {detail.productSpecs &&
+              detail.productSpecs.length > 0 && (
+                <div className="mt-5 rounded-2xl border border-foreground/10 bg-background p-5">
+                  <h2 className="text-base font-semibold text-foreground">
+                    <LKey k="productSpecifications" />
+                  </h2>
 
-      <div className="mt-3 overflow-x-auto">
-        <table className="w-full text-left text-xs">
-          <thead className="text-muted-foreground">
-            <tr className="border-b border-foreground/10">
-              <th className="py-2 pr-3">Title</th>
-              <th className="py-2 pr-3">Description / Notes</th>
-            </tr>
-          </thead>
+                  <div className="mt-3 overflow-x-auto">
+                    <table className="w-full text-left text-xs">
+                      <thead className="text-muted-foreground">
+                        <tr className="border-b border-foreground/10">
+                          <th className="py-2 pr-3"><LKey k="title" /></th>
+                          <th className="py-2 pr-3"><LKey k="descriptionNotes" /></th>
+                        </tr>
+                      </thead>
 
-          <tbody>
-            {sampleProduct2.productSpecifications.map((row, i) => (
-              <tr key={i} className="border-b border-foreground/10">
-                <td className="py-2 pr-3">{row.name}</td>
-                <td className="py-2 pr-3">{row.value ?? "-"}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  )}
-
+                      <tbody>
+                        {detail.productSpecs.map((row, i) => (
+                          <tr key={i} className="border-b border-foreground/10">
+                            <td className="py-2 pr-3"><L value={row.specification} /></td>
+                            <td className="py-2 pr-3"><L value={row.value ?? "-"} /></td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
 
 
             {/* Technical Specifications */}
-            {sampleProduct.technicalSpecs && Object.keys(sampleProduct.technicalSpecs).length > 0 && (
+            {detail.technicalSpecs && detail.technicalSpecs.length > 0 && (
               <div className="mt-5 rounded-2xl border border-foreground/10 bg-background p-5">
-                <h2 className="text-base font-semibold text-foreground">Technical Specifications</h2>
+                <h2 className="text-base font-semibold text-foreground">
+                  <LKey k="technicalSpecifications" />
+                </h2>
                 <div className="mt-3 overflow-x-auto">
                   <table className="w-full text-left text-xs">
                     <thead className="text-muted-foreground">
                       <tr className="border-b border-foreground/10">
-                        <th className="py-2 pr-3">Specification</th>
-                        <th className="py-2 pr-3">Value</th>
+                        <th className="py-2 pr-3"><LKey k="specification" /></th>
+                        <th className="py-2 pr-3"><LKey k="value" /></th>
                       </tr>
                     </thead>
                     <tbody>
-                      {Object.entries(sampleProduct.technicalSpecs).map(([key, value], i) => (
+                      {detail.technicalSpecs.map((row, i) => (
                         <tr key={i} className="border-b border-foreground/10">
-                          <td className="py-2 pr-3">{key.replace(/([A-Z])/g, " $1").replace(/^./, str => str.toUpperCase())}</td>
-                          <td className="py-2 pr-3">{value ?? "-"}</td>
+                          <td className="py-2 pr-3"><L value={row.title ?? "-"} /></td>
+                          <td className="py-2 pr-3"><L value={row.description ?? "-"} /></td>
                         </tr>
                       ))}
                     </tbody>
