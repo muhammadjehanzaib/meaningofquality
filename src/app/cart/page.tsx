@@ -30,11 +30,6 @@ export default function CartPage() {
   const [openShare, setOpenShare] = useState(false);
   // const ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY;
 
-  useEffect(() => {
-  console.log("Web3Forms key:", process.env.NEXT_PUBLIC_WEB3FORMS_KEY);
-}, []);
-
-
   const totalItems = items.reduce((acc, it) => acc + it.qty, 0);
 
   const [isSubmittingQ, setIsSubmittingQ] = useState(false);
