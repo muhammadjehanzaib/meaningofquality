@@ -6,6 +6,7 @@ import { useLang } from "@/hooks/useLang";
 import { pickAny } from "@/data/i18n";
 import { t } from "@/data/labels";
 import { productImageByItemId } from "@/data/assets";
+import Image from "next/image";
 
 export default function Search() {
   const [open, setOpen] = useState(false);
@@ -131,7 +132,7 @@ export default function Search() {
                   >
                     {/* Thumbnail */}
                     <div className="w-14 h-14 flex-shrink-0">
-                      <img
+                      <Image
                         src={productImageByItemId[item.id]}
                         alt={pickAny(item.name, lang)}
                         className="w-full h-full object-contain rounded"

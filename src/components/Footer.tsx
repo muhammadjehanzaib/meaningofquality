@@ -10,143 +10,214 @@ import { t } from "@/data/labels";
 export default function Footer() {
   const lang = useLang();
   return (
-    <footer className="bg-gray-50 border-t border-gray-200 mt-20">
-      <Container className="py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-        {/* Logo & Description */}
-        <div className="flex flex-col gap-4 col-span-1 lg:col-span-1">
-          <div className="flex items-center gap-3">
-            <Image
-              src="/images/logo/sultanlogo.png"
-              alt="Sultan Logo"
-              width={150}
-              height={100}
-              className="object-contain"
-            />
+    <footer className="bg-gradient-to-br from-gray-50 via-white to-gray-50 border-t border-gray-200 mt-20">
+      <Container className="py-12 lg:py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12">
+          {/* Logo & Description */}
+          <div className="flex flex-col gap-4 col-span-1 lg:col-span-1">
+            <div className="flex items-center gap-3">
+              <div className="relative w-[150px] h-[100px]">
+                <Image
+                  src="/images/logo/sultanlogo.png"
+                  alt="Sultan Logo"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            </div>
+            <p className="text-sm text-gray-600 leading-relaxed max-w-sm">
+              {t("footerDescription", lang)}
+            </p>
+            <div className="flex gap-3 mt-2">
+              <a
+                href="#"
+                aria-label="LinkedIn"
+                className="w-9 h-9 flex items-center justify-center rounded-lg bg-gray-100 text-gray-600 hover:bg-gradient-to-br hover:from-purple-500 hover:to-indigo-500 hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-lg"
+              >
+                <FaLinkedin size={18} />
+              </a>
+              <a
+                href="#"
+                aria-label="Instagram"
+                className="w-9 h-9 flex items-center justify-center rounded-lg bg-gray-100 text-gray-600 hover:bg-gradient-to-br hover:from-purple-500 hover:to-indigo-500 hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-lg"
+              >
+                <FaInstagram size={18} />
+              </a>
+              <a
+                href="#"
+                aria-label="Facebook"
+                className="w-9 h-9 flex items-center justify-center rounded-lg bg-gray-100 text-gray-600 hover:bg-gradient-to-br hover:from-purple-500 hover:to-indigo-500 hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-lg"
+              >
+                <FaFacebookF size={18} />
+              </a>
+            </div>
           </div>
-          <p className="text-sm text-gray-500 max-w-sm">
-            {t("footerDescription", lang)}
-          </p>
-          <div className="flex gap-3 mt-2">
-            <a
-              href="#"
-              aria-label="LinkedIn"
-              className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-600 hover:bg-primary hover:text-white transition"
-            >
-              <FaLinkedin size={16} />
-            </a>
-            <a
-              href="#"
-              aria-label="Instagram"
-              className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-600 hover:bg-primary hover:text-white transition"
-            >
-              <FaInstagram size={16} />
-            </a>
-            <a
-              href="#"
-              aria-label="Facebook"
-              className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-600 hover:bg-primary hover:text-white transition"
-            >
-              <FaFacebookF size={16} />
-            </a>
+
+          {/* Products */}
+          <div>
+            <h3 className="text-sm font-bold text-gray-900 mb-4 uppercase tracking-wide">
+              {t("productsSection", lang)}
+            </h3>
+            <ul className="space-y-3 text-gray-600 text-sm">
+              <li>
+                <Link 
+                  href="/categories" 
+                  className="hover:text-indigo-600 transition-colors duration-200 inline-flex items-center gap-2 group"
+                >
+                  <span className="w-1 h-1 rounded-full bg-gray-400 group-hover:bg-indigo-600 transition-colors duration-200"></span>
+                  {t("allProducts", lang)}
+                </Link>
+              </li>
+            </ul>
           </div>
-        </div>
 
-        {/* Products */}
-        <div>
-          <h3 className="text-sm font-semibold text-gray-800 mb-4">{t("productsSection", lang)}</h3>
-          <ul className="space-y-2 text-gray-500 text-sm">
-            <li>
-              <Link href="/categories" className="hover:text-primary transition">
-                {t("allProducts", lang)}
-              </Link>
-            </li>
-          </ul>
-        </div>
+          {/* Company */}
+          <div>
+            <h3 className="text-sm font-bold text-gray-900 mb-4 uppercase tracking-wide">
+              {t("companySection", lang)}
+            </h3>
+            <ul className="space-y-3 text-gray-600 text-sm">
+              <li>
+                <Link 
+                  href="/customer-care/about" 
+                  className="hover:text-indigo-600 transition-colors duration-200 inline-flex items-center gap-2 group"
+                >
+                  <span className="w-1 h-1 rounded-full bg-gray-400 group-hover:bg-indigo-600 transition-colors duration-200"></span>
+                  {t("aboutUs", lang)}
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/customer-care" 
+                  className="hover:text-indigo-600 transition-colors duration-200 inline-flex items-center gap-2 group"
+                >
+                  <span className="w-1 h-1 rounded-full bg-gray-400 group-hover:bg-indigo-600 transition-colors duration-200"></span>
+                  {t("contactUs", lang)}
+                </Link>
+              </li>
+            </ul>
+          </div>
 
-        {/* Company */}
-        <div>
-          <h3 className="text-sm font-semibold text-gray-800 mb-4">{t("companySection", lang)}</h3>
-          <ul className="space-y-2 text-gray-500 text-sm">
-            <li>
-              <Link href="/customer-care/about" className="hover:text-primary transition">
-                {t("aboutUs", lang)}
-              </Link>
-            </li>
-            <li>
-              <Link href="/customer-care" className="hover:text-primary transition">
-                {t("contactUs", lang)}
-              </Link>
-            </li>
-          </ul>
-        </div>
+          {/* Customer Care */}
+          <div>
+            <h3 className="text-sm font-bold text-gray-900 mb-4 uppercase tracking-wide">
+              {t("customerCareSection", lang)}
+            </h3>
+            <ul className="space-y-3 text-gray-600 text-sm">
+              <li>
+                <Link 
+                  href="/customer-care" 
+                  className="hover:text-indigo-600 transition-colors duration-200 inline-flex items-center gap-2 group"
+                >
+                  <span className="w-1 h-1 rounded-full bg-gray-400 group-hover:bg-indigo-600 transition-colors duration-200"></span>
+                  {t("contactUs", lang)}
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/customer-care/faq" 
+                  className="hover:text-indigo-600 transition-colors duration-200 inline-flex items-center gap-2 group"
+                >
+                  <span className="w-1 h-1 rounded-full bg-gray-400 group-hover:bg-indigo-600 transition-colors duration-200"></span>
+                  {t("faq", lang)}
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/customer-care/shopping-guide" 
+                  className="hover:text-indigo-600 transition-colors duration-200 inline-flex items-center gap-2 group"
+                >
+                  <span className="w-1 h-1 rounded-full bg-gray-400 group-hover:bg-indigo-600 transition-colors duration-200"></span>
+                  {t("shoppingGuide", lang)}
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/customer-care/returns" 
+                  className="hover:text-indigo-600 transition-colors duration-200 inline-flex items-center gap-2 group"
+                >
+                  <span className="w-1 h-1 rounded-full bg-gray-400 group-hover:bg-indigo-600 transition-colors duration-200"></span>
+                  {t("returnExchange", lang)}
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/customer-care/privacy" 
+                  className="hover:text-indigo-600 transition-colors duration-200 inline-flex items-center gap-2 group"
+                >
+                  <span className="w-1 h-1 rounded-full bg-gray-400 group-hover:bg-indigo-600 transition-colors duration-200"></span>
+                  {t("privacyPolicy", lang)}
+                </Link>
+              </li>
+            </ul>
+          </div>
 
-        {/* Customer Care */}
-        <div>
-          <h3 className="text-sm font-semibold text-gray-800 mb-4">{t("customerCareSection", lang)}</h3>
-          <ul className="space-y-2 text-gray-500 text-sm">
-            <li>
-              <Link href="/customer-care" className="hover:text-primary transition">
-                {t("contactUs", lang)}
-              </Link>
-            </li>
-            <li>
-              <Link href="/customer-care/faq" className="hover:text-primary transition">
-                {t("faq", lang)}
-              </Link>
-            </li>
-            <li>
-              <Link href="/customer-care/shopping-guide" className="hover:text-primary transition">
-                {t("shoppingGuide", lang)}
-              </Link>
-            </li>
-            <li>
-              <Link href="/customer-care/returns" className="hover:text-primary transition">
-                {t("returnExchange", lang)}
-              </Link>
-            </li>
-            <li>
-              <Link href="/customer-care/privacy" className="hover:text-primary transition">
-                {t("privacyPolicy", lang)}
-              </Link>
-            </li>
-          </ul>
-        </div>
-
-        {/* Legal */}
-        <div>
-          <h3 className="text-sm font-semibold text-gray-800 mb-4">{t("humanRightsSection", lang)}</h3>
-          <ul className="space-y-2 text-gray-500 text-sm">
-            <li>
-              <Link href="/customer-care/humanRightPolicy" className="hover:text-primary transition">
-                {t("humanRightsPolicy", lang)}
-              </Link>
-            </li>
-            <li>
-              <Link href="/customer-care/humanRightsAnalysisProcessDescription" className="hover:text-primary transition">
-                {t("humanRightsAnalysisProcess", lang)}
-              </Link>
-            </li>
-                        <li>
-              <Link href="/customer-care/humanRightsDueDiligance" className="hover:text-primary transition">
-                {t("humanRightsDueDiligance", lang)}
-              </Link>
-            </li>
-            <li>
-              <Link href="/customer-care/supplierIncentiveProcessDescription" className="hover:text-primary transition">
-                {t("supplierIncentiveProcess", lang)}
-              </Link>
-            </li>
-          </ul>
+          {/* Legal */}
+          <div>
+            <h3 className="text-sm font-bold text-gray-900 mb-4 uppercase tracking-wide">
+              {t("humanRightsSection", lang)}
+            </h3>
+            <ul className="space-y-3 text-gray-600 text-sm">
+              <li>
+                <Link 
+                  href="/customer-care/humanRightPolicy" 
+                  className="hover:text-indigo-600 transition-colors duration-200 inline-flex items-center gap-2 group"
+                >
+                  <span className="w-1 h-1 rounded-full bg-gray-400 group-hover:bg-indigo-600 transition-colors duration-200"></span>
+                  {t("humanRightsPolicy", lang)}
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/customer-care/humanRightsAnalysisProcessDescription" 
+                  className="hover:text-indigo-600 transition-colors duration-200 inline-flex items-center gap-2 group"
+                >
+                  <span className="w-1 h-1 rounded-full bg-gray-400 group-hover:bg-indigo-600 transition-colors duration-200"></span>
+                  {t("humanRightsAnalysisProcess", lang)}
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/customer-care/humanRightsDueDiligance" 
+                  className="hover:text-indigo-600 transition-colors duration-200 inline-flex items-center gap-2 group"
+                >
+                  <span className="w-1 h-1 rounded-full bg-gray-400 group-hover:bg-indigo-600 transition-colors duration-200"></span>
+                  {t("humanRightsDueDiligance", lang)}
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/customer-care/supplierIncentiveProcessDescription" 
+                  className="hover:text-indigo-600 transition-colors duration-200 inline-flex items-center gap-2 group"
+                >
+                  <span className="w-1 h-1 rounded-full bg-gray-400 group-hover:bg-indigo-600 transition-colors duration-200"></span>
+                  {t("supplierIncentiveProcess", lang)}
+                </Link>
+              </li>
+            </ul>
+          </div>
         </div>
       </Container>
 
       {/* Bottom */}
-      <div className="border-t border-gray-200">
-        <Container className="py-6 flex flex-col md:flex-row items-center justify-between text-sm text-gray-400 gap-2">
-          <p>{t("copyright", lang).replace("2025", new Date().getFullYear().toString())}</p>
-          <div className="flex gap-4">
-            <Link href="/customer-care/privacy" className="hover:text-primary transition">{t("privacy", lang)}</Link>
-            <Link href="/customer-care/returns" className="hover:text-primary transition">{t("terms", lang)}</Link>
+      <div className="border-t border-gray-200 bg-white/50">
+        <Container className="py-6 flex flex-col md:flex-row items-center justify-between text-sm text-gray-500 gap-4">
+          <p className="font-medium">
+            {t("copyright", lang).replace("2025", new Date().getFullYear().toString())}
+          </p>
+          <div className="flex gap-6">
+            <Link 
+              href="/customer-care/privacy" 
+              className="hover:text-indigo-600 transition-colors duration-200 font-medium"
+            >
+              {t("privacy", lang)}
+            </Link>
+            <Link 
+              href="/customer-care/returns" 
+              className="hover:text-indigo-600 transition-colors duration-200 font-medium"
+            >
+              {t("terms", lang)}
+            </Link>
           </div>
         </Container>
       </div>

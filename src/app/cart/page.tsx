@@ -14,7 +14,7 @@ import ArabicReshaper from 'arabic-reshaper';
 import { pickAny } from "@/data/i18n";
 import type { jsPDF } from "jspdf";
 import { AmiriRegular, AmiriBold } from "@/utils/fonts/amiri";
-import { FaWhatsapp, FaFilePdf } from "react-icons/fa";
+import { FaShareAlt, FaWhatsapp, FaFilePdf } from "react-icons/fa";
 import { HiOutlineMail } from "react-icons/hi";
 
 
@@ -27,8 +27,55 @@ export default function CartPage() {
   const lang = useLang();
   const [info, setInfo] = useState<ClientInfo>({});
   const formRef = useRef<HTMLFormElement>(null);
+  const [openShare, setOpenShare] = useState(false);
+  // const ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY;
+
 
   const totalItems = items.reduce((acc, it) => acc + it.qty, 0);
+
+  const [isSubmittingQ, setIsSubmittingQ] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  const handleSubmitQuotation = async () => {
+    if (!formRef.current || isSubmittingQ) return;
+
+    if (!ensureFormValid()) return;
+
+    try {
+      setIsSubmittingQ(true);
+
+      const formData = new FormData(formRef.current);
+      const itemsMessage = buildWhatsAppMessage(items, info);
+      formData.append("items", itemsMessage);
+
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData,
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setShowSuccess(true);
+
+        // Clear form and cart
+        setInfo({ name: "", company: "", email: "", phone: "", note: "" });
+        // clear();
+
+        // Auto-close success modal after 10 seconds
+        setTimeout(() => setShowSuccess(false), 10000);
+      } else {
+        alert("Submission failed. Please try again.");
+        console.error(result);
+      }
+    } catch (error) {
+      alert("Something went wrong. Please try again.");
+      console.error(error);
+    } finally {
+      setIsSubmittingQ(false);
+    }
+  };
+
 
   const ensureFormValid = (): boolean => {
     const form = formRef.current;
@@ -1129,6 +1176,12 @@ export default function CartPage() {
               <div className="rounded-2xl border border-foreground/10 bg-gradient-to-br from-background to-muted p-4 space-y-3 shadow-sm">
                 <h2 className="text-base font-semibold">{t("yourInfo", lang)}</h2>
                 <form ref={formRef} className="space-y-3">
+                  {/* Your existing input fields remain unchanged */}
+                  <input type="hidden" name="access_key" value={process.env.NEXT_PUBLIC_WEB3FORMS_KEY} />
+                  <input type="hidden" name="subject" value="New Quotation Request" />
+                  <input type="hidden" name="from_name" value="MOQ Website" />
+                  <input type="hidden" name="redirect" value="https://web3forms.com/success" />
+                  <input type="checkbox" name="botcheck" className="hidden" />
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     <input
                       id="name"
@@ -1184,42 +1237,124 @@ export default function CartPage() {
                     onChange={(e) => setInfo((v) => ({ ...v, note: e.target.value }))}
                   />
                 </form>
-                <p className="text-xs text-muted-foreground">
-                  {t("infoNote", lang)}
+                <p className="text-xs text-muted-foreground leading-relaxed whitespace-pre-line">
+                  {t("infoNoteSteps", lang)}
                 </p>
               </div>
 
-              <button
-                className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-white text-sm font-medium transition hover:brightness-110"
-                onClick={handleSendWhatsApp}
-                type="button"
-              >
-                <FaWhatsapp className="h-5 w-5" />
-                {t("sendWhatsAppInquiry", lang)}
-              </button>
+              {/* ACTIONS */}
+              <div className="space-y-3">
+                {/* Submit + Share Row */}
+                <div className="grid grid-cols-4 gap-2">
+                  {/* Submit Quotation */}
+                  <button
+                    className="col-span-3 inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-white text-sm font-semibold shadow-md transition-all duration-200 hover:brightness-110 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                    onClick={handleSubmitQuotation}
+                    type="button"
+                    disabled={isSubmittingQ}
+                  >
+                    {isSubmittingQ ? "Submitting..." : t("submitQuotation", lang)}
+                  </button>
 
-              <button
-                className="w-full inline-flex items-center justify-center gap-2 rounded-lg border px-4 py-2 text-sm transition hover:bg-muted"
-                onClick={handleSendEmail}
-                type="button"
-              >
-                <HiOutlineMail className="h-5 w-5" />
-                {t("sendEmailInquiry", lang)}
-              </button>
+                  {/* Share */}
+                  <button
+                    type="button"
+                    onClick={() => setOpenShare(true)}
+                    className="inline-flex items-center justify-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium shadow-sm transition-all duration-200 hover:bg-muted hover:shadow-md"
+                    aria-label={t("share", lang)}
+                  >
+                    <FaShareAlt className="h-4 w-4" />
+                    {t("share", lang)}
+                  </button>
+                </div>
 
-              <button
-                className="w-full inline-flex items-center justify-center gap-2 rounded-lg border px-4 py-2 text-sm transition hover:bg-muted"
-                onClick={handleDownloadPDF}
-                type="button"
-              >
-                <FaFilePdf className="h-5 w-5" />
-                {t("downloadPDF", lang)}
-              </button>
+                {/* Download PDF */}
+                <button
+                  className="w-full inline-flex items-center justify-center gap-2 rounded-lg border px-4 py-2 text-sm shadow-sm transition-all duration-200 hover:bg-muted hover:shadow-md"
+                  onClick={handleDownloadPDF}
+                  type="button"
+                >
+                  <FaFilePdf className="h-5 w-5" />
+                  {t("downloadPDF", lang)}
+                </button>
 
+                {/* SHARE MODAL */}
+                <div
+                  className={`fixed inset-0 z-40 flex items-center justify-center transition-all duration-300 ${openShare
+                    ? "visible bg-black/50 backdrop-blur-sm opacity-100"
+                    : "invisible opacity-0"
+                    }`}
+                >
+                  {/* Modal Card */}
+                  <div
+                    className={`w-80 max-w-[90%] rounded-xl bg-background p-6 shadow-2xl space-y-4 transform transition-all duration-300 ease-out ${openShare ? "scale-100 opacity-100" : "scale-95 opacity-0"
+                      }`}
+                  >
+                    {/* Title */}
+                    <h3 className="text-lg font-semibold text-center">
+                      {t("shareVia", lang)}
+                    </h3>
+
+                    {/* WhatsApp */}
+                    <button
+                      className="flex w-full items-center justify-center gap-3 rounded-lg bg-green-600 px-4 py-2 text-white text-sm font-medium shadow-md transition-all duration-200 hover:brightness-110 hover:scale-[1.02]"
+                      onClick={() => {
+                        handleSendWhatsApp();
+                        setOpenShare(false);
+                      }}
+                    >
+                      <FaWhatsapp className="h-5 w-5" />
+                      {t("whatsapp", lang)}
+
+                    </button>
+
+                    {/* Email */}
+                    <button
+                      className="flex w-full items-center justify-center gap-3 rounded-lg border px-4 py-2 text-sm font-medium shadow-sm transition-all duration-200 hover:bg-muted hover:scale-[1.02]"
+                      onClick={() => {
+                        handleSendEmail();
+                        setOpenShare(false);
+                      }}
+                    >
+                      <HiOutlineMail className="h-5 w-5" />
+                      {t("email", lang)}
+                    </button>
+
+                    {/* Cancel */}
+                    <button
+                      className="w-full pt-2 text-sm text-muted-foreground transition hover:text-red-600"
+                      onClick={() => setOpenShare(false)}
+                    >
+                      {t("cancel", lang)}
+                    </button>
+                  </div>
+                </div>
+              </div>
             </aside>
           </div>
         )}
       </Container>
+
+      {/* SUCCESS MODAL */}
+      {showSuccess && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+          <div className="bg-white dark:bg-background rounded-xl p-6 shadow-2xl text-center w-80 max-w-[90%]">
+            {t("thankyou", lang)}
+            <h3 className="text-lg font-semibold mb-2"></h3>
+            <p className="text-sm text-muted-foreground">
+              {t("thankSubmited", lang)}
+            </p>
+            <button
+              className="mt-4 inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-white text-sm font-semibold shadow-md transition-all duration-200 hover:brightness-110"
+              onClick={() => setShowSuccess(false)}
+            >
+              {t("submitClose", lang)}
+
+            </button>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
