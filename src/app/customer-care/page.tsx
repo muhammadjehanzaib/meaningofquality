@@ -5,19 +5,23 @@ import Container from "@/components/ui/Container";
 import { Mail, Phone, MapPin, MessageCircle, Clock } from "lucide-react";
 import { useLang } from "@/hooks/useLang";
 import CustomerCareSidebar from "@/components/customer-care/CustomerCareSidebar";
+import { FaClock, FaEnvelope, FaMapMarkerAlt, FaPhoneAlt } from 'react-icons/fa';
+import CustomerCareFooter from './footer';
 
 export default function CustomerCarePage() {
   const lang = useLang();
   const isAr = lang === "ar";
-    return (
+  return (
     <div className="min-h-screen bg-gray-50">
       {/* Breadcrumb */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <nav className="flex text-sm text-gray-500">
-            <Link href="/" className="hover:text-purple-600">Home</Link>
+            <Link href="/" className="hover:text-purple-600">              {isAr ? "الرئيسية" : "Home"}
+            </Link>
             <span className="mx-2">&gt;</span>
-            <Link href="/customer-care" className="hover:text-purple-600">Customer Care</Link>
+            <Link href="/customer-care" className="hover:text-purple-600">              {isAr ? "خدمة العملاء" : "Customer Care"}
+            </Link>
             <span className="mx-2">&gt;</span>
             <span className="text-gray-900">{isAr ? "تواصل معنا" : "Contact Us"}</span>
           </nav>
@@ -92,31 +96,7 @@ export default function CustomerCarePage() {
       </div>
 
       {/* Footer / Company Info */}
-      <footer className="bg-white border-t py-8">
-        <Container>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-sm text-gray-600">
-            <div>
-              <h3 className="font-medium text-gray-900 mb-2">{isAr ? "السعودية للسلامة" : "The Meaning of Quality Trading Establishment"}</h3>
-              <p className="whitespace-pre-line">
-                <strong>Address:</strong>{" "}
-                Jarallah Bin Fahad Street{"\n"}
-                Al Jazeerah District 14262{"\n"}
-                Riyadh, Saudi Arabia
-              </p>
-
-              <p><strong>Contact Number:</strong> +966 590 019 826</p>
-            </div>
-            <div>
-              <p><strong>{isAr ? "لخدمات ما بعد البيع:" : "After Sales Service:"}</strong> +966 590 019 826</p>
-              <p><strong>Email:</strong> <a href="mailto:sales@moq.com.sa" className="text-purple-600 hover:underline">sales@moq.com.sa</a></p>
-            </div>
-            <div>
-              <p><strong>{isAr ? "ساعات عمل مركز الاتصال:" : "Call Center Working Hours:"}</strong> Sunday – Thursday: 9:00 AM – 6:00 PM</p>
-              <p>{isAr ? "للموقع والفروع:" : "For showroom locations & hours"} <Link href="https://maps.app.goo.gl/JHX2DVrRzomWQjeE8?g_st=ipc" className="text-purple-600 hover:underline">Store locations</Link></p>
-            </div>
-          </div>
-        </Container>
-      </footer>
+      <CustomerCareFooter/>
     </div>
   );
 }

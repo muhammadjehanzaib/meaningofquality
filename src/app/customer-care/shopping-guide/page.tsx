@@ -10,6 +10,9 @@ import {
   FaWhatsapp,
   FaEnvelope,
   FaFilePdf,
+  FaMapMarkerAlt,
+  FaClock,
+  FaPhoneAlt,
 } from "react-icons/fa";
 
 
@@ -253,51 +256,76 @@ export default function HowToRequestQuotationPage() {
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="bg-white border-t py-8">
-        <Container>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-sm text-gray-600">
-            <div>
-              <h3 className="font-medium text-gray-900 mb-2">
-                {isAr ? "منشأة معنى الجودة التجارية" : "The Meaning of Quality Trading Establishment"}
-              </h3>
-              <p className="whitespace-pre-line">
-                <strong>{isAr ? "العنوان:" : "Address:"}</strong>{" "}
-                Jarallah Bin Fahad Street{"\n"}
-                Al Jazeerah District 14262{"\n"}
-                Riyadh, Saudi Arabia
-              </p>
-              <p><strong>{isAr ? "رقم التواصل:" : "Contact Number:"}</strong> +966 590 019 826</p>
+    
+        <footer className="bg-white border-t py-12">
+          <Container>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-gray-700">
+    
+              {/* Company Info */}
+              <div className="space-y-4 p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300">
+                <h3 className="text-lg font-semibold text-gray-900">
+                  {isAr ? "السعودية للسلامة" : "The Meaning of Quality Trading Establishment"}
+                </h3>
+                <div className="flex items-start gap-3">
+                  <FaMapMarkerAlt className="mt-1 text-purple-600" />
+                  <p className="whitespace-pre-line text-sm">
+                    {isAr
+                      ? "الشارع: جار الله بن فهد\nالحي: الجزيرة 14262\nالرياض، المملكة العربية السعودية"
+                      : "Jarallah Bin Fahad Street\nAl Jazeerah District 14262\nRiyadh, Saudi Arabia"}
+                  </p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <FaPhoneAlt className="text-purple-600" />
+                  <p className="text-sm" dir="ltr">+966 590 019 826</p>
+                </div>
+              </div>
+    
+              {/* Contact Info */}
+              <div className="space-y-4 p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300">
+                <div className="flex items-center gap-3">
+                  <FaPhoneAlt className="text-purple-600" />
+                  <p className="text-sm">
+                    <strong>{isAr ? "خدمات ما بعد البيع:" : "After Sales Service:"}</strong>{" "}
+                    <span dir="ltr">+966 590 019 826</span>
+                  </p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <FaEnvelope className="text-purple-600" />
+                  <p className="text-sm">
+                    <strong>Email:</strong>{" "}
+                    <a href="mailto:sales@moq.com.sa" className="text-purple-600 hover:underline">
+                      sales@moq.com.sa
+                    </a>
+                  </p>
+                </div>
+              </div>
+    
+              {/* Call Center & Location */}
+              <div className="space-y-4 p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300">
+                <div className="flex items-center gap-3">
+                  <FaClock className="text-purple-600" />
+                  <p className="text-sm">
+                    <strong>{isAr ? "ساعات عمل مركز الاتصال:" : "Call Center Working Hours:"}</strong>{" "}
+                    <span dir="ltr">Sunday – Thursday: 9:00 AM – 6:00 PM</span>
+                  </p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <FaMapMarkerAlt className="text-purple-600" />
+                  <p className="text-sm">
+                    {isAr ? "للموقع والفروع:" : "For showroom locations & hours"}{" "}
+                    <Link
+                      href="https://maps.app.goo.gl/JHX2DVrRzomWQjeE8?g_st=ipc"
+                      className="text-purple-600 hover:underline"
+                    >
+                      {isAr ? "مواقع المتاجر" : "Store locations"}
+                    </Link>
+                  </p>
+                </div>
+              </div>
+    
             </div>
-
-            <div>
-              <p><strong>{isAr ? "خدمة ما بعد البيع:" : "After Sales Service:"}</strong> +966 590 019 826</p>
-              <p>
-                <strong>Email:</strong>{" "}
-                <a href="mailto:sales@moq.com.sa" className="text-purple-600 hover:underline">
-                  sales@moq.com.sa
-                </a>
-              </p>
-            </div>
-
-            <div>
-              <p>
-                <strong>{isAr ? "ساعات العمل:" : "Working Hours:"}</strong>{" "}
-                Sunday – Thursday: 9:00 AM – 6:00 PM
-              </p>
-              <p>
-                {isAr ? "للموقع والفروع:" : "For showroom locations & hours"}{" "}
-                <Link
-                  href="https://maps.app.goo.gl/JHX2DVrRzomWQjeE8?g_st=ipc"
-                  className="text-purple-600 hover:underline"
-                >
-                  {isAr ? "مواقع الفروع" : "Store locations"}
-                </Link>
-              </p>
-            </div>
-          </div>
-        </Container>
-      </footer>
+          </Container>
+        </footer>
     </div>
   );
 }
