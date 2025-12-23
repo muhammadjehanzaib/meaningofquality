@@ -1,17 +1,19 @@
 'use client';
 
 import React from 'react';
-// import { useLanguage } from '@/contexts/LanguageContext';
 import Link from 'next/link';
 import Container from '@/components/ui/Container';
 import { useLang } from "@/hooks/useLang";
 import CustomerCareSidebar from '@/components/customer-care/CustomerCareSidebar';
+import {
+  FaClipboardCheck,
+  FaWhatsapp,
+  FaEnvelope,
+  FaFilePdf,
+} from "react-icons/fa";
 
-// import { Footer } from '@/components';
 
-export default function ShoppingGuidePage() {
-  // const { t, isRTL, language } = useLanguage();
-
+export default function HowToRequestQuotationPage() {
   const lang = useLang();
   const isAr = lang === "ar";
 
@@ -21,11 +23,17 @@ export default function ShoppingGuidePage() {
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <nav className="flex text-sm text-gray-500">
-            <Link href="/" className="hover:text-purple-600">Home</Link>
+            <Link href="/" className="hover:text-purple-600">
+              {isAr ? "الرئيسية" : "Home"}
+            </Link>
             <span className="mx-2">&gt;</span>
-            <Link href="/customer-care" className="hover:text-purple-600">Customer Care</Link>
+            <Link href="/customer-care" className="hover:text-purple-600">
+              {isAr ? "خدمة العملاء" : "Customer Care"}
+            </Link>
             <span className="mx-2">&gt;</span>
-            <span className="text-gray-900">Shopping Guide</span>
+            <span className="text-gray-900">
+              {isAr ? "كيفية طلب عرض سعر" : "How to Request a Quotation"}
+            </span>
           </nav>
         </div>
       </div>
@@ -38,160 +46,204 @@ export default function ShoppingGuidePage() {
           {/* Main Content */}
           <div className="lg:col-span-3">
             <div className="bg-white rounded-lg shadow-sm border p-8">
-              <h1 className="text-3xl font-bold text-gray-900 mb-8">Shopping Guide</h1>
+              <h1 className="text-3xl font-bold text-gray-900 mb-8">
+                {isAr ? "كيفية طلب عرض سعر" : "How to Request a Quotation"}
+              </h1>
 
               {/* Quick Start */}
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
                 <h2 className="text-xl font-semibold text-blue-900 mb-3 flex items-center">
                   <span className="text-2xl mr-3">ℹ️</span>
-                  Quick Start
+                  {isAr ? "نظرة سريعة" : "Quick Overview"}
                 </h2>
-                <p className="text-blue-800">Follow these simple steps to place your order smoothly.</p>
+                <p className="text-blue-800">
+                  {isAr
+                    ? "تم تصميم هذه المنصة لخدمة الشركات والمقاولين والجهات الحكومية لطلب عروض أسعار رسمية لمعدات السلامة والمنتجات الصناعية دون الحاجة إلى الدفع الإلكتروني المباشر."
+                    : "This platform is designed for businesses, contractors, and organizations to request official quotations for safety and industrial products. No direct online payment is required."}
+                </p>
               </div>
 
-              {/* Steps to Shop */}
               <div className="space-y-8">
+                {/* Step 1 */}
                 <div>
                   <h2 className="text-2xl font-semibold text-gray-900 mb-4 flex items-center">
                     <span className="w-8 h-8 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center text-sm font-bold mr-3">
                       1
                     </span>
-                    How to Shop on SaudiSafety
+                    {isAr
+                      ? "كيفية طلب عرض سعر من منشأة معنى الجودة التجارية"
+                      : "How to Request a Quotation from The Meaning of Quality Trading Establishment"}
                   </h2>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="text-center p-6 bg-gray-50 rounded-lg border">
                       <div className="w-12 h-12 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 text-xl">1</div>
-                      <h3 className="font-medium text-gray-900 mb-2">Browse & Discover</h3>
-                      <p className="text-sm text-gray-600">Explore categories or use search to find products. Check images, details, and reviews.</p>
+                      <h3 className="font-medium text-gray-900 mb-2">
+                        {isAr ? "تصفح المنتجات" : "Browse Products"}
+                      </h3>
+                      <p className="text-sm text-gray-600">
+                        {isAr
+                          ? "استعرض المنتجات واطلع على المواصفات الفنية والشهادات والمستندات المتوفرة."
+                          : "Explore products and review specifications, certifications, and available technical documents."}
+                      </p>
                     </div>
+
                     <div className="text-center p-6 bg-gray-50 rounded-lg border">
                       <div className="w-12 h-12 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 text-xl">2</div>
-                      <h3 className="font-medium text-gray-900 mb-2">Add to Cart</h3>
-                      <p className="text-sm text-gray-600">Choose quantity, size, or color (if available), then add items to your cart.</p>
+                      <h3 className="font-medium text-gray-900 mb-2">
+                        {isAr ? "إضافة إلى قائمة عرض السعر" : "Add to Quotation List"}
+                      </h3>
+                      <p className="text-sm text-gray-600">
+                        {isAr
+                          ? "حدد الكميات المطلوبة وأضف المنتجات إلى قائمة عرض السعر دون أي التزام."
+                          : "Select required quantities and add products to your quotation list with no commitment."}
+                      </p>
                     </div>
+
                     <div className="text-center p-6 bg-gray-50 rounded-lg border">
                       <div className="w-12 h-12 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 text-xl">3</div>
-                      <h3 className="font-medium text-gray-900 mb-2">Checkout Securely</h3>
-                      <p className="text-sm text-gray-600">Sign in or continue as guest, fill in shipping details, and choose payment method.</p>
+                      <h3 className="font-medium text-gray-900 mb-2">
+                        {isAr ? "إرسال طلب عرض السعر" : "Submit Quotation Request"}
+                      </h3>
+                      <p className="text-sm text-gray-600">
+                        {isAr
+                          ? "أدخل بيانات المنشأة وسيقوم فريق المبيعات بالتواصل معك بالأسعار والتوفر."
+                          : "Submit your company details and our sales team will contact you with pricing and availability."}
+                      </p>
                     </div>
                   </div>
                 </div>
 
-                {/* Payments */}
+                {/* Quotation Submission Methods */}
                 <div>
                   <h2 className="text-2xl font-semibold text-gray-900 mb-4 flex items-center">
                     <span className="w-8 h-8 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center text-sm font-bold mr-3">
                       2
                     </span>
-                    Payment Methods
+                    {isAr
+                      ? "طرق إرسال طلب عرض السعر"
+                      : "Quotation Submission Methods"}
                   </h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                      <h3 className="font-medium text-green-900 mb-2">Online Payments</h3>
-                      <ul className="text-sm text-green-800 space-y-1">
-                        <li>• Visa, Mastercard, Mada</li>
-                        <li>• STC Pay</li>
-                        <li>• Stripe (secured)</li>
-                      </ul>
+
+                  <p className="text-gray-600 mb-6">
+                    {isAr
+                      ? "بعد تجهيز قائمة المنتجات وبيانات الاتصال، يمكنك اختيار إحدى الطرق التالية لإرسال طلب عرض السعر."
+                      : "After preparing your product list and contact details, choose one of the following methods to submit your quotation request."}
+                  </p>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {/* Direct System */}
+                    <div className="bg-gray-50 border rounded-lg p-6 text-center hover:shadow-sm transition">
+                      <FaClipboardCheck className="text-purple-600 text-4xl mx-auto mb-4" />
+                      <h3 className="font-medium text-gray-900 mb-2">
+                        {isAr ? "الإرسال عبر النظام" : "Direct System"}
+                      </h3>
+                      <p className="text-sm text-gray-600">
+                        {isAr
+                          ? "إرسال طلب عرض السعر مباشرة من خلال الموقع."
+                          : "Submit your quotation request directly through the website system."}
+                      </p>
                     </div>
-                    <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                      <h3 className="font-medium text-yellow-900 mb-2">Cash on Delivery</h3>
-                      <p className="text-sm text-yellow-800">Available for eligible areas. Additional handling fee may apply.</p>
+
+                    {/* WhatsApp */}
+                    <div className="bg-gray-50 border rounded-lg p-6 text-center hover:shadow-sm transition">
+                      <FaWhatsapp className="text-green-600 text-4xl mx-auto mb-4" />
+                      <h3 className="font-medium text-gray-900 mb-2">
+                        {isAr ? "واتساب" : "WhatsApp"}
+                      </h3>
+                      <p className="text-sm text-gray-600">
+                        {isAr
+                          ? "مشاركة قائمة عرض السعر عبر واتساب."
+                          : "Share your quotation list with us via WhatsApp."}
+                      </p>
+                    </div>
+
+                    {/* Email */}
+                    <div className="bg-gray-50 border rounded-lg p-6 text-center hover:shadow-sm transition">
+                      <FaEnvelope className="text-blue-600 text-4xl mx-auto mb-4" />
+                      <h3 className="font-medium text-gray-900 mb-2">
+                        {isAr ? "البريد الإلكتروني" : "Email"}
+                      </h3>
+                      <p className="text-sm text-gray-600">
+                        {isAr
+                          ? "إرسال طلب عرض السعر عبر البريد الإلكتروني."
+                          : "Send your quotation request via email."}
+                      </p>
+                    </div>
+
+                    {/* PDF */}
+                    <div className="bg-gray-50 border rounded-lg p-6 text-center hover:shadow-sm transition">
+                      <FaFilePdf className="text-red-600 text-4xl mx-auto mb-4" />
+                      <h3 className="font-medium text-gray-900 mb-2">
+                        {isAr ? "تحميل ملف PDF" : "Download PDF"}
+                      </h3>
+                      <p className="text-sm text-gray-600">
+                        {isAr
+                          ? "تحميل عرض السعر بصيغة PDF ومشاركته عبر واتساب أو البريد الإلكتروني."
+                          : "Download the quotation as a PDF and share it via WhatsApp or Email."}
+                      </p>
                     </div>
                   </div>
+                </div>
+
+
+                {/* Pricing */}
+                <div>
+                  <h2 className="text-2xl font-semibold text-gray-900 mb-4 flex items-center">
+                    <span className="w-8 h-8 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center text-sm font-bold mr-3">
+                      3
+                    </span>
+                    {isAr ? "الأسعار وشروط الدفع" : "Pricing & Payment Terms"}
+                  </h2>
+
+                  <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4">
+                    <li>{isAr ? "يتم مشاركة الأسعار عبر عرض سعر رسمي" : "Pricing is shared through official quotations"}</li>
+                    <li>{isAr ? "أسعار خاصة للكميات الكبيرة والمشاريع" : "Special pricing for bulk and project orders"}</li>
+                    <li>{isAr ? "توفير فواتير ضريبية" : "VAT invoices provided"}</li>
+                    <li>{isAr ? "يتم الاتفاق على شروط الدفع بعد اعتماد العرض" : "Payment terms agreed after quotation approval"}</li>
+                  </ul>
                 </div>
 
                 {/* Delivery */}
                 <div>
                   <h2 className="text-2xl font-semibold text-gray-900 mb-4 flex items-center">
                     <span className="w-8 h-8 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center text-sm font-bold mr-3">
-                      3
+                      4
                     </span>
-                    Delivery & Shipping
+                    {isAr ? "التوصيل والخدمات اللوجستية" : "Delivery & Logistics"}
                   </h2>
+
                   <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4">
-                    <li>Standard: 2-5 business days within KSA</li>
-                    <li>Express: 1-2 business days in major cities</li>
-                    <li>Remote areas may take extra 1-2 days</li>
-                    <li>Free shipping for orders over 200 SAR</li>
+                    <li>{isAr ? "يتم تحديد مواعيد التسليم في عرض السعر" : "Delivery timelines confirmed in the quotation"}</li>
+                    <li>{isAr ? "توصيل لجميع مناطق المملكة" : "Nationwide delivery across Saudi Arabia"}</li>
+                    <li>{isAr ? "دعم الطلبات الكبيرة والمشاريع" : "Support for bulk and project deliveries"}</li>
                   </ul>
                 </div>
 
-                {/* Sizing & Fit */}
-                <div>
-                  <h2 className="text-2xl font-semibold text-gray-900 mb-4 flex items-center">
-                    <span className="w-8 h-8 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center text-sm font-bold mr-3">
-                      4
-                    </span>
-                    Sizing & Measurements
-                  </h2>
-                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 text-gray-700">
-                    <p className="mb-2">Always refer to the size guide on the product page. If between sizes, consider checking customer reviews or contacting support for advice.</p>
-                    <p className="text-sm">Tip: Measure a similar item you own and compare with the size chart for best results.</p>
-                  </div>
-                </div>
-
-                {/* Promotions */}
-                <div>
-                  <h2 className="text-2xl font-semibold text-gray-900 mb-4 flex items-center">
-                    <span className="w-8 h-8 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center text-sm font-bold mr-3">
-                      5
-                    </span>
-                    Promotions & Coupons
-                  </h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="border border-gray-200 rounded-lg p-4">
-                      <h3 className="font-medium text-gray-900 mb-2">Applying Coupons</h3>
-                      <p className="text-sm text-gray-600">Enter your coupon code at checkout. Valid codes will be applied immediately to your order total.</p>
-                    </div>
-                    <div className="border border-gray-200 rounded-lg p-4">
-                      <h3 className="font-medium text-gray-900 mb-2">Best Deals</h3>
-                      <p className="text-sm text-gray-600">Subscribe to our newsletter and follow us on social media to be the first to know about exclusive offers.</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Troubleshooting */}
-                <div>
-                  <h2 className="text-2xl font-semibold text-gray-900 mb-4 flex items-center">
-                    <span className="w-8 h-8 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center text-sm font-bold mr-3">
-                      6
-                    </span>
-                    Troubleshooting & Help
-                  </h2>
-                  <div className="space-y-3 text-gray-700">
-                    <div className="border-l-4 border-blue-500 pl-4">
-                      <h3 className="font-medium text-gray-900">Payment Declined</h3>
-                      <p className="text-sm">Check card details, available balance, and 3D Secure prompts. Try another method or contact your bank.</p>
-                    </div>
-                    <div className="border-l-4 border-yellow-500 pl-4">
-                      <h3 className="font-medium text-gray-900">Order Not Placed</h3>
-                      <p className="text-sm">If you didn&apos;t receive an order confirmation email, check your spam folder or contact support with any charges shown.</p>
-                    </div>
-                    <div className="border-l-4 border-green-500 pl-4">
-                      <h3 className="font-medium text-gray-900">Change or Cancel Order</h3>
-                      <p className="text-sm">Orders can be modified before shipping. Visit My Orders or contact support promptly.</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Contact CTA */}
+                {/* CTA */}
                 <div className="mt-4 p-6 bg-purple-50 rounded-lg border border-purple-200">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Need personalized help?</h3>
-                  <p className="text-gray-600 mb-4">Our customer support team is happy to guide you through product selection and checkout.</p>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                    {isAr ? "هل تحتاج مساعدة في عرض السعر؟" : "Need help with your quotation?"}
+                  </h3>
+                  <p className="text-gray-600 mb-4">
+                    {isAr
+                      ? "فريق المبيعات لدينا جاهز لمساعدتك في اختيار المنتجات وتقديم الدعم."
+                      : "Our sales team is ready to assist you with product selection and quotation support."}
+                  </p>
+
                   <div className="flex flex-col sm:flex-row gap-3">
                     <Link
                       href="/customer-care"
                       className="inline-flex items-center justify-center px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors"
                     >
-                      Contact Support
+                      {isAr ? "التواصل مع الدعم" : "Contact Sales"}
                     </Link>
+
                     <a
-                      href="tel:8003314444"
+                      href="tel:+966590019826"
                       className="inline-flex items-center justify-center px-4 py-2 border border-purple-300 text-purple-700 rounded-md hover:bg-purple-100 transition-colors"
                     >
-                      Call: 800-331-4444
+                      {isAr ? "اتصال" : "Call"}: +966 590 019 826
                     </a>
                   </div>
                 </div>
@@ -200,34 +252,52 @@ export default function ShoppingGuidePage() {
           </div>
         </div>
       </div>
-      {/* Footer / Company Info */}
+
+      {/* Footer */}
       <footer className="bg-white border-t py-8">
         <Container>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-sm text-gray-600">
             <div>
-              <h3 className="font-medium text-gray-900 mb-2">{isAr ? "السعودية للسلامة" : "The Meaning of Quality Trading Establishment"}</h3>
+              <h3 className="font-medium text-gray-900 mb-2">
+                {isAr ? "منشأة معنى الجودة التجارية" : "The Meaning of Quality Trading Establishment"}
+              </h3>
               <p className="whitespace-pre-line">
-                <strong>Address:</strong>{" "}
+                <strong>{isAr ? "العنوان:" : "Address:"}</strong>{" "}
                 Jarallah Bin Fahad Street{"\n"}
                 Al Jazeerah District 14262{"\n"}
                 Riyadh, Saudi Arabia
               </p>
+              <p><strong>{isAr ? "رقم التواصل:" : "Contact Number:"}</strong> +966 590 019 826</p>
+            </div>
 
-              <p><strong>Contact Number:</strong> +966 590 019 826</p>
-            </div>
             <div>
-              <p><strong>{isAr ? "لخدمات ما بعد البيع:" : "After Sales Service:"}</strong> +966 590 019 826</p>
-              <p><strong>Email:</strong> <a href="mailto:sales@moq.com.sa" className="text-purple-600 hover:underline">sales@moq.com.sa</a></p>
+              <p><strong>{isAr ? "خدمة ما بعد البيع:" : "After Sales Service:"}</strong> +966 590 019 826</p>
+              <p>
+                <strong>Email:</strong>{" "}
+                <a href="mailto:sales@moq.com.sa" className="text-purple-600 hover:underline">
+                  sales@moq.com.sa
+                </a>
+              </p>
             </div>
+
             <div>
-              <p><strong>{isAr ? "ساعات عمل مركز الاتصال:" : "Call Center Working Hours:"}</strong> Sunday – Thursday: 9:00 AM – 6:00 PM</p>
-              <p>{isAr ? "للموقع والفروع:" : "For showroom locations & hours"} <Link href="https://maps.app.goo.gl/JHX2DVrRzomWQjeE8?g_st=ipc" className="text-purple-600 hover:underline">Store locations</Link></p>
+              <p>
+                <strong>{isAr ? "ساعات العمل:" : "Working Hours:"}</strong>{" "}
+                Sunday – Thursday: 9:00 AM – 6:00 PM
+              </p>
+              <p>
+                {isAr ? "للموقع والفروع:" : "For showroom locations & hours"}{" "}
+                <Link
+                  href="https://maps.app.goo.gl/JHX2DVrRzomWQjeE8?g_st=ipc"
+                  className="text-purple-600 hover:underline"
+                >
+                  {isAr ? "مواقع الفروع" : "Store locations"}
+                </Link>
+              </p>
             </div>
           </div>
         </Container>
       </footer>
-      {/* <Footer /> */}
     </div>
   );
 }
-

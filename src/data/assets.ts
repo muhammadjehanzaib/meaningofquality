@@ -1,7 +1,7 @@
 export type Banner = { src: string; alt: string; href?: string };
 
 export const sliderBanners: Banner[] = [
-  { src: "/images/sliders/100AQ-aquarium-silicone.jpg", alt: "Aquarium silicone sealant banner" },
+  { src: "/images/sliders/banner.jpg", alt: "Thermcoat thermal acoustic insulation spray foam" },
   { src: "/images/sliders/705-universal-fast-adhesive.jpg", alt: "705 Universal Fast Adhesive banner" },
   { src: "/images/sliders/967P-fast-adhesive.jpg", alt: "967P Fast Adhesive banner" },
   { src: "/images/sliders/Aquazero.jpg", alt: "Aquazero waterproofing banner" },
@@ -12,6 +12,7 @@ export const sliderBanners: Banner[] = [
   { src: "/images/sliders/akfix-safe-use-handling-of-diisocyanates-trainings.jpg", alt: "Safe use and handling of diisocyanates training" },
   { src: "/images/sliders/akfix-spray-paint-banner-en.jpg", alt: "Akfix spray paint color range" },
   { src: "/images/sliders/thermcoat-thermal-acoustic-insulation-spray-foam_en.jpg", alt: "Thermcoat thermal acoustic insulation spray foam" },
+  { src: "/images/sliders/100AQ-aquarium-silicone.jpg", alt: "Aquarium silicone sealant banner" },
 ];
 
 export const categoryIconById: Record<string, string> = {

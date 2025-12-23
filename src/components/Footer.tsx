@@ -59,12 +59,12 @@ export default function Footer() {
               {t("productsSection", lang)}
             </h3>
             <ul className="space-y-3 text-gray-600 text-sm">
-              <li>
+              <li className="flex items-center gap-2">
+                <span className="text-indigo-600 font-bold">➤</span>
                 <Link 
                   href="/categories" 
-                  className="hover:text-indigo-600 transition-colors duration-200 inline-flex items-center gap-2 group"
+                  className="hover:text-indigo-600 transition-colors duration-200"
                 >
-                  <span className="w-1 h-1 rounded-full bg-gray-400 group-hover:bg-indigo-600 transition-colors duration-200"></span>
                   {t("allProducts", lang)}
                 </Link>
               </li>
@@ -77,21 +77,21 @@ export default function Footer() {
               {t("companySection", lang)}
             </h3>
             <ul className="space-y-3 text-gray-600 text-sm">
-              <li>
+              <li className="flex items-center gap-2">
+                <span className="text-indigo-600 font-bold">➤</span>
                 <Link 
                   href="/customer-care/about" 
-                  className="hover:text-indigo-600 transition-colors duration-200 inline-flex items-center gap-2 group"
+                  className="hover:text-indigo-600 transition-colors duration-200"
                 >
-                  <span className="w-1 h-1 rounded-full bg-gray-400 group-hover:bg-indigo-600 transition-colors duration-200"></span>
                   {t("aboutUs", lang)}
                 </Link>
               </li>
-              <li>
+              <li className="flex items-center gap-2">
+                <span className="text-indigo-600 font-bold">➤</span>
                 <Link 
                   href="/customer-care" 
-                  className="hover:text-indigo-600 transition-colors duration-200 inline-flex items-center gap-2 group"
+                  className="hover:text-indigo-600 transition-colors duration-200"
                 >
-                  <span className="w-1 h-1 rounded-full bg-gray-400 group-hover:bg-indigo-600 transition-colors duration-200"></span>
                   {t("contactUs", lang)}
                 </Link>
               </li>
@@ -104,93 +104,93 @@ export default function Footer() {
               {t("customerCareSection", lang)}
             </h3>
             <ul className="space-y-3 text-gray-600 text-sm">
-              <li>
+              <li className="flex items-center gap-2">
+                <span className="text-indigo-600 font-bold">➤</span>
                 <Link 
                   href="/customer-care" 
-                  className="hover:text-indigo-600 transition-colors duration-200 inline-flex items-center gap-2 group"
+                  className="hover:text-indigo-600 transition-colors duration-200"
                 >
-                  <span className="w-1 h-1 rounded-full bg-gray-400 group-hover:bg-indigo-600 transition-colors duration-200"></span>
                   {t("contactUs", lang)}
                 </Link>
               </li>
-              <li>
+              <li className="flex items-center gap-2">
+                <span className="text-indigo-600 font-bold">➤</span>
                 <Link 
                   href="/customer-care/faq" 
-                  className="hover:text-indigo-600 transition-colors duration-200 inline-flex items-center gap-2 group"
+                  className="hover:text-indigo-600 transition-colors duration-200"
                 >
-                  <span className="w-1 h-1 rounded-full bg-gray-400 group-hover:bg-indigo-600 transition-colors duration-200"></span>
                   {t("faq", lang)}
                 </Link>
               </li>
-              <li>
+              <li className="flex items-center gap-2">
+                <span className="text-indigo-600 font-bold">➤</span>
                 <Link 
                   href="/customer-care/shopping-guide" 
-                  className="hover:text-indigo-600 transition-colors duration-200 inline-flex items-center gap-2 group"
+                  className="hover:text-indigo-600 transition-colors duration-200"
                 >
-                  <span className="w-1 h-1 rounded-full bg-gray-400 group-hover:bg-indigo-600 transition-colors duration-200"></span>
                   {t("shoppingGuide", lang)}
                 </Link>
               </li>
-              <li>
+              <li className="flex items-center gap-2">
+                <span className="text-indigo-600 font-bold">➤</span>
                 <Link 
                   href="/customer-care/returns" 
-                  className="hover:text-indigo-600 transition-colors duration-200 inline-flex items-center gap-2 group"
+                  className="hover:text-indigo-600 transition-colors duration-200"
                 >
-                  <span className="w-1 h-1 rounded-full bg-gray-400 group-hover:bg-indigo-600 transition-colors duration-200"></span>
                   {t("returnExchange", lang)}
                 </Link>
               </li>
-              <li>
+              <li className="flex items-center gap-2">
+                <span className="text-indigo-600 font-bold">➤</span>
                 <Link 
                   href="/customer-care/privacy" 
-                  className="hover:text-indigo-600 transition-colors duration-200 inline-flex items-center gap-2 group"
+                  className="hover:text-indigo-600 transition-colors duration-200"
                 >
-                  <span className="w-1 h-1 rounded-full bg-gray-400 group-hover:bg-indigo-600 transition-colors duration-200"></span>
                   {t("privacyPolicy", lang)}
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Legal */}
+          {/* Human Rights / Legal */}
           <div>
             <h3 className="text-sm font-bold text-gray-900 mb-4 uppercase tracking-wide">
               {t("humanRightsSection", lang)}
             </h3>
             <ul className="space-y-3 text-gray-600 text-sm">
-              <li>
+              <li className="flex items-center gap-2">
+                <span className="text-indigo-600 font-bold">➤</span>
                 <Link 
                   href="/customer-care/humanRightPolicy" 
-                  className="hover:text-indigo-600 transition-colors duration-200 inline-flex items-center gap-2 group"
+                  className="hover:text-indigo-600 transition-colors duration-200"
                 >
-                  <span className="w-1 h-1 rounded-full bg-gray-400 group-hover:bg-indigo-600 transition-colors duration-200"></span>
                   {t("humanRightsPolicy", lang)}
                 </Link>
               </li>
-              <li>
+              <li className="flex items-center gap-2">
+                <span className="text-indigo-600 font-bold">➤</span>
                 <Link 
                   href="/customer-care/humanRightsAnalysisProcessDescription" 
-                  className="hover:text-indigo-600 transition-colors duration-200 inline-flex items-center gap-2 group"
+                  className="hover:text-indigo-600 transition-colors duration-200"
                 >
-                  <span className="w-1 h-1 rounded-full bg-gray-400 group-hover:bg-indigo-600 transition-colors duration-200"></span>
                   {t("humanRightsAnalysisProcess", lang)}
                 </Link>
               </li>
-              <li>
+              <li className="flex items-center gap-2">
+                <span className="text-indigo-600 font-bold">➤</span>
                 <Link 
                   href="/customer-care/humanRightsDueDiligance" 
-                  className="hover:text-indigo-600 transition-colors duration-200 inline-flex items-center gap-2 group"
+                  className="hover:text-indigo-600 transition-colors duration-200"
                 >
-                  <span className="w-1 h-1 rounded-full bg-gray-400 group-hover:bg-indigo-600 transition-colors duration-200"></span>
                   {t("humanRightsDueDiligance", lang)}
                 </Link>
               </li>
-              <li>
+              <li className="flex items-center gap-2">
+                <span className="text-indigo-600 font-bold">➤</span>
                 <Link 
                   href="/customer-care/supplierIncentiveProcessDescription" 
-                  className="hover:text-indigo-600 transition-colors duration-200 inline-flex items-center gap-2 group"
+                  className="hover:text-indigo-600 transition-colors duration-200"
                 >
-                  <span className="w-1 h-1 rounded-full bg-gray-400 group-hover:bg-indigo-600 transition-colors duration-200"></span>
                   {t("supplierIncentiveProcess", lang)}
                 </Link>
               </li>
