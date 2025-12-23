@@ -9,7 +9,7 @@ import { useLang } from "@/hooks/useLang";
 import { t } from "@/data/labels";
 import { WHATSAPP_NUMBER } from "@/data/site";
 import { buildWhatsAppMessage, type ClientInfo } from "@/utils/whatsapp";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ArabicReshaper from 'arabic-reshaper';
 import { pickAny } from "@/data/i18n";
 import type { jsPDF } from "jspdf";
@@ -29,6 +29,10 @@ export default function CartPage() {
   const formRef = useRef<HTMLFormElement>(null);
   const [openShare, setOpenShare] = useState(false);
   // const ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY;
+
+  useEffect(() => {
+  console.log("Web3Forms key:", process.env.NEXT_PUBLIC_WEB3FORMS_KEY);
+}, []);
 
 
   const totalItems = items.reduce((acc, it) => acc + it.qty, 0);
