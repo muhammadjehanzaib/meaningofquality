@@ -85,7 +85,7 @@ export const labels = {
   contactUs: { en: "Contact Us", ar: "اتصل بنا" },
   customerCareSection: { en: "Customer Care", ar: "خدمة العملاء" },
   faq: { en: "FAQ", ar: "الأسئلة الشائعة" },
-  shoppingGuide: { en: "Shopping Guide", ar: "دليل التسوق" },
+  shoppingGuide: { en: "How to Request a Quotation", ar: "دليل التسوق" },
   returnExchange: { en: "Return & Exchange", ar: "الإرجاع والتبادل" },
   privacyPolicy: { en: "Privacy Policy", ar: "سياسة الخصوصية" },
   humanRightsSection: { en: "Human Rights", ar: "حقوق الإنسان" },
