@@ -4,9 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Users, Target, Award, Clock } from "lucide-react";
 import { useLang } from "@/hooks/useLang";
-import Container from '@/components/ui/Container';
 import CustomerCareSidebar from '@/components/customer-care/CustomerCareSidebar';
-import { FaClock, FaEnvelope, FaMapMarkerAlt, FaPhoneAlt } from 'react-icons/fa';
 import CustomerCareFooter from '../footer';
 
 export default function AboutPage() {

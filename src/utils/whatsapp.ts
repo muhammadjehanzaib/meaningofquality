@@ -35,3 +35,4 @@ export function buildWhatsAppMessage(items: CartItem[], info: ClientInfo = {}): 
   lines.push(`Total items: ${total}`);
   return lines.join("\n");
 }
+

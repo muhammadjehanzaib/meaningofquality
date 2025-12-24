@@ -1,11 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import Container from "@/components/ui/Container";
 import { Mail, Phone, MapPin, MessageCircle, Clock } from "lucide-react";
 import { useLang } from "@/hooks/useLang";
 import CustomerCareSidebar from "@/components/customer-care/CustomerCareSidebar";
-import { FaClock, FaEnvelope, FaMapMarkerAlt, FaPhoneAlt } from 'react-icons/fa';
 import CustomerCareFooter from './footer';
 
 export default function CustomerCarePage() {

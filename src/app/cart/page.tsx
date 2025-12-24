@@ -9,7 +9,7 @@ import { useLang } from "@/hooks/useLang";
 import { t } from "@/data/labels";
 import { WHATSAPP_NUMBER } from "@/data/site";
 import { buildWhatsAppMessage, type ClientInfo } from "@/utils/whatsapp";
-import { useEffect, useRef, useState } from "react";
+import {useRef, useState } from "react";
 import ArabicReshaper from 'arabic-reshaper';
 import { pickAny } from "@/data/i18n";
 import type { jsPDF } from "jspdf";
@@ -31,49 +31,43 @@ export default function CartPage() {
   // const ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY;
 
   const totalItems = items.reduce((acc, it) => acc + it.qty, 0);
+const [isSubmittingQ, setIsSubmittingQ] = useState(false);
+const [showSuccess, setShowSuccess] = useState(false);
 
-  const [isSubmittingQ, setIsSubmittingQ] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
+const handleSubmitQuotation = async () => {
+  if (!formRef.current || isSubmittingQ) return;
+  if (!ensureFormValid()) return;
 
-  const handleSubmitQuotation = async () => {
-    if (!formRef.current || isSubmittingQ) return;
+  try {
+    setIsSubmittingQ(true);
+    const response = await fetch("/api/submitQuotation", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...info, items }),
+    });
 
-    if (!ensureFormValid()) return;
+    const result = await response.json();
 
-    try {
-      setIsSubmittingQ(true);
+    if (result.success) {
+      setShowSuccess(true);
 
-      const formData = new FormData(formRef.current);
-      const itemsMessage = buildWhatsAppMessage(items, info);
-      formData.append("items", itemsMessage);
+      // Don't clear cart or form if user wants to send WhatsApp/email/PDF
+      // setInfo({ name: "", company: "", email: "", phone: "", note: "" });
 
-      const response = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        body: formData,
-      });
-
-      const result = await response.json();
-
-      if (result.success) {
-        setShowSuccess(true);
-
-        // Clear form and cart
-        setInfo({ name: "", company: "", email: "", phone: "", note: "" });
-        // clear();
-
-        // Auto-close success modal after 10 seconds
-        setTimeout(() => setShowSuccess(false), 10000);
-      } else {
-        alert("Submission failed. Please try again.");
-        console.error(result);
-      }
-    } catch (error) {
-      alert("Something went wrong. Please try again.");
-      console.error(error);
-    } finally {
-      setIsSubmittingQ(false);
+      // Auto-close success modal after 10 seconds
+      setTimeout(() => setShowSuccess(false), 10000);
+    } else {
+      alert("Submission failed: " + result.message);
+      console.error(result);
     }
-  };
+  } catch (error) {
+    alert("Something went wrong. Please try again.");
+    console.error(error);
+  } finally {
+    setIsSubmittingQ(false);
+  }
+};
+
 
 
   const ensureFormValid = (): boolean => {
@@ -109,13 +103,7 @@ export default function CartPage() {
   };
 
 
-  // Complete handleDownloadPDF with Arabic support - FIXED VERSION
 
-  // Complete bilingual handleDownloadPDF function
-  // Replace your existing handleDownloadPDF with this
-
-  // Complete bilingual handleDownloadPDF function
-  // Replace your existing handleDownloadPDF with this
 
   const handleDownloadPDF = async () => {
     if (!ensureFormValid()) return;
@@ -1334,25 +1322,21 @@ export default function CartPage() {
         )}
       </Container>
 
-      {/* SUCCESS MODAL */}
       {showSuccess && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
-          <div className="bg-white dark:bg-background rounded-xl p-6 shadow-2xl text-center w-80 max-w-[90%]">
-            {t("thankyou", lang)}
-            <h3 className="text-lg font-semibold mb-2"></h3>
-            <p className="text-sm text-muted-foreground">
-              {t("thankSubmited", lang)}
-            </p>
+          <div className="bg-white dark:bg-background rounded-xl p-6 shadow-2xl text-center w-80 max-w-[90%] animate-fade-in scale-up">
+            <h2 className="text-lg font-semibold mb-2">{t("thankyou", lang)}</h2>
+            <p className="text-sm text-muted-foreground">{t("thankSubmited", lang)}</p>
             <button
               className="mt-4 inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-white text-sm font-semibold shadow-md transition-all duration-200 hover:brightness-110"
               onClick={() => setShowSuccess(false)}
             >
               {t("submitClose", lang)}
-
             </button>
           </div>
         </div>
       )}
+
 
     </div>
   );

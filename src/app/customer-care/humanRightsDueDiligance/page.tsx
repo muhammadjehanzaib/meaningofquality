@@ -3,8 +3,6 @@
 import Link from 'next/link';
 import { useLang } from "@/hooks/useLang";
 import CustomerCareSidebar from '@/components/customer-care/CustomerCareSidebar';
-import Container from '@/components/ui/Container';
-import { FaClock, FaEnvelope, FaMapMarkerAlt, FaPhoneAlt } from 'react-icons/fa';
 import CustomerCareFooter from '../footer';
 
 
@@ -285,8 +283,6 @@ export default function HumanRightsDueDiligencePage() {
                 </main>
             </div>
             <CustomerCareFooter />
-
         </div>
-
     );
 }
