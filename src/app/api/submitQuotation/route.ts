@@ -61,20 +61,35 @@ function formatItems(items: QuotationItem[]) {
 export async function POST(req: Request) {
   try {
     const data: QuotationData = await req.json();
+    console.log("Received data:", data);
 
     const itemsText = formatItems(data.items || []);
+    console.log("Formatted items:", itemsText);
+
+    // Check if environment variables are set
+    if (!process.env.NEXT_PUBLIC_GMAIL_USER || !process.env.NEXT_PUBLIC_GMAIL_APP_PASSWORD) {
+      console.error("Missing environment variables");
+      return NextResponse.json(
+        { success: false, message: "Email configuration is missing" },
+        { status: 500 }
+      );
+    }
+
+    console.log("Creating transporter with user:", process.env.NEXT_PUBLIC_GMAIL_USER);
 
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: process.env.NEXT_PUBLIC_GMAIL_USER!,
-        pass: process.env.NEXT_PUBLIC_GMAIL_APP_PASSWORD!,
+        user: process.env.NEXT_PUBLIC_GMAIL_USER,
+        pass: process.env.NEXT_PUBLIC_GMAIL_APP_PASSWORD,
       },
     });
 
+    console.log("Sending email...");
+
     await transporter.sendMail({
       from: process.env.NEXT_PUBLIC_GMAIL_USER,
-      to: process.env.NEXT_PUBLIC_GMAIL_USER, // You can add multiple recipients
+      to: process.env.NEXT_PUBLIC_GMAIL_USER,
       subject: "New Quotation Request",
       text: `
 Name: ${data.name}
@@ -90,10 +105,17 @@ Total items: ${data.items?.length || 0}
       `,
     });
 
+    console.log("Email sent successfully");
+
     return NextResponse.json({ success: true, message: "Email sent!" });
   } catch (error) {
     console.error("Email Error:", error);
     const errorMessage = error instanceof Error ? error.message : "Email failed";
+    const errorStack = error instanceof Error ? error.stack : undefined;
+    
+    console.error("Error message:", errorMessage);
+    console.error("Error stack:", errorStack);
+    
     return NextResponse.json(
       { success: false, message: errorMessage },
       { status: 500 }
