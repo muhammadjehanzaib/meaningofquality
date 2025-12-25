@@ -89,21 +89,6 @@ export default function Search() {
 
   return (
     <>
-      {/* <button
-        type="button"
-        className="
-    relative flex h-10 w-10 items-center justify-center rounded-full
-    bg-gray-600 text-white
-    shadow-lg shadow-gray-500/50
-    transform transition-all duration-900
-    hover:scale-110 hover:shadow-xl
-  "
-        aria-label="Search"
-      >
-        <FiSearch className="w-5 h-5 animate-pulse" />
-      </button> */}
-
-
       <button
         type="button"
         className="
@@ -115,6 +100,8 @@ export default function Search() {
     animate-pulse
   "
         aria-label="Search"
+        onClick={() => setOpen(true)}
+
       >
         <FiSearch className="w-6 h-6 text-white animate-ping-slow" />
       </button>
