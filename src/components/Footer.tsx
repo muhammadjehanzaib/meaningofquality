@@ -10,7 +10,7 @@ import { t } from "@/data/labels";
 export default function Footer() {
   const lang = useLang();
   return (
-    <footer className="bg-gradient-to-br from-gray-50 via-white to-gray-50 border-t border-gray-200 mt-20">
+    <footer className="bg-gradient-to-br bg-gray-200 mt-20">
       <Container className="py-12 lg:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12">
           {/* Logo & Description */}
@@ -30,21 +30,22 @@ export default function Footer() {
             </p>
             <div className="flex gap-3 mt-2">
               <a
-                href="#"
+                href="https://www.linkedin.com/company/moqtradingest/"
                 aria-label="LinkedIn"
+
                 className="w-9 h-9 flex items-center justify-center rounded-lg bg-gray-100 text-gray-600 hover:bg-gradient-to-br hover:from-purple-500 hover:to-indigo-500 hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-lg"
               >
                 <FaLinkedin size={18} />
               </a>
               <a
-                href="#"
+                href="https://www.instagram.com/moqtrading2016/"
                 aria-label="Instagram"
                 className="w-9 h-9 flex items-center justify-center rounded-lg bg-gray-100 text-gray-600 hover:bg-gradient-to-br hover:from-purple-500 hover:to-indigo-500 hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-lg"
               >
                 <FaInstagram size={18} />
               </a>
               <a
-                href="#"
+                href="https://www.facebook.com/MOQTradingEst"
                 aria-label="Facebook"
                 className="w-9 h-9 flex items-center justify-center rounded-lg bg-gray-100 text-gray-600 hover:bg-gradient-to-br hover:from-purple-500 hover:to-indigo-500 hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-lg"
               >
@@ -61,8 +62,8 @@ export default function Footer() {
             <ul className="space-y-3 text-gray-600 text-sm">
               <li className="flex items-center gap-2">
                 <span className="text-indigo-600 font-bold">➤</span>
-                <Link 
-                  href="/categories" 
+                <Link
+                  href="/categories"
                   className="hover:text-indigo-600 transition-colors duration-200"
                 >
                   {t("allProducts", lang)}
@@ -79,8 +80,8 @@ export default function Footer() {
             <ul className="space-y-3 text-gray-600 text-sm">
               <li className="flex items-center gap-2">
                 <span className="text-indigo-600 font-bold">➤</span>
-                <Link 
-                  href="/customer-care/about" 
+                <Link
+                  href="/customer-care/about"
                   className="hover:text-indigo-600 transition-colors duration-200"
                 >
                   {t("aboutUs", lang)}
@@ -88,13 +89,24 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <span className="text-indigo-600 font-bold">➤</span>
-                <Link 
-                  href="/customer-care" 
+                <Link
+                  href="/customer-care/termsOfBusiness"
                   className="hover:text-indigo-600 transition-colors duration-200"
                 >
-                  {t("contactUs", lang)}
+                  {t("termsOfBusiness", lang)}
                 </Link>
               </li>
+
+              <li className="flex items-center gap-2">
+                <span className="text-indigo-600 font-bold">➤</span>
+                <Link
+                  href="/customer-care/supplierIncentiveProcessDescription"
+                  className="hover:text-indigo-600 transition-colors duration-200"
+                >
+                  {t("supplierIncentiveProcess", lang)}
+                </Link>
+              </li>
+
             </ul>
           </div>
 
@@ -106,8 +118,8 @@ export default function Footer() {
             <ul className="space-y-3 text-gray-600 text-sm">
               <li className="flex items-center gap-2">
                 <span className="text-indigo-600 font-bold">➤</span>
-                <Link 
-                  href="/customer-care" 
+                <Link
+                  href="/customer-care"
                   className="hover:text-indigo-600 transition-colors duration-200"
                 >
                   {t("contactUs", lang)}
@@ -115,17 +127,8 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <span className="text-indigo-600 font-bold">➤</span>
-                <Link 
-                  href="/customer-care/faq" 
-                  className="hover:text-indigo-600 transition-colors duration-200"
-                >
-                  {t("faq", lang)}
-                </Link>
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="text-indigo-600 font-bold">➤</span>
-                <Link 
-                  href="/customer-care/shopping-guide" 
+                <Link
+                  href="/customer-care/shopping-guide"
                   className="hover:text-indigo-600 transition-colors duration-200"
                 >
                   {t("shoppingGuide", lang)}
@@ -133,8 +136,17 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <span className="text-indigo-600 font-bold">➤</span>
-                <Link 
-                  href="/customer-care/returns" 
+                <Link
+                  href="/customer-care/faq"
+                  className="hover:text-indigo-600 transition-colors duration-200"
+                >
+                  {t("faq", lang)}
+                </Link>
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="text-indigo-600 font-bold">➤</span>
+                <Link
+                  href="/customer-care/returns"
                   className="hover:text-indigo-600 transition-colors duration-200"
                 >
                   {t("returnExchange", lang)}
@@ -142,8 +154,8 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <span className="text-indigo-600 font-bold">➤</span>
-                <Link 
-                  href="/customer-care/privacy" 
+                <Link
+                  href="/customer-care/privacy"
                   className="hover:text-indigo-600 transition-colors duration-200"
                 >
                   {t("privacyPolicy", lang)}
@@ -160,8 +172,8 @@ export default function Footer() {
             <ul className="space-y-3 text-gray-600 text-sm">
               <li className="flex items-center gap-2">
                 <span className="text-indigo-600 font-bold">➤</span>
-                <Link 
-                  href="/customer-care/humanRightPolicy" 
+                <Link
+                  href="/customer-care/humanRightPolicy"
                   className="hover:text-indigo-600 transition-colors duration-200"
                 >
                   {t("humanRightsPolicy", lang)}
@@ -169,8 +181,8 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <span className="text-indigo-600 font-bold">➤</span>
-                <Link 
-                  href="/customer-care/humanRightsAnalysisProcessDescription" 
+                <Link
+                  href="/customer-care/humanRightsAnalysisProcessDescription"
                   className="hover:text-indigo-600 transition-colors duration-200"
                 >
                   {t("humanRightsAnalysisProcess", lang)}
@@ -178,49 +190,42 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <span className="text-indigo-600 font-bold">➤</span>
-                <Link 
-                  href="/customer-care/humanRightsDueDiligance" 
+                <Link
+                  href="/customer-care/humanRightsDueDiligance"
                   className="hover:text-indigo-600 transition-colors duration-200"
                 >
                   {t("humanRightsDueDiligance", lang)}
                 </Link>
               </li>
-              <li className="flex items-center gap-2">
-                <span className="text-indigo-600 font-bold">➤</span>
-                <Link 
-                  href="/customer-care/supplierIncentiveProcessDescription" 
-                  className="hover:text-indigo-600 transition-colors duration-200"
-                >
-                  {t("supplierIncentiveProcess", lang)}
-                </Link>
-              </li>
+
             </ul>
           </div>
         </div>
       </Container>
 
       {/* Bottom */}
-      <div className="border-t border-gray-200 bg-white/50">
-        <Container className="py-6 flex flex-col md:flex-row items-center justify-between text-sm text-gray-500 gap-4">
-          <p className="font-medium">
-            {t("copyright", lang).replace("2025", new Date().getFullYear().toString())}
-          </p>
-          <div className="flex gap-6">
-            <Link 
-              href="/customer-care/privacy" 
-              className="hover:text-indigo-600 transition-colors duration-200 font-medium"
+      <div className="border-t border-gray-200 bg-gradient-to-b from-white to-gray-50">
+        <Container className="py-10">
+          <div className="flex justify-center text-center">
+            <p
+              className={`
+          max-w-5xl
+          text-sm md:text-[15px]
+          leading-loose
+          font-normal
+          text-gray-600
+          tracking-wide
+          ${lang === "ar" ? "rtl text-[16px] leading-[2.2] tracking-normal" : ""}
+        `}
             >
-              {t("privacy", lang)}
-            </Link>
-            <Link 
-              href="/customer-care/returns" 
-              className="hover:text-indigo-600 transition-colors duration-200 font-medium"
-            >
-              {t("terms", lang)}
-            </Link>
+              {t("copyright", lang)}
+            </p>
           </div>
         </Container>
       </div>
+
+
+
     </footer>
   );
 }

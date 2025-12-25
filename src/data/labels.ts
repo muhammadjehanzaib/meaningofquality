@@ -38,7 +38,7 @@ export const labels = {
   quantity: { en: "Quantity", ar: "الكمية" },
   remove: { en: "Remove", ar: "إزالة" },
   clearCart: { en: "Clear Quote", ar: "مسح العرض" },
-  emptyCart: { en: "No items in your quotation list.", ar: " لا توجد منتجات في قائمة عرض السعر" },
+  emptyCart: { en: "Your quotation list is currently empty. Please click the button below to add products.", ar:"قائمة عرض السعر فارغة حالياً. يرجى الضغط على الزر أدناه لإضافة المنتجات." },
   items: { en: "Items", ar: "العناصر" },
   yourInfo: { en: "Your Info", ar: "معلوماتك" },
   name: { en: "Name", ar: "الاسم" },
@@ -93,7 +93,11 @@ export const labels = {
   humanRightsAnalysisProcess: { en: "Human Rights Analysis Process", ar: "عملية تحليل حقوق الإنسان" },
   humanRightsDueDiligance: { en: "Human Rights Due Diligance", ar: "الفحص الواجب لحقوق الإنسان" },
   supplierIncentiveProcess: { en: "Supplier Incentive Process", ar: "عملية حوافز الموردين" },
-  copyright: { en: "© 2025 Sultan Co. All rights reserved.", ar: "© 2025 شركة سلطان. جميع الحقوق محفوظة." },
+  copyright: {
+  en: "Copyright © 2026. The Meaning of Quality Trading Establishment. CR. No. 1010545178. VAT No. 300018855900003. All Rights Reserved.",
+  ar: "جميع الحقوق محفوظة © ٢٠٢٦. مؤسسة معنى الجودة للتجارة. س.ت. ١٠١٠٥٤٥١٧٨. الرقم الضريبي ٣٠٠٠١٨٨٥٥٩٠٠٠٠٣"
+},
+
   privacy: { en: "Privacy", ar: "الخصوصية" },
   terms: { en: "Terms", ar: "الشروط" },
   productSpecifications: { en: "Product Specifications", ar: "مواصفات المنتج" },
@@ -134,7 +138,12 @@ export const labels = {
   },
   submitClose: { en: "Close", ar: "يغلق" },
   whatsapp:{en:"WhatsApp", ar:"واتس اب"},
-
+  addtoquotepara: {
+    en:"Add more products from the products page using \“Add to Quote\”. \n Clears all items from the quote list using “Clear Quote.”",
+    ar:"أضف المزيد من المنتجات من صفحة المنتجات باستخدام \"إضافة إلى عرض السعر\". امسح جميع العناصر من قائمة عرض السعر باستخدام \"مسح عرض السعر\"."
+  },
+  customerCare: {en:"Customer Care", ar:"رعاية العملاء"},
+  termsOfBusiness: {en:"Terms of Buisness", ar:"شروط العمل"}
 } as const;
 
 

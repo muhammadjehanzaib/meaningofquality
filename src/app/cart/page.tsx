@@ -315,7 +315,7 @@ const handleSubmitQuotation = async () => {
 
     // ===== HEADER BAR =====
     const drawHeaderBar = (showInquiry: boolean) => {
-      doc.setFillColor(COLORS.primary.r, COLORS.primary.g, COLORS.primary.b);
+      doc.setFillColor(106, 106, 106);
       doc.rect(0, 0, pageW, DIMENSIONS.headerBarH, "F");
 
       if (showInquiry) {
@@ -615,12 +615,12 @@ const handleSubmitQuotation = async () => {
         maxWidth: pageW - DIMENSIONS.margin * 2 - 30
       });
 
-      doc.setTextColor(100);
-      drawText(labels.scanQR, genX, genY + 20, {
-        fontSize: 7,
-        align: isArabic ? "right" : "left"
-      });
-      doc.setTextColor(0);
+      // doc.setTextColor(100);
+      // drawText(labels.scanQR, genX, genY + 20, {
+      //   fontSize: 7,
+      //   align: isArabic ? "right" : "left"
+      // });
+      // doc.setTextColor(0);
 
       const qrData = await generateQR(inquiryNumber);
       const qrSize = 24;
@@ -971,14 +971,14 @@ const handleSubmitQuotation = async () => {
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
             {t("cartTitle", lang)}
           </h1>
-          {totalItems > 0 && (
+          {/* {totalItems > 0 && (
             <div className="text-sm text-muted-foreground">
               {t("items", lang)}:{" "}
               <span className="font-semibold text-foreground">
                 {totalItems}
               </span>
             </div>
-          )}
+          )} */}
         </div>
 
         {items.length === 0 ? (
@@ -1007,7 +1007,7 @@ const handleSubmitQuotation = async () => {
                 href="/categories"
                 className="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-white text-sm hover:brightness-110"
               >
-                {t("addProducts", lang)}
+              {t("continueShopping", lang)}
               </Link>
             </div>
           </div>
@@ -1144,6 +1144,12 @@ const handleSubmitQuotation = async () => {
                 <div className="text-sm text-muted-foreground">{t("items", lang)}</div>
                 <div className="text-2xl font-bold">{totalItems}</div>
                 <div className="mt-3 grid grid-cols-2 gap-2">
+                  <Link
+                    href="/categories"
+                    className="inline-flex items-center justify-center rounded-lg border px-3 py-2 text-sm hover:bg-muted"
+                  >
+                    {t("continueShopping", lang)}
+                  </Link>
                   <button
                     className="rounded-lg border px-3 py-2 text-sm hover:bg-muted"
                     onClick={() => clear()}
@@ -1151,13 +1157,8 @@ const handleSubmitQuotation = async () => {
                   >
                     {t("clearCart", lang)}
                   </button>
-                  <Link
-                    href="/categories"
-                    className="inline-flex items-center justify-center rounded-lg border px-3 py-2 text-sm hover:bg-muted"
-                  >
-                    {t("continueShopping", lang)}
-                  </Link>
                 </div>
+                <p className="text-xs mt-4 ml-3">{t("addtoquotepara", lang)}</p>
               </div>
 
               <div className="rounded-2xl border border-foreground/10 bg-gradient-to-br from-background to-muted p-4 space-y-3 shadow-sm">

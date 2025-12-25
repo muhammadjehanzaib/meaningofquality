@@ -180,18 +180,19 @@ export default function CartDrawer() {
           {/* Footer */}
           <footer className="border-t border-foreground/10 p-4 space-y-2">
             <Link
+              className="inline-flex w-full items-center justify-center rounded-lg border px-4 py-2 text-sm hover:bg-muted"
+              onClick={closeDrawer}
+              href="/categories"
+            >
+              {t("continueShopping", lang)}
+            </Link>
+            <Link
               href="/cart"
               className="inline-flex w-full items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white hover:brightness-110"
               onClick={closeDrawer}
             >
               {t("goToCart", lang)}
             </Link>
-            <button
-              className="inline-flex w-full items-center justify-center rounded-lg border px-4 py-2 text-sm hover:bg-muted"
-              onClick={closeDrawer}
-            >
-              {t("continueShopping", lang)}
-            </button>
           </footer>
         </div>
       </aside>

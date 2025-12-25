@@ -56,7 +56,8 @@ export const newProducts: Item[] = [
   { id: "np-5", name: { en: "E360 Plast Weld", ar: "E360 بلاست ويلد" }, categoryId: "adhesives", subcategoryId: "plastic", priceRange: { min: 10, max: 20 }, Brand : "Sultan" },
   { id: "np-6", name: { en: "HB262 Hybrid Wood Flooring Adhesive", ar: "HB262 لاصق هجين لأرضيات الخشب" }, categoryId: "adhesives", subcategoryId: "hybrid", priceRange: { min: 10, max: 20 }, Brand : "Sultan" },
   { id: "840P", name: { en: "840P B2 Fire Rated PU Gun Foam", ar: "840P لاصق هجين لأرضيات الخشب" }, categoryId: "adhesives", subcategoryId: "wood", priceRange: { min: 10, max: 100 }, Brand : "Sultan" },
-  { id: "np-1765966726374", name: { en: "New Product testing New things", ar: "منتج جديد" }, categoryId: "adhesives", subcategoryId: "plastic", priceRange: { min: 20, max: 60 }, Brand : "Sultan" }
+  { id: "np-1765966726374", name: { en: "New Product testing New things", ar: "منتج جديد" }, categoryId: "adhesives", subcategoryId: "plastic", priceRange: { min: 20, max: 60 }, Brand : "Sultan" },
+  { id: "np-1766645310521", name: { en: "Testing Item", ar: "منتج جديد" }, categoryId: "adhesives", subcategoryId: "wood", priceRange: { min: 10, max: 50 }, Brand : "Sultan" }
 ];
 
 export const mostVisited: Item[] = [

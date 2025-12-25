@@ -1,26 +1,47 @@
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { allItems, categories } from "@/data/catalog";
 import { useLang } from "@/hooks/useLang";
 import { pickAny } from "@/data/i18n";
 import { t } from "@/data/labels";
 import { productImageByItemId } from "@/data/assets";
 import Image from "next/image";
+import { FiSearch } from "react-icons/fi";
 
 export default function Search() {
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState("");
   const lang = useLang();
+  const modalRef = useRef<HTMLDivElement | null>(null);
 
-  // Close modal on Escape
+  // Close on Escape
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
     window.addEventListener("keydown", handleEsc);
     return () => window.removeEventListener("keydown", handleEsc);
   }, []);
 
-  // Highlight match helper
+  // Close when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    if (open) document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [open]);
+
+  // Prevent body scroll when open
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
+  // Highlight matches
   const highlightMatch = (text: string, query: string) => {
     if (!query) return text;
     const parts = text.split(new RegExp(`(${query})`, "gi"));
@@ -36,25 +57,18 @@ export default function Search() {
       </>
     );
   };
+
+  // Format price
   const formatPrice = (amount: number) => {
     if (lang === "ar") {
-      // Arabic numerals + SAR text
-      const formatted = new Intl.NumberFormat("ar-EG", {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      }).format(amount);
+      const formatted = new Intl.NumberFormat("ar-EG", { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(amount);
       return `${formatted} ريال`;
     } else {
-      // English numerals + SAR symbol
-      return new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "SAR",
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      }).format(amount);
+      return new Intl.NumberFormat("en-US", { style: "currency", currency: "SAR", minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(amount);
     }
   };
 
+  // Filtered results
   const filtered = useMemo(() => {
     const query = q.trim().toLowerCase();
     if (!query) return [] as typeof allItems;
@@ -67,6 +81,7 @@ export default function Search() {
     });
   }, [q, lang]);
 
+  // Get category title
   const getCategoryTitle = (id: string) => {
     const cat = categories.find((c) => c.id === id);
     return cat ? pickAny(cat.title, lang) : id;
@@ -74,28 +89,42 @@ export default function Search() {
 
   return (
     <>
-      {/* Search Button */}
+      {/* <button
+        type="button"
+        className="
+    relative flex h-10 w-10 items-center justify-center rounded-full
+    bg-gray-600 text-white
+    shadow-lg shadow-gray-500/50
+    transform transition-all duration-900
+    hover:scale-110 hover:shadow-xl
+  "
+        aria-label="Search"
+      >
+        <FiSearch className="w-5 h-5 animate-pulse" />
+      </button> */}
+
+
       <button
         type="button"
-        className="inline-flex h-9 w-9 items-center justify-center rounded hover:bg-muted transition"
-        aria-label={t("search", lang)}
-        onClick={() => setOpen(true)}
+        className="
+    relative flex h-10 w-10 items-center justify-center rounded-full
+    bg-gray-600 text-white
+    shadow-lg shadow-gray-500/50
+    transform transition-all duration-300
+    hover:scale-110 hover:shadow-xl
+    animate-pulse
+  "
+        aria-label="Search"
       >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-          <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2" />
-          <path d="M20 20l-3.5-3.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-        </svg>
+        <FiSearch className="w-6 h-6 text-white animate-ping-slow" />
       </button>
 
       {/* Search Modal */}
       {open && (
-        <div
-          className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 p-4"
-          onClick={() => setOpen(false)}
-        >
+        <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 p-4">
           <div
+            ref={modalRef}
             className="relative w-full max-w-3xl rounded-lg bg-background p-4 shadow-lg ring-1 ring-black/10 animate-fadeIn"
-            onClick={(e) => e.stopPropagation()}
           >
             {/* Input */}
             <div className="flex items-center gap-2 border-b border-muted pb-2">
@@ -131,11 +160,12 @@ export default function Search() {
                     className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted transition"
                   >
                     {/* Thumbnail */}
-                    <div className="w-14 h-14 flex-shrink-0">
+                    <div className="relative w-14 h-14 flex-shrink-0">
                       <Image
                         src={productImageByItemId[item.id]}
                         alt={pickAny(item.name, lang)}
-                        className="w-full h-full object-contain rounded"
+                        fill
+                        className="object-contain rounded"
                       />
                     </div>
 
@@ -145,11 +175,12 @@ export default function Search() {
                         {highlightMatch(pickAny(item.name, lang), q)}
                       </div>
                       <div className="text-xs text-muted-foreground flex flex-wrap gap-2 mt-1">
-                        {/* <span className="font-semibold">{highlightMatch(item.id, q)}</span> */}
                         <span>{highlightMatch(getCategoryTitle(item.categoryId), q)}</span>
                         <span>{highlightMatch(item.Brand, q)}</span>
                         {item.priceRange && (
-                          <span className="font-semibold">• {formatPrice(item.priceRange.min)} - {formatPrice(item.priceRange.max)}</span>
+                          <span className="font-semibold">
+                            • {formatPrice(item.priceRange.min)} - {formatPrice(item.priceRange.max)}
+                          </span>
                         )}
                       </div>
                     </div>

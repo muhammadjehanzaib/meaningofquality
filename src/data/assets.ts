@@ -1,7 +1,7 @@
 export type Banner = { src: string; alt: string; href?: string };
 
 export const sliderBanners: Banner[] = [
-  { src: "/images/sliders/banner.jpg", alt: "Thermcoat thermal acoustic insulation spray foam" },
+  { src: "/images/sliders/100AQ-aquarium-silicone.jpg", alt: "Aquarium silicone sealant banner" },
   { src: "/images/sliders/705-universal-fast-adhesive.jpg", alt: "705 Universal Fast Adhesive banner" },
   { src: "/images/sliders/967P-fast-adhesive.jpg", alt: "967P Fast Adhesive banner" },
   { src: "/images/sliders/Aquazero.jpg", alt: "Aquazero waterproofing banner" },
@@ -12,7 +12,6 @@ export const sliderBanners: Banner[] = [
   { src: "/images/sliders/akfix-safe-use-handling-of-diisocyanates-trainings.jpg", alt: "Safe use and handling of diisocyanates training" },
   { src: "/images/sliders/akfix-spray-paint-banner-en.jpg", alt: "Akfix spray paint color range" },
   { src: "/images/sliders/thermcoat-thermal-acoustic-insulation-spray-foam_en.jpg", alt: "Thermcoat thermal acoustic insulation spray foam" },
-  { src: "/images/sliders/100AQ-aquarium-silicone.jpg", alt: "Aquarium silicone sealant banner" },
 ];
 
 export const categoryIconById: Record<string, string> = {
@@ -50,6 +49,7 @@ export const productImageByItemId: Record<string, string> = {
   "mv-6": "/images/all-products/adhesives/705-universal-fast-adhesive.png",
   "np-1": "/images/all-products/sealants/AC578-sanitary-sealant-bath-kitchen.png",
   "np-1765966726374": "/images/all-products/adhesives/HB262-hybrid-wood-flooring-adhesive.png",
+  "np-1766645310521": "/images/all-products/adhesives/HB262-hybrid-wood-flooring-adhesive.png",
   "np-2": "/images/all-products/adhesives/Akfix-744-Allbond-Hybrid.png",
   "np-3": "/images/all-products/sealants/AC580-rapid-seal.png",
   "np-4": "/images/all-products/adhesives/702HV-super-glue.png",
