@@ -1,11 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
 import Container from "@/components/ui/Container";
-import { categories, allItems } from "@/data/catalog";
+import { categories, allItems, subcategoriesByCategoryId } from "@/data/catalog";
 import { categoryIconById, categoryThemeById } from "@/data/assets";
 import L, { LKey } from "@/components/i18n/L";
 import CategoryClient from "@/components/category/CategoryClient";
-import { subcategoriesByCategoryId } from "@/data/subcategories";
 import { Suspense } from "react";
 
 interface PageProps {

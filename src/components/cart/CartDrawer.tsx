@@ -126,7 +126,21 @@ export default function CartDrawer() {
                             >
                               −
                             </button>
-                            <div className="h-7 w-10 border-x grid place-items-center text-xs select-none">{it.qty}</div>
+                            {/* <div className="h-7 w-20 border-x grid place-items-center text-xs select-none">{it.qty}</div> */}
+                            <input
+                              type="number"
+                              min={1}
+                              value={it.qty}
+                              onChange={(e) =>
+                                updateQty(
+                                  it.id,
+                                  Math.max(1, Number(e.target.value) || 1),
+                                  key
+                                )
+                              }
+                              className="h-8 w-22 border-x px-2 text-center text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                              aria-label={t("quantity", lang)}
+                            />
                             <button
                               type="button"
                               aria-label={t("increaseQuantity", lang)}

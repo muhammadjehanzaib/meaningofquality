@@ -3,7 +3,7 @@
 import type { AnchorHTMLAttributes, ButtonHTMLAttributes, PropsWithChildren } from "react";
 import clsx from "clsx";
 
-type Variant = "primary" | "secondary" | "ghost";
+type Variant = "primary" | "secondary" | "ghost" | "destructive" | "outline";
 
 interface BaseProps {
   variant?: Variant;
@@ -29,7 +29,13 @@ export default function Button({
       "bg-primary text-primary-foreground hover:opacity-90 focus-visible:ring-primary",
     secondary:
       "bg-muted text-foreground hover:bg-muted/80 focus-visible:ring-muted",
-    ghost: "bg-transparent text-foreground hover:bg-muted",
+ghost: "bg-transparent text-gray-600 hover:bg-gray-100 hover:text-gray-800",
+
+
+    destructive:
+      "bg-red-600 text-white hover:bg-red-700 focus-visible:ring-red-600",
+    outline:
+      "border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus-visible:ring-gray-500",
   };
 
   const classes = clsx(base, variants[variant], fullWidth && "w-full", className);

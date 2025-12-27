@@ -148,12 +148,18 @@ export default function Search() {
                   >
                     {/* Thumbnail */}
                     <div className="relative w-14 h-14 flex-shrink-0">
-                      <Image
-                        src={productImageByItemId[item.id]}
-                        alt={pickAny(item.name, lang)}
-                        fill
-                        className="object-contain rounded"
-                      />
+                      {productImageByItemId[item.id] ? (
+                        <Image
+                          src={productImageByItemId[item.id]}
+                          alt={pickAny(item.name, lang)}
+                          fill
+                          className="object-contain rounded"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gray-200 rounded flex items-center justify-center text-xs text-gray-500">
+                          No Image
+                        </div>
+                      )}
                     </div>
 
                     {/* Info */}
@@ -181,3 +187,4 @@ export default function Search() {
     </>
   );
 }
+

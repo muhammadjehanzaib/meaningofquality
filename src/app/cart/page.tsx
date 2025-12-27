@@ -9,7 +9,7 @@ import { useLang } from "@/hooks/useLang";
 import { t } from "@/data/labels";
 import { WHATSAPP_NUMBER } from "@/data/site";
 import { buildWhatsAppMessage, type ClientInfo } from "@/utils/whatsapp";
-import {useRef, useState } from "react";
+import { useRef, useState } from "react";
 import ArabicReshaper from 'arabic-reshaper';
 import { pickAny } from "@/data/i18n";
 import type { jsPDF } from "jspdf";
@@ -31,42 +31,42 @@ export default function CartPage() {
   // const ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY;
 
   const totalItems = items.reduce((acc, it) => acc + it.qty, 0);
-const [isSubmittingQ, setIsSubmittingQ] = useState(false);
-const [showSuccess, setShowSuccess] = useState(false);
+  const [isSubmittingQ, setIsSubmittingQ] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
-const handleSubmitQuotation = async () => {
-  if (!formRef.current || isSubmittingQ) return;
-  if (!ensureFormValid()) return;
+  const handleSubmitQuotation = async () => {
+    if (!formRef.current || isSubmittingQ) return;
+    if (!ensureFormValid()) return;
 
-  try {
-    setIsSubmittingQ(true);
-    const response = await fetch("/api/submitQuotation", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...info, items }),
-    });
+    try {
+      setIsSubmittingQ(true);
+      const response = await fetch("/api/submitQuotation", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...info, items }),
+      });
 
-    const result = await response.json();
+      const result = await response.json();
 
-    if (result.success) {
-      setShowSuccess(true);
+      if (result.success) {
+        setShowSuccess(true);
 
-      // Don't clear cart or form if user wants to send WhatsApp/email/PDF
-      // setInfo({ name: "", company: "", email: "", phone: "", note: "" });
+        // Don't clear cart or form if user wants to send WhatsApp/email/PDF
+        // setInfo({ name: "", company: "", email: "", phone: "", note: "" });
 
-      // Auto-close success modal after 10 seconds
-      setTimeout(() => setShowSuccess(false), 10000);
-    } else {
-      alert("Submission failed: " + result.message);
-      console.error(result);
+        // Auto-close success modal after 10 seconds
+        setTimeout(() => setShowSuccess(false), 10000);
+      } else {
+        alert("Submission failed: " + result.message);
+        console.error(result);
+      }
+    } catch (error) {
+      alert("Something went wrong. Please try again.");
+      console.error(error);
+    } finally {
+      setIsSubmittingQ(false);
     }
-  } catch (error) {
-    alert("Something went wrong. Please try again.");
-    console.error(error);
-  } finally {
-    setIsSubmittingQ(false);
-  }
-};
+  };
 
 
 
@@ -1007,7 +1007,7 @@ const handleSubmitQuotation = async () => {
                 href="/categories"
                 className="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-white text-sm hover:brightness-110"
               >
-              {t("continueShopping", lang)}
+                {t("continueShopping", lang)}
               </Link>
             </div>
           </div>
@@ -1096,7 +1096,7 @@ const handleSubmitQuotation = async () => {
                                 key
                               )
                             }
-                            className="h-8 w-14 border-x px-2 text-center text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                            className="h-8 w-22 border-x px-2 text-center text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                             aria-label={t("quantity", lang)}
                           />
                           <button
@@ -1158,7 +1158,15 @@ const handleSubmitQuotation = async () => {
                     {t("clearCart", lang)}
                   </button>
                 </div>
-                <p className="text-xs mt-4 ml-3">{t("addtoquotepara", lang)}</p>
+                <p className="text-xs mt-4 ml-3">
+                  {t("addtoquotepara", lang).split("\n").map((line, i) => (
+                    <span key={i}>
+                      {line}
+                      <br />
+                    </span>
+                  ))}
+                </p>
+
               </div>
 
               <div className="rounded-2xl border border-foreground/10 bg-gradient-to-br from-background to-muted p-4 space-y-3 shadow-sm">

@@ -54,6 +54,11 @@ export default async function ProductDetailPage({ params }: PageProps) {
   const detail = productDetailsById[item.id] ?? {};
   const galleryImages = detail.images && detail.images.length ? detail.images : (img ? [img] : []);
 
+  const nonEmptyApplications = (detail.applications ?? []).filter((p) => {
+    if (typeof p === "string") return p.trim() !== "";
+    return (p.en || "").trim() !== "" || (p.ar || "").trim() !== "";
+  });
+
   // Simple related products: same category, different id
   const related = allItems.filter(
     (i) => i.categoryId === item.categoryId && i.id !== item.id
@@ -130,10 +135,10 @@ export default async function ProductDetailPage({ params }: PageProps) {
               typeof item.priceRange?.max === "number" && (
                 <div className="mt-4">
                   <div className="inline-flex items-center gap-2 rounded-lg border border-foreground/10 bg-muted/40 px-4 py-2">
-                    <span className="text-sm text-muted-foreground">
+                    <span className="text-s text-muted-foreground">
                       <LKey k="priceRange" />
                     </span>
-                    <span className="text-sm font-semibold text-foreground">
+                    <span className="text-lg font-semibold text-foreground">
                       <LKey k="currency" /> {item.priceRange.min} – {item.priceRange.max}
                     </span>
                   </div>
@@ -173,25 +178,28 @@ export default async function ProductDetailPage({ params }: PageProps) {
             {detail.properties && detail.properties.length > 0 && (
               <div className="mt-8 rounded-2xl border border-foreground/10 bg-background p-5">
                 <h2 className="text-base font-semibold text-foreground"><LKey k="properties" /></h2>
-                <ul className="mt-2 list-disc space-y-2 pl-5 text-sm text-muted-foreground">
+                <div className="mt-2 ml-3 space-y-2 text-sm text-muted-foreground">
                   {detail.properties.map((p, i) => (
                     <p key={i}><L value={p} /></p>
                   ))}
-                </ul>
+                </div>
               </div>
             )}
 
             {/* Use cases */}
-            {detail.applications && detail.applications.length > 0 && (
+            {nonEmptyApplications.length > 0 && (
               <div className="mt-5 rounded-2xl border border-foreground/10 bg-background p-5">
-                <h2 className="text-base font-semibold text-foreground"><LKey k="applicationAreas" /></h2>
+                <h2 className="text-base font-semibold text-foreground">
+                  <LKey k="applicationAreas" />
+                </h2>
                 <ul className="mt-2 list-disc space-y-2 pl-5 text-sm text-muted-foreground">
-                  {detail.applications.map((p, i) => (
+                  {nonEmptyApplications.map((p, i) => (
                     <li key={i}><L value={p} /></li>
                   ))}
                 </ul>
               </div>
             )}
+
 
             {/* Product Specifications */}
             {detail.productSpecs &&

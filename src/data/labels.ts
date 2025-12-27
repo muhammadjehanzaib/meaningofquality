@@ -7,6 +7,7 @@ export const labels = {
   solutions: { en: "Solutions", ar: "الحلول" },
   newProducts: { en: "New Products", ar: "منتجات جديدة" },
   mostVisitedProducts: { en: "Most Visited Products", ar: "المنتجات الأكثر زيارة" },
+  featuredProducts: { en: "Featured Products", ar: "المنتجات المميزة" },
   categories: { en: "Products", ar: "الفئات" },
   about: { en: "About Us", ar: "حول" },
   quotationSummery: { en: "Request Quotation", ar: "طلب عرض سعر" },
@@ -39,7 +40,7 @@ export const labels = {
   remove: { en: "Remove", ar: "إزالة" },
   clearCart: { en: "Clear Quote", ar: "مسح العرض" },
   emptyCart: { en: "Your quotation list is currently empty. Please click the button below to add products.", ar:"قائمة عرض السعر فارغة حالياً. يرجى الضغط على الزر أدناه لإضافة المنتجات." },
-  items: { en: "Items", ar: "العناصر" },
+  items: { en: "Total Items", ar: "مجموع العناصر" },
   yourInfo: { en: "Your Info", ar: "معلوماتك" },
   name: { en: "Name", ar: "الاسم" },
   company: { en: "Company", ar: "الشركة" },
@@ -138,10 +139,10 @@ export const labels = {
   },
   submitClose: { en: "Close", ar: "يغلق" },
   whatsapp:{en:"WhatsApp", ar:"واتس اب"},
-  addtoquotepara: {
-    en:"Add more products from the products page using \“Add to Quote\”. \n Clears all items from the quote list using “Clear Quote.”",
-    ar:"أضف المزيد من المنتجات من صفحة المنتجات باستخدام \"إضافة إلى عرض السعر\". امسح جميع العناصر من قائمة عرض السعر باستخدام \"مسح عرض السعر\"."
-  },
+addtoquotepara: {
+  en: "Add more products from the products page using “Add to Quote”.\nClear all items from the quote list using “Clear Quote”.",
+  ar: "أضف المزيد من المنتجات من صفحة المنتجات باستخدام «إضافة إلى عرض السعر».\nامسح جميع العناصر من قائمة عرض السعر باستخدام «مسح عرض السعر»."
+},
   customerCare: {en:"Customer Care", ar:"رعاية العملاء"},
   termsOfBusiness: {en:"Terms of Buisness", ar:"شروط العمل"}
 } as const;

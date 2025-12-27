@@ -6,7 +6,7 @@ import Carousel from "@/components/ui/Carousel";
 import SimpleImageSlider from "@/components/ui/SimpleImageSlider";
 import CategoryCard from "@/components/ui/CategoryCard";
 import ProductTile from "@/components/ui/ProductTile";
-import { categories, newProducts, mostVisited } from "@/data/catalog";
+import { categories, newProducts, mostVisited, featuredProducts } from "@/data/catalog";
 import { sliderBanners, categoryIconById, categoryThemeById, productImageByItemId } from "@/data/assets";
 import { useLang } from "@/hooks/useLang";
 import { pick } from "@/data/i18n";
@@ -65,7 +65,19 @@ export default function Home() {
         </Container>
       </section>
 
-      {/* 6) Footer already included by layout */}
+      {/* 6) Featured Products slider section */}
+      {/* <section className="py-10">
+        <Container className="max-w-5xl">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight uppercase">{t("featuredProducts", lang)}</h2>
+          <Carousel className="mt-6" autoPlay pauseOnHover intervalMs={3400} stepItems={1}>
+            {featuredProducts.map((p) => (
+              <ProductTile key={p.id} title={p.name} imgSrc={productImageByItemId[p.id]} href={`/p/${p.id}`} productId={p.id} showCtas priceRange={p.priceRange} brand={p.Brand} />
+            ))}
+          </Carousel>
+        </Container>
+      </section> */}
+
+      {/* 7) Footer already included by layout */}
     </div>
   );
 }

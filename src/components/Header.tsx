@@ -138,7 +138,7 @@ export default function Header() {
             </svg>
             <span className="hidden xl:inline">{t("cart", lang)}</span>
             {count > 0 && (
-              <span className="absolute -right-1 -top-1 inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-gradient-to-br from-purple-500 to-indigo-500 px-1.5 text-[10px] font-bold text-white shadow-lg">
+              <span className="absolute -right-1 -top-1 inline-flex h-5 min-w-[22px] items-center justify-center rounded-full bg-gradient-to-br from-purple-500 to-indigo-500 px-1.5 text-[10px] font-bold text-white shadow-lg">
                 {count}
               </span>
             )}

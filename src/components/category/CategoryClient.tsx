@@ -2,8 +2,7 @@
 
 import ProductTile from "@/components/ui/ProductTile";
 import { productImageByItemId } from "@/data/assets";
-import type { Item } from "@/data/catalog";
-import type { Subcategory } from "@/data/subcategories";
+import type { Item, Subcategory } from "@/data/catalog";
 import L from "@/components/i18n/L";
 import { useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";

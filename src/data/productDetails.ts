@@ -30,6 +30,7 @@ export type ProductDetail = {
   isNew?: boolean;
   images?: string[];
 };
+
 export const productDetailsById: Record<string, ProductDetail> = {
   "np-1": {
     isNew: true,
@@ -63,7 +64,6 @@ export const productDetailsById: Record<string, ProductDetail> = {
       { stockCode: "-", productCode: "AC579", type: "-", volume: "410 ml", boxQty: "19" }
     ],
     tdsUrl: "www.google.com",
-    sdsUrl: "www.hbl.com",
     images: [
       "/images/all-products/sealants/AC578-sanitary-sealant-bath-kitchen.png",
       "/images/all-products/adhesives/740-allbond-glue.png",
@@ -116,6 +116,51 @@ export const productDetailsById: Record<string, ProductDetail> = {
     ],
     images: [
       "/images/all-products/fire-related-products/820P-B1-fire-rated-pu-gun-foam.png"
+    ]
+  },
+  "p-1766747336873": {
+    description: { en: "hello", ar: "ar hello" },
+    properties: [
+      { en: "product over vire en", ar: "product over viwe at" }
+    ],
+    applications: [
+      { en: "1", ar: "1" },
+      { en: "2", ar: "2" },
+      { en: "3", ar: "3" }
+    ],
+    productSpecs: [
+      { specification: {"en":"1","ar":"123"}, value: {"en":"12","ar":"123"} }
+    ],
+    technicalSpecs: [
+      { title: {"en":"1234","ar":"4321"}, description: {"en":"1234","ar":"4321"} }
+    ],
+    images: [
+      "/images/all-products/category-1766747244591/p-1766747336873_1766750555797_d1fezx.png"
+    ]
+  },
+  "p-1766819707316": {
+    
+  },
+  "p-1766838665290": {
+    description: { en: "helo", ar: "how" },
+    properties: [
+      { en: "new thing are comming ", ar: "asdfas ar" }
+    ],
+    applications: [
+      { en: "hello", ar: "fine" },
+      { en: "how are you", ar: "fine " },
+      { en: "fine", ar: "fine" }
+    ],
+    images: [
+      "/images/all-products/category-1766747244591/p-1766838665290_1766838908965_3ljcsj.png",
+      "/images/all-products/category-1766747244591/p-1766838665290_1766838912240_as7lkn.png"
+    ]
+  },
+  "p-1766848283790": {
+    images: [
+      "/images/all-products/category-1766747244591/p-1766848283790_1766848846727_z2sy66.png",
+      "/images/all-products/category-1766747244591/p-1766848283790_1766848849368_ckjjkf.png",
+      "/images/all-products/category-1766747244591/p-1766848283790_1766848851661_rrmi67.png"
     ]
   }
 };

@@ -1,10 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import Container from "@/components/ui/Container";
-import { categories } from "@/data/catalog";
+import { categories, subcategoriesByCategoryId } from "@/data/catalog";
 import { categoryIconById, categoryThemeById } from "@/data/assets";
 import L, { LKey } from "@/components/i18n/L";
-import { subcategoriesByCategoryId } from "@/data/subcategories";
 
 export default function CategoriesIndexPage() {
   return (
