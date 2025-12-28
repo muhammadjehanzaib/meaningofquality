@@ -41,7 +41,7 @@ export default function Search() {
     };
   }, [open]);
 
-  // Highlight matches
+  // Highlight matches in text
   const highlightMatch = (text: string, query: string) => {
     if (!query) return text;
     const parts = text.split(new RegExp(`(${query})`, "gi"));
@@ -68,20 +68,29 @@ export default function Search() {
     }
   };
 
-  // Filtered results
+  // Filtered results (cross-language)
   const filtered = useMemo(() => {
     const query = q.trim().toLowerCase();
     if (!query) return [] as typeof allItems;
+
     return allItems.filter((item) => {
-      const name = pickAny(item.name, lang).toLowerCase();
+      const nameEn = item.name.en.toLowerCase();
+      const nameAr = item.name.ar.toLowerCase();
       const brand = item.Brand.toLowerCase();
       const category = item.categoryId.toLowerCase();
       const id = item.id.toLowerCase();
-      return name.includes(query) || brand.includes(query) || category.includes(query) || id.includes(query);
-    });
-  }, [q, lang]);
 
-  // Get category title
+      return (
+        nameEn.includes(query) ||
+        nameAr.includes(query) ||
+        brand.includes(query) ||
+        category.includes(query) ||
+        id.includes(query)
+      );
+    });
+  }, [q]);
+
+  // Get category title in current language
   const getCategoryTitle = (id: string) => {
     const cat = categories.find((c) => c.id === id);
     return cat ? pickAny(cat.title, lang) : id;
@@ -92,16 +101,15 @@ export default function Search() {
       <button
         type="button"
         className="
-    relative flex h-10 w-10 items-center justify-center rounded-full
-    bg-gray-600 text-white
-    shadow-lg shadow-gray-500/50
-    transform transition-all duration-300
-    hover:scale-110 hover:shadow-xl
-    animate-pulse
-  "
+          relative flex h-10 w-10 items-center justify-center rounded-full
+          bg-gray-600 text-white
+          shadow-lg shadow-gray-500/50
+          transform transition-all duration-300
+          hover:scale-110 hover:shadow-xl
+          animate-pulse
+        "
         aria-label="Search"
         onClick={() => setOpen(true)}
-
       >
         <FiSearch className="w-6 h-6 text-white animate-ping-slow" />
       </button>
@@ -165,7 +173,7 @@ export default function Search() {
                     {/* Info */}
                     <div className="flex-1">
                       <div className="text-sm font-medium text-foreground">
-                        {highlightMatch(pickAny(item.name, lang), q)}
+                        {highlightMatch(item.name.en, q)} / {highlightMatch(item.name.ar, q)}
                       </div>
                       <div className="text-xs text-muted-foreground flex flex-wrap gap-2 mt-1">
                         <span>{highlightMatch(getCategoryTitle(item.categoryId), q)}</span>
@@ -187,4 +195,3 @@ export default function Search() {
     </>
   );
 }
-
