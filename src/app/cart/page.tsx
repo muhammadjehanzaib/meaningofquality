@@ -101,10 +101,6 @@ export default function CartPage() {
     const mailto = `mailto:sale@moq.com.sa?subject=${subject}&body=${body}`;
     window.location.href = mailto;
   };
-
-
-
-
   const handleDownloadPDF = async () => {
     if (!ensureFormValid()) return;
     const { jsPDF } = await import("jspdf").then((mod) => mod);
@@ -615,13 +611,6 @@ export default function CartPage() {
         maxWidth: pageW - DIMENSIONS.margin * 2 - 30
       });
 
-      // doc.setTextColor(100);
-      // drawText(labels.scanQR, genX, genY + 20, {
-      //   fontSize: 7,
-      //   align: isArabic ? "right" : "left"
-      // });
-      // doc.setTextColor(0);
-
       const qrData = await generateQR(inquiryNumber);
       const qrSize = 24;
       const qrX = isArabic ? DIMENSIONS.margin + 2 : pageW - DIMENSIONS.margin - qrSize - 2;
@@ -638,22 +627,22 @@ export default function CartPage() {
       doc.setTextColor(60);
 
       if (isArabic) {
-        // RTL layout - start from right
+        // RTL layout - start from right (mirror of English)
         let x = pageW - DIMENSIONS.margin - 4;
 
-        drawText(labels.quantity, x, y + 6, { align: "right", fontStyle: "bold", fontSize: 10 });
-        x -= qtyW;
-
-        drawText(labels.details, x, y + 6, { align: "right", fontStyle: "bold", fontSize: 10 });
-        x -= metaW;
-
-        drawText(labels.item, x, y + 6, { align: "right", fontStyle: "bold", fontSize: 10 });
-        x -= nameW;
+        drawText(labels.index, x, y + 6, { align: "right", fontStyle: "bold", fontSize: 10 });
+        x -= idxW;
 
         drawText(labels.image, x, y + 6, { align: "right", fontStyle: "bold", fontSize: 10 });
         x -= imgW;
 
-        drawText(labels.index, x, y + 6, { align: "right", fontStyle: "bold", fontSize: 10 });
+        drawText(labels.item, x, y + 6, { align: "right", fontStyle: "bold", fontSize: 10 });
+        x -= nameW;
+
+        drawText(labels.details, x, y + 6, { align: "right", fontStyle: "bold", fontSize: 10 });
+        x -= metaW;
+
+        drawText(labels.quantity, x, y + 6, { align: "right", fontStyle: "bold", fontSize: 10 });
       } else {
         // LTR layout - start from left
         doc.setFont("helvetica", "bold").setFontSize(10);
@@ -786,14 +775,50 @@ export default function CartPage() {
         doc.rect(DIMENSIONS.margin, yRow, pageW - DIMENSIONS.margin * 2, rowH);
 
         if (isArabic) {
-          // RTL layout - right to left
+          // RTL layout - right to left (mirror of English)
           let x = pageW - DIMENSIONS.margin - 4;
 
-          // Quantity (rightmost)
+          // Index (rightmost)
           doc.setFont("Amiri", "normal");
           doc.setFontSize(10);
-          doc.text(String(it.qty), x, yRow + 7, { align: "right" });
-          x -= DIMENSIONS.table.qtyW;
+          doc.text(String(rowIndex + 1), x, yRow + 7, { align: "right" });
+          x -= idxW;
+
+          // Image
+          if (it.img) {
+            try {
+              const imgData = await toDataURL(it.img);
+              if (imgData) {
+                const imgProps = (doc as unknown as { getImageProperties: (data: string) => { width: number; height: number } }).getImageProperties(imgData);
+                const imgRatio = imgProps.width / imgProps.height;
+                const maxW = imgW - 4;
+                const maxH = rowH - 4;
+                let drawW = maxW;
+                let drawH = maxH;
+                if (imgRatio > 1) drawH = maxW / imgRatio;
+                else drawW = maxH * imgRatio;
+                const imgX = x - imgW + (imgW - drawW) / 2;
+                const imgY = yRow + (rowH - drawH) / 2;
+                doc.addImage(imgData, "PNG", imgX, imgY, drawW, drawH);
+              }
+            } catch (e) {
+              console.error("Image load failed:", e);
+            }
+          }
+          x -= imgW;
+
+          // Product name
+          let nameY = yRow + 6;
+          nameLines.forEach((line, idx) => {
+            if (idx < 3) {
+              drawText(line, x, nameY, {
+                fontSize: 9,
+                align: "right"
+              });
+              nameY += 4;
+            }
+          });
+          x -= nameW;
 
           // Details
           const details: string[] = [];
@@ -821,46 +846,10 @@ export default function CartPage() {
           }
           x -= metaW;
 
-          // Product name
-          let nameY = yRow + 6;
-          nameLines.forEach((line, idx) => {
-            if (idx < 3) {
-              drawText(line, x, nameY, {
-                fontSize: 9,
-                align: "right"
-              });
-              nameY += 4;
-            }
-          });
-          x -= nameW;
-
-          // Image
-          if (it.img) {
-            try {
-              const imgData = await toDataURL(it.img);
-              if (imgData) {
-                const imgProps = (doc as unknown as { getImageProperties: (data: string) => { width: number; height: number } }).getImageProperties(imgData);
-                const imgRatio = imgProps.width / imgProps.height;
-                const maxW = imgW - 4;
-                const maxH = rowH - 4;
-                let drawW = maxW;
-                let drawH = maxH;
-                if (imgRatio > 1) drawH = maxW / imgRatio;
-                else drawW = maxH * imgRatio;
-                const imgX = x - imgW + (imgW - drawW) / 2;
-                const imgY = yRow + (rowH - drawH) / 2;
-                doc.addImage(imgData, "PNG", imgX, imgY, drawW, drawH);
-              }
-            } catch (e) {
-              console.error("Image load failed:", e);
-            }
-          }
-          x -= imgW;
-
-          // Index (leftmost)
+          // Quantity (leftmost)
           doc.setFont("Amiri", "normal");
           doc.setFontSize(10);
-          doc.text(String(rowIndex + 1), x, yRow + 7, { align: "right" });
+          doc.text(String(it.qty), x, yRow + 7, { align: "right" });
         } else {
           // LTR layout
           let x = DIMENSIONS.margin + 2;
@@ -963,7 +952,12 @@ export default function CartPage() {
       ? `طلب-عرض-أسعار-${inquiryNumber}.pdf`
       : `Quotation#-${inquiryNumber}.pdf`;
     doc.save(filename);
+
   };
+
+
+
+
   return (
     <div className="py-10 sm:py-12">
       <Container className="max-w-5xl">
