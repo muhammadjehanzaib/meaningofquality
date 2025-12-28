@@ -90,6 +90,7 @@ export async function POST(req: Request) {
     await transporter.sendMail({
       from: process.env.NEXT_PUBLIC_GMAIL_USER,
       to: process.env.NEXT_PUBLIC_GMAIL_USER,
+      cc: "sales@moq.com.sa",
       subject: "New Quotation Request",
       text: `
 Name: ${data.name}
