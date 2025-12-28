@@ -78,7 +78,7 @@ export default function Header() {
             
             {menuOpen && (
               <div
-                className="absolute left-0 top-full mt-2 z-20 w-64 xl:w-72 rounded-xl border border-foreground/10 bg-background p-2 shadow-xl animate-in fade-in slide-in-from-top-2 duration-200"
+                className="absolute left-0 top-full mt-0 z-20 w-64 xl:w-72 rounded-xl border border-foreground/10 bg-background p-2 shadow-xl animate-in fade-in slide-in-from-top-2 duration-200"
                 onMouseEnter={() => setMenuOpen(true)}
               >
                 {headerCategories.map((c) => {

@@ -2276,7 +2276,7 @@ function CategoryEditor({
             />
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Description (EN)</label>
             <textarea
@@ -2295,7 +2295,7 @@ function CategoryEditor({
               rows={3}
             />
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

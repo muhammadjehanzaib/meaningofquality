@@ -6,7 +6,7 @@ import Carousel from "@/components/ui/Carousel";
 import SimpleImageSlider from "@/components/ui/SimpleImageSlider";
 import CategoryCard from "@/components/ui/CategoryCard";
 import ProductTile from "@/components/ui/ProductTile";
-import { categories, newProducts, mostVisited, featuredProducts } from "@/data/catalog";
+import { categories, newProducts, mostVisited } from "@/data/catalog";
 import { sliderBanners, categoryIconById, categoryThemeById, productImageByItemId } from "@/data/assets";
 import { useLang } from "@/hooks/useLang";
 import { pick } from "@/data/i18n";
