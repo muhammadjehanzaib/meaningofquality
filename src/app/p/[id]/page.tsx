@@ -178,7 +178,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
             {detail.properties && detail.properties.length > 0 && (
               <div className="mt-8 rounded-2xl border border-foreground/10 bg-background p-5">
                 <h2 className="text-base font-semibold text-foreground"><LKey k="properties" /></h2>
-                <div className="mt-2 ml-3 space-y-2 text-sm text-muted-foreground">
+                <div className="mt-2 ml-3 rtl:mr-3 rtl:ml-0 space-y-2 text-sm text-muted-foreground">
                   {detail.properties.map((p, i) => (
                     <p key={i}><L value={p} /></p>
                   ))}
@@ -192,7 +192,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
                 <h2 className="text-base font-semibold text-foreground">
                   <LKey k="applicationAreas" />
                 </h2>
-                <ul className="mt-2 list-disc space-y-2 pl-5 text-sm text-muted-foreground">
+                <ul className="mt-2 list-disc space-y-2 pl-5 rtl:pr-5 rtl:pl-0 text-sm text-muted-foreground">
                   {nonEmptyApplications.map((p, i) => (
                     <li key={i}><L value={p} /></li>
                   ))}
@@ -209,20 +209,20 @@ export default async function ProductDetailPage({ params }: PageProps) {
                     <LKey k="productSpecifications" />
                   </h2>
 
-                  <div className="mt-3 overflow-x-auto">
-                    <table className="w-full text-left text-xs">
+                  <div className="mt-3 overflow-x-auto" dir="auto">
+                    <table className="w-full text-xs">
                       <thead className="text-muted-foreground">
                         <tr className="border-b border-foreground/10">
-                          <th className="py-2 pr-3"><LKey k="title" /></th>
-                          <th className="py-2 pr-3"><LKey k="descriptionNotes" /></th>
+                          <th className="py-2 px-3 text-start"><LKey k="title" /></th>
+                          <th className="py-2 px-3 text-start"><LKey k="descriptionNotes" /></th>
                         </tr>
                       </thead>
 
                       <tbody>
                         {detail.productSpecs.map((row, i) => (
                           <tr key={i} className="border-b border-foreground/10">
-                            <td className="py-2 pr-3"><L value={row.specification} /></td>
-                            <td className="py-2 pr-3"><L value={row.value ?? "-"} /></td>
+                            <td className="py-2 px-3"><L value={row.specification} /></td>
+                            <td className="py-2 px-3"><L value={row.value ?? "-"} /></td>
                           </tr>
                         ))}
                       </tbody>
@@ -238,19 +238,19 @@ export default async function ProductDetailPage({ params }: PageProps) {
                 <h2 className="text-base font-semibold text-foreground">
                   <LKey k="technicalSpecifications" />
                 </h2>
-                <div className="mt-3 overflow-x-auto">
-                  <table className="w-full text-left text-xs">
+                <div className="mt-3 overflow-x-auto" dir="auto">
+                  <table className="w-full text-xs">
                     <thead className="text-muted-foreground">
                       <tr className="border-b border-foreground/10">
-                        <th className="py-2 pr-3"><LKey k="specification" /></th>
-                        <th className="py-2 pr-3"><LKey k="value" /></th>
+                        <th className="py-2 px-3 text-start"><LKey k="specification" /></th>
+                        <th className="py-2 px-3 text-start"><LKey k="value" /></th>
                       </tr>
                     </thead>
                     <tbody>
                       {detail.technicalSpecs.map((row, i) => (
                         <tr key={i} className="border-b border-foreground/10">
-                          <td className="py-2 pr-3"><L value={row.title ?? "-"} /></td>
-                          <td className="py-2 pr-3"><L value={row.description ?? "-"} /></td>
+                          <td className="py-2 px-3"><L value={row.title ?? "-"} /></td>
+                          <td className="py-2 px-3"><L value={row.description ?? "-"} /></td>
                         </tr>
                       ))}
                     </tbody>
@@ -264,25 +264,25 @@ export default async function ProductDetailPage({ params }: PageProps) {
             {detail.packaging && detail.packaging.length > 0 && (
               <div className="mt-5 rounded-2xl border border-foreground/10 bg-background p-5">
                 <h2 className="text-base font-semibold text-foreground"><LKey k="packaging" /></h2>
-                <div className="mt-3 overflow-x-auto">
-                  <table className="w-full text-left text-xs">
+                <div className="mt-3 overflow-x-auto" dir="auto">
+                  <table className="w-full text-xs">
                     <thead className="text-muted-foreground">
                       <tr className="border-b border-foreground/10">
-                        <th className="py-2 pr-3"><LKey k="stockCode" /></th>
-                        <th className="py-2 pr-3"><LKey k="productCode" /></th>
-                        <th className="py-2 pr-3"><LKey k="type" /></th>
-                        <th className="py-2 pr-3"><LKey k="volume" /></th>
-                        <th className="py-2 pr-3"><LKey k="boxQty" /></th>
+                        <th className="py-2 px-3 text-start"><LKey k="stockCode" /></th>
+                        <th className="py-2 px-3 text-start"><LKey k="productCode" /></th>
+                        <th className="py-2 px-3 text-start"><LKey k="type" /></th>
+                        <th className="py-2 px-3 text-start"><LKey k="volume" /></th>
+                        <th className="py-2 px-3 text-start"><LKey k="boxQty" /></th>
                       </tr>
                     </thead>
                     <tbody>
                       {detail.packaging.map((row, i) => (
                         <tr key={i} className="border-b border-foreground/10">
-                          <td className="py-2 pr-3">{row.stockCode ?? "-"}</td>
-                          <td className="py-2 pr-3">{row.productCode ?? "-"}</td>
-                          <td className="py-2 pr-3">{row.type ?? "-"}</td>
-                          <td className="py-2 pr-3">{row.volume ?? "-"}</td>
-                          <td className="py-2 pr-3">{row.boxQty ?? "-"}</td>
+                          <td className="py-2 px-3">{row.stockCode ?? "-"}</td>
+                          <td className="py-2 px-3">{row.productCode ?? "-"}</td>
+                          <td className="py-2 px-3">{row.type ?? "-"}</td>
+                          <td className="py-2 px-3">{row.volume ?? "-"}</td>
+                          <td className="py-2 px-3">{row.boxQty ?? "-"}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -308,4 +308,3 @@ export default async function ProductDetailPage({ params }: PageProps) {
     </div>
   );
 }
-
