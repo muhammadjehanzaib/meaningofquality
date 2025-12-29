@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { useLang } from "@/hooks/useLang";
 import CustomerCareSidebar from '@/components/customer-care/CustomerCareSidebar';
-import CustomerCareFooter from '../footer';
 
 export default function HumanRightsPolicy() {
     const lang = useLang();
@@ -167,7 +166,6 @@ export default function HumanRightsPolicy() {
 
                 </main>
             </div>
-            <CustomerCareFooter/>
         </div>
     );
 }

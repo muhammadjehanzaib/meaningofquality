@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { Mail, Phone, MapPin, MessageCircle, Clock } from "lucide-react";
 import { useLang } from "@/hooks/useLang";
 import CustomerCareSidebar from "@/components/customer-care/CustomerCareSidebar";
-import CustomerCareFooter from './footer';
 
 export default function CustomerCarePage() {
   const lang = useLang();
@@ -92,9 +91,6 @@ export default function CustomerCarePage() {
 
         </div>
       </div>
-
-      {/* Footer / Company Info */}
-      <CustomerCareFooter/>
     </div>
   );
 }

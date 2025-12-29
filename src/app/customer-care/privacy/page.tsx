@@ -4,7 +4,6 @@ import React from 'react';
 import Link from 'next/link';
 import CustomerCareSidebar from '@/components/customer-care/CustomerCareSidebar';
 import { useLang } from '@/hooks/useLang';
-import CustomerCareFooter from '../footer';
 
 export default function PrivacyPolicyPage() {
   const lang = useLang();
@@ -190,7 +189,6 @@ export default function PrivacyPolicyPage() {
           </div>
         </div>
       </div>
-      <CustomerCareFooter />
     </div>
   );
 }

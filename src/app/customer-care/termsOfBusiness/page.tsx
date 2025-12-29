@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { useLang } from '@/hooks/useLang';
 import CustomerCareSidebar from '@/components/customer-care/CustomerCareSidebar';
-import CustomerCareFooter from '../footer';
 
 const termsOfBusiness = {
   en: {
@@ -82,7 +81,6 @@ export default function CustomerCarePage() {
           ))}
         </div>
       </div>
-      <CustomerCareFooter />
     </div>
   );
 }

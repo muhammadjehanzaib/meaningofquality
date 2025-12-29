@@ -4,7 +4,6 @@ import React from 'react';
 import Link from 'next/link';
 import { useLang } from "@/hooks/useLang";
 import CustomerCareSidebar from '@/components/customer-care/CustomerCareSidebar';
-import CustomerCareFooter from '../footer';
 
 export default function ReturnsPage() {
   const lang = useLang();
@@ -143,7 +142,6 @@ export default function ReturnsPage() {
           </div>
         </div>
       </div>
-      <CustomerCareFooter />
     </div>
   );
 }

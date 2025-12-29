@@ -987,9 +987,6 @@ export default function CartPage() {
 
   };
 
-
-
-
   return (
     <div className="py-10 sm:py-12">
       <Container className="max-w-5xl">

@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { Users, Target, Award, Clock } from "lucide-react";
 import { useLang } from "@/hooks/useLang";
 import CustomerCareSidebar from '@/components/customer-care/CustomerCareSidebar';
-import CustomerCareFooter from '../footer';
 
 export default function AboutPage() {
   const lang = useLang();
@@ -199,7 +198,6 @@ export default function AboutPage() {
         </main>
 
       </div>
-        <CustomerCareFooter/>
     </div>
   );
 }

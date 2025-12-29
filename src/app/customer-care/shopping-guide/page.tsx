@@ -10,7 +10,6 @@ import {
   FaEnvelope,
   FaFilePdf
 } from "react-icons/fa";
-import CustomerCareFooter from '../footer';
 
 
 export default function HowToRequestQuotationPage() {
@@ -252,7 +251,6 @@ export default function HowToRequestQuotationPage() {
           </div>
         </div>
       </div>
-      <CustomerCareFooter/>
     </div>
   );
 }
