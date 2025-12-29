@@ -34,70 +34,72 @@ export default function CartPage() {
   const totalItems = items.reduce((acc, it) => acc + it.qty, 0);
   const [isSubmittingQ, setIsSubmittingQ] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  
 
 
-const handleSubmitQuotation = async () => {
-  if (!formRef.current || isSubmittingQ) return;
-  if (!ensureFormValid()) return;
 
-  // ❌ Stop immediately if offline
-  if (!navigator.onLine) {
-    toast.error("You are offline. Please connect to the internet and try again.");
-    return;
-  }
+  const handleSubmitQuotation = async () => {
+    if (!formRef.current || isSubmittingQ) return;
+    if (!ensureFormValid()) return;
 
-  setIsSubmittingQ(true);
-  toast.loading("Submitting quotation...", { id: "quotation" });
-
-  try {
-    // ⏱ Fetch with timeout
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 sec
-
-    const response = await fetch("/api/submitQuotation", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...info, items }),
-      signal: controller.signal,
-    });
-
-    clearTimeout(timeoutId);
-
-    if (!response.ok) {
-      throw new Error(`Server error: ${response.status}`);
+    // ❌ Stop immediately if offline
+    if (!navigator.onLine) {
+      toast.error("You are offline. Please connect to the internet and try again.");
+      return;
     }
 
-    const result = await response.json();
+    setIsSubmittingQ(true);
+    toast.loading("Submitting quotation...", { id: "quotation" });
 
-    if (result.success) {
-      toast.success("Quotation submitted successfully!", {
-        id: "quotation",
+    try {
+      // ⏱ Fetch with timeout
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 sec
+
+      const response = await fetch("/api/submitQuotation", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...info, items }),
+        signal: controller.signal,
       });
 
-      setShowSuccess(true);
-      setTimeout(() => setShowSuccess(false), 10000);
-    } else {
-      toast.error(result.message || "Submission failed", {
-        id: "quotation",
-      });
-      console.error(result);
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        throw new Error(`Server error: ${response.status}`);
+      }
+
+      const result = await response.json();
+
+      if (result.success) {
+        toast.success("Quotation submitted successfully!", {
+          id: "quotation",
+        });
+
+        setShowSuccess(true);
+        setTimeout(() => setShowSuccess(false), 10000);
+      } else {
+        toast.error(result.message || "Submission failed", {
+          id: "quotation",
+        });
+        console.error(result);
+      }
+    } catch (error: unknown) {
+      if (error instanceof DOMException && error.name === "AbortError") {
+        toast.warning("Request timed out. Please try again.", {
+          id: "quotation",
+        });
+      } else {
+        toast.error("Network error. Please check your internet connection.", {
+          id: "quotation",
+        });
+      }
+
+      console.error("Quotation submit error:", error);
+    } finally {
+      setIsSubmittingQ(false);
     }
-  } catch (error: any) {
-    if (error.name === "AbortError") {
-      toast.warning("Request timed out. Please try again.", {
-        id: "quotation",
-      });
-    } else {
-      toast.error("Network error. Please check your internet connection.", {
-        id: "quotation",
-      });
-    }
-    console.error("Quotation submit error:", error);
-  } finally {
-    setIsSubmittingQ(false);
-  }
-};
+
+  };
 
 
   const ensureFormValid = (): boolean => {
@@ -651,7 +653,7 @@ const handleSubmitQuotation = async () => {
 
     // ===== TABLE HEADER =====
     const drawTableHeader = (y: number) => {
-      const { idxW, imgW, nameW, metaW, qtyW } = DIMENSIONS.table;
+      const { idxW, imgW, nameW, metaW } = DIMENSIONS.table;
       doc.setFillColor(245, 247, 250);
       doc.rect(DIMENSIONS.margin, y, pageW - DIMENSIONS.margin * 2, 9, "F");
       doc.setTextColor(60);
