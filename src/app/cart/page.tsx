@@ -2,6 +2,7 @@
 "use client";
 
 import Image from "next/image";
+import { toast } from "sonner";
 import Link from "next/link";
 import Container from "@/components/ui/Container";
 import { useCart } from "@/contexts/CartContext";
@@ -33,41 +34,70 @@ export default function CartPage() {
   const totalItems = items.reduce((acc, it) => acc + it.qty, 0);
   const [isSubmittingQ, setIsSubmittingQ] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  
 
-  const handleSubmitQuotation = async () => {
-    if (!formRef.current || isSubmittingQ) return;
-    if (!ensureFormValid()) return;
 
-    try {
-      setIsSubmittingQ(true);
-      const response = await fetch("/api/submitQuotation", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...info, items }),
+const handleSubmitQuotation = async () => {
+  if (!formRef.current || isSubmittingQ) return;
+  if (!ensureFormValid()) return;
+
+  // ❌ Stop immediately if offline
+  if (!navigator.onLine) {
+    toast.error("You are offline. Please connect to the internet and try again.");
+    return;
+  }
+
+  setIsSubmittingQ(true);
+  toast.loading("Submitting quotation...", { id: "quotation" });
+
+  try {
+    // ⏱ Fetch with timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 sec
+
+    const response = await fetch("/api/submitQuotation", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...info, items }),
+      signal: controller.signal,
+    });
+
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      throw new Error(`Server error: ${response.status}`);
+    }
+
+    const result = await response.json();
+
+    if (result.success) {
+      toast.success("Quotation submitted successfully!", {
+        id: "quotation",
       });
 
-      const result = await response.json();
-
-      if (result.success) {
-        setShowSuccess(true);
-
-        // Don't clear cart or form if user wants to send WhatsApp/email/PDF
-        // setInfo({ name: "", company: "", email: "", phone: "", note: "" });
-
-        // Auto-close success modal after 10 seconds
-        setTimeout(() => setShowSuccess(false), 10000);
-      } else {
-        alert("Submission failed: " + result.message);
-        console.error(result);
-      }
-    } catch (error) {
-      alert("Something went wrong. Please try again.");
-      console.error(error);
-    } finally {
-      setIsSubmittingQ(false);
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 10000);
+    } else {
+      toast.error(result.message || "Submission failed", {
+        id: "quotation",
+      });
+      console.error(result);
     }
-  };
-
+  } catch (error: any) {
+    if (error.name === "AbortError") {
+      toast.warning("Request timed out. Please try again.", {
+        id: "quotation",
+      });
+    } else {
+      toast.error("Network error. Please check your internet connection.", {
+        id: "quotation",
+      });
+    }
+    console.error("Quotation submit error:", error);
+  } finally {
+    setIsSubmittingQ(false);
+  }
+};
 
 
   const ensureFormValid = (): boolean => {

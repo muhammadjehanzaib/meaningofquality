@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Providers from "./providers";
 import CartDrawer from "@/components/cart/CartDrawer";
+import { Toaster } from "sonner"; // ✅ ADD THIS
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,6 +38,14 @@ export default function RootLayout({
           <main>{children}</main>
           <Footer />
           <CartDrawer />
+
+          {/* ✅ Beautiful alerts live here */}
+          <Toaster
+            position="top-right"
+            richColors
+            closeButton
+            expand
+          />
         </Providers>
       </body>
     </html>
