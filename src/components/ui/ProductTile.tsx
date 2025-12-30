@@ -6,12 +6,7 @@ import { useLang } from "@/hooks/useLang";
 import { LText, pickAny } from "@/data/i18n";
 import { t } from "@/data/labels";
 import { useCart } from "@/contexts/CartContext";
-
-// Convert English digits → Arabic digits when needed
-function toArabicNumber(num: number | string) {
-  const map = ["٠","١","٢","٣","٤","٥","٦","٧","٨","٩"];
-  return num.toString().replace(/[0-9]/g, (d) => map[parseInt(d)]);
-}
+import ArabicNumberTranslator from "./ArabicNumberTranslator";
 
 interface ProductTileProps {
   title: LText;
@@ -36,16 +31,14 @@ export default function ProductTile({
   priceRange,
   brand
 }: ProductTileProps) {
-  
+
   const lang = useLang();
   const { add } = useCart();
   const name = pickAny(title, lang);
 
-  const formatNum = (n: number) => (lang === "ar" ? toArabicNumber(n) : n);
-
   const onAdd = () => {
     if (!productId) return;
-    add({ id: productId, name: title, img: imgSrc, qty: 1, priceRange, useDefaultPackaging: true});
+    add({ id: productId, name: title, img: imgSrc, qty: 1, priceRange, useDefaultPackaging: true });
   };
 
   return (
@@ -90,9 +83,13 @@ export default function ProductTile({
           <div className="text-sm font-semibold text-primary">
             {t("priceRange", lang)}:
             {" "}
-            {t("currency", lang)}
-            {" "}
-            {formatNum(priceRange.min)} – {formatNum(priceRange.max)}
+            <span className="text-lg font-semibold text-foreground">
+              {typeof priceRange?.min === "number" &&
+                typeof priceRange?.max === "number" && (
+                  <ArabicNumberTranslator min={priceRange.min} max={priceRange.max} />
+                )}
+
+            </span>
           </div>
           <div className="text-xs text-muted-foreground mt-1">
             ({t("basedOnQuantity", lang)})
@@ -101,31 +98,31 @@ export default function ProductTile({
       )}
 
 
-  {/* Spacer to push buttons to bottom */}
-  <div className="flex-1"></div>
-  
-{showCtas && (
-  <div className="mt-3 flex flex-col sm:flex-row gap-2">
-    <Link
-      href={href ?? "#"}
-      className="flex-1 text-center py-2 px-3 rounded-lg border border-gray-300 bg-white text-gray-700 font-medium text-sm hover:bg-gray-100 transition-shadow shadow-sm hover:shadow-md whitespace-nowrap"
-    >
-      {t("viewDetails", lang)}
-    </Link>
+      {/* Spacer to push buttons to bottom */}
+      <div className="flex-1"></div>
 
-    <button
-      type="button"
-      onClick={onAdd}
-      disabled={!productId}
-      className="flex-1 text-center py-2 px-2 rounded-lg bg-primary text-white font-medium text-sm hover:brightness-110 disabled:opacity-50 transition-shadow shadow-sm hover:shadow-md whitespace-nowrap"
-    >
-      {t("addToCart", lang)}
-    </button>
-  </div>
-)}
+      {showCtas && (
+        <div className="mt-3 flex flex-col sm:flex-row gap-2">
+          <Link
+            href={href ?? "#"}
+            className="flex-1 text-center py-2 px-3 rounded-lg border border-gray-300 bg-white text-gray-700 font-medium text-sm hover:bg-gray-100 transition-shadow shadow-sm hover:shadow-md whitespace-nowrap"
+          >
+            {t("viewDetails", lang)}
+          </Link>
+
+          <button
+            type="button"
+            onClick={onAdd}
+            disabled={!productId}
+            className="flex-1 text-center py-2 px-2 rounded-lg bg-primary text-white font-medium text-sm hover:brightness-110 disabled:opacity-50 transition-shadow shadow-sm hover:shadow-md whitespace-nowrap"
+          >
+            {t("addToCart", lang)}
+          </button>
+        </div>
+      )}
 
 
-</div>
+    </div>
 
   );
 }

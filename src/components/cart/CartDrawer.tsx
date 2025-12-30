@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { useLang } from "@/hooks/useLang";
 import { t } from "@/data/labels";
 import { pickAny } from "@/data/i18n";
+import ArabicNumberTranslator from "../ui/ArabicNumberTranslator";
 
 export default function CartDrawer() {
   const { drawerOpen, closeDrawer, lastAdded, items, count, updateQty, remove } = useCart();
@@ -99,7 +100,14 @@ export default function CartDrawer() {
                         <div className="truncate text-sm font-medium">{pickAny(it.name, lang)}</div>
                         {typeof it.priceRange?.min === "number" && typeof it.priceRange?.max === "number" && (
                           <div className="text-xs text-muted-foreground mt-0.5">
-                            {t("priceRange", lang)}: {t("currency", lang)} {it.priceRange.min} – {it.priceRange.max}
+                            {t("priceRange", lang)}:
+                            <span className="text-xs font-semibold text-foreground">
+                              {typeof it.priceRange?.min === "number" &&
+                                typeof it.priceRange?.max === "number" && (
+                                  <ArabicNumberTranslator min={it.priceRange.min} max={it.priceRange.max} />
+                                )}
+
+                            </span>
                           </div>
                         )}
                         <div className="mt-1 flex flex-wrap gap-1.5 text-[10px] text-muted-foreground">

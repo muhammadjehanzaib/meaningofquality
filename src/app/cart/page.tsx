@@ -17,6 +17,7 @@ import type { jsPDF } from "jspdf";
 import { AmiriRegular, AmiriBold } from "@/utils/fonts/amiri";
 import { FaShareAlt, FaWhatsapp, FaFilePdf } from "react-icons/fa";
 import { HiOutlineMail } from "react-icons/hi";
+import ArabicNumberTranslator from "@/components/ui/ArabicNumberTranslator";
 
 
 export const hasArabic = (text: string): boolean => {
@@ -1070,8 +1071,14 @@ export default function CartPage() {
                       </div>
                       {it.priceRange && (
                         <div className="text-xs text-muted-foreground mt-0.5">
-                          {t("priceRange", lang)}: {t("currency", lang)}{" "}
-                          {it.priceRange.min} – {it.priceRange.max}
+                          {t("priceRange", lang)}:
+                          <span className="text-lg font-semibold text-foreground">
+                            {typeof it.priceRange?.min === "number" &&
+                              typeof it.priceRange?.max === "number" && (
+                                <ArabicNumberTranslator min={it.priceRange.min} max={it.priceRange.max} />
+                              )}
+
+                          </span>
                         </div>
                       )}
                       <div className="mt-1 flex flex-wrap gap-1.5 text-[10px] text-muted-foreground">
