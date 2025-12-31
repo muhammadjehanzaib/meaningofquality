@@ -8,6 +8,7 @@ import { t } from "@/data/labels";
 import { productImageByItemId } from "@/data/assets";
 import Image from "next/image";
 import { FiSearch } from "react-icons/fi";
+import ArabicNumberTranslator from "@/components/ui/ArabicNumberTranslator";
 
 export default function Search() {
   const [open, setOpen] = useState(false);
@@ -179,9 +180,13 @@ export default function Search() {
                         <span>{highlightMatch(getCategoryTitle(item.categoryId), q)}</span>
                         <span>{highlightMatch(item.Brand, q)}</span>
                         {item.priceRange && (
-                          <span className="font-semibold">
-                            • {formatPrice(item.priceRange.min)} - {formatPrice(item.priceRange.max)}
-                          </span>
+                          <span className="text-xs font-semibold text-foreground">
+                              {typeof item.priceRange?.min === "number" &&
+                                typeof item.priceRange?.max === "number" && (
+                                  <ArabicNumberTranslator min={item.priceRange.min} max={item.priceRange.max} />
+                                )}
+
+                            </span>
                         )}
                       </div>
                     </div>
