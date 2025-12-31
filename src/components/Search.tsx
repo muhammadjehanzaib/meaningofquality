@@ -59,16 +59,6 @@ export default function Search() {
     );
   };
 
-  // Format price
-  const formatPrice = (amount: number) => {
-    if (lang === "ar") {
-      const formatted = new Intl.NumberFormat("ar-EG", { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(amount);
-      return `${formatted} ريال`;
-    } else {
-      return new Intl.NumberFormat("en-US", { style: "currency", currency: "SAR", minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(amount);
-    }
-  };
-
   // Filtered results (cross-language)
   const filtered = useMemo(() => {
     const query = q.trim().toLowerCase();
