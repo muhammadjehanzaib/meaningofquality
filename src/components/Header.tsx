@@ -24,19 +24,30 @@ export default function Header() {
     <header className="sticky top-0 z-40 w-full border-b border-foreground/10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 shadow-sm">
       <Container className="flex min-h-16 items-center justify-between gap-4 py-3">
         {/* Logo Section */}
-        <div className="flex items-center gap-2 sm:gap-4 min-w-0">
-          <div className="relative h-10 sm:h-14 md:h-16 lg:h-20 w-32 sm:w-48 md:w-64 lg:w-72 flex-shrink-0">
-            <Link href="/" className="block h-full w-full relative">
-              <Image
-                src="/images/logo/canvas1.png"
-                alt="The Meaning of Quality Trading"
-                fill
-                className="object-contain"
-                priority
-              />
-            </Link>
-          </div>
-        </div>
+{/* Logo */}
+<div className="flex items-center shrink-0">
+  <Link href="/" className="block">
+    <div
+      className="
+        relative
+        h-[48px]
+        w-[160px]
+        sm:h-[56px] sm:w-[200px]
+        md:h-[64px] md:w-[260px]
+        lg:h-[80px] lg:w-[320px]
+      "
+    >
+      <Image
+        src="/images/logo/canvas1.png"
+        alt="The Meaning of Quality Trading"
+        fill
+        priority
+        className="object-contain"
+      />
+    </div>
+  </Link>
+</div>
+
 
         {/* Desktop Navigation */}
         <nav className="hidden lg:flex items-center gap-1 xl:gap-4">
@@ -168,7 +179,7 @@ export default function Header() {
 
       {/* Polished Mobile Menu */}
       {mobileOpen && (
-        <div className="lg:hidden border-t border-foreground/10 bg-gradient-to-b from-background via-background to-muted/30 shadow-xl animate-in slide-in-from-top-4 duration-300 max-h-[calc(100vh-5rem)] overflow-y-auto">
+        <div className="lg:hidden border-t border-foreground/10 bg-gradient-to-b from-background via-background to-muted/30 shadow-xl animate-in slide-in-from-top-4 duration-300">
           <Container className="py-4">
             <div className="flex flex-col gap-1.5">
               {/* Home Link */}
@@ -199,7 +210,7 @@ export default function Header() {
                   <FiChevronDown className="text-base transition-transform duration-200 group-open/details:rotate-180" />
                 </summary>
                 
-                <div className="bg-gradient-to-b from-gray-50/50 to-slate-50/50 px-2 py-2 space-y-1 max-h-80 overflow-y-auto scrollbar-thin scrollbar-thumb-purple-300 scrollbar-track-transparent">
+                <div className="bg-gradient-to-b from-gray-50/50 to-slate-50/50 px-2 py-2 space-y-1">
                   {headerCategories.map((c) => {
                     const icon = categoryIconById[c.id] ?? "/images/product-categories/categories-icons/accessories.png";
                     const theme = categoryThemeById[c.id] ?? { bg: "bg-slate-50", ring: "ring-slate-200" };
