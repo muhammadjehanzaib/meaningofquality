@@ -995,26 +995,20 @@ export default function CartPage() {
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
             {t("cartTitle", lang)}
           </h1>
-          {/* {totalItems > 0 && (
+          {totalItems > 0 && (
             <div className="text-sm text-muted-foreground">
-              {t("items", lang)}:{" "}
+              {t("totalItemsQuntity", lang)}:{" "}
               <span className="font-semibold text-foreground">
                 {totalItems}
               </span>
             </div>
-          )} */}
+          )}
         </div>
 
         {items.length === 0 ? (
           <div className="mt-6 rounded-xl border border-foreground/10 bg-background p-6 text-center">
             <div className="mx-auto mb-3 grid h-12 w-12 place-items-center rounded-full bg-muted text-muted-foreground">
-              <svg
-                width="22"
-                height="22"
-                viewBox="0 0 24 24"
-                fill="none"
-                aria-hidden
-              >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
                 <path
                   d="M6 6h15l-1.5 9h-12L6 6z"
                   stroke="currentColor"
@@ -1025,7 +1019,9 @@ export default function CartPage() {
                 <circle cx="18" cy="20" r="1.5" fill="currentColor" />
               </svg>
             </div>
-            <p className="text-sm text-muted-foreground">{t("emptyCart", lang)}</p>
+            <p className="text-sm text-muted-foreground">
+              {t("emptyCart", lang)}
+            </p>
             <div className="mt-4 flex items-center justify-center gap-3">
               <Link
                 href="/categories"
@@ -1037,17 +1033,27 @@ export default function CartPage() {
           </div>
         ) : (
           <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Items list */}
-            <div className="lg:col-span-2 space-y-4">
+            {/* ================= ITEMS LIST ================= */}
+            <div
+              className="
+              lg:col-span-2
+              space-y-4
+              max-h-[65vh]
+              lg:max-h-[70vh]
+              overflow-y-auto
+              pr-1
+            "
+            >
               {items.map((it) => {
-                const key = `${it.id}|${it.productCode ?? ""}|${it.volume ?? ""}|${it.stockCode ?? ""
-                  }|${it.type ?? ""}`;
+                const key = `${it.id}|${it.productCode ?? ""}|${it.volume ?? ""}|${it.stockCode ?? ""}|${it.type ?? ""}`;
+
                 return (
                   <div
                     key={key}
                     className="group relative flex items-center gap-4 rounded-2xl border border-foreground/10 bg-gradient-to-br from-background to-muted p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
                   >
                     <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-foreground/10" />
+
                     <div className="relative h-20 w-20 rounded-xl bg-background/90 ring-1 ring-foreground/10 overflow-hidden">
                       {it.img ? (
                         <Image
@@ -1063,52 +1069,57 @@ export default function CartPage() {
                         </div>
                       )}
                     </div>
+
                     <div className="flex-1 min-w-0">
                       <div className="text-sm font-medium leading-snug line-clamp-2 group-hover:text-primary">
                         <Link href={`/p/${it.id}`} className="hover:underline">
                           {pickAny(it.name, lang)}
                         </Link>
                       </div>
+
                       {it.priceRange && (
                         <div className="text-xs text-muted-foreground mt-0.5">
                           {t("priceRange", lang)}:
                           <span className="text-lg font-semibold text-foreground">
-                            {typeof it.priceRange?.min === "number" &&
-                              typeof it.priceRange?.max === "number" && (
-                                <ArabicNumberTranslator min={it.priceRange.min} max={it.priceRange.max} />
+                            {typeof it.priceRange.min === "number" &&
+                              typeof it.priceRange.max === "number" && (
+                                <ArabicNumberTranslator
+                                  min={it.priceRange.min}
+                                  max={it.priceRange.max}
+                                />
                               )}
-
                           </span>
                         </div>
                       )}
+
                       <div className="mt-1 flex flex-wrap gap-1.5 text-[10px] text-muted-foreground">
                         {it.productCode && (
-                          <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 ring-1 ring-foreground/10">
+                          <span className="rounded-full bg-muted px-2 py-0.5 ring-1 ring-foreground/10">
                             {t("codeLabel", lang)} {it.productCode}
                           </span>
                         )}
                         {it.volume && (
-                          <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 ring-1 ring-foreground/10">
+                          <span className="rounded-full bg-muted px-2 py-0.5 ring-1 ring-foreground/10">
                             {t("volumeLabel", lang)} {it.volume}
                           </span>
                         )}
                         {it.type && (
-                          <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 ring-1 ring-foreground/10">
+                          <span className="rounded-full bg-muted px-2 py-0.5 ring-1 ring-foreground/10">
                             {t("typeLabel", lang)} {it.type}
                           </span>
                         )}
                         {it.stockCode && (
-                          <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 ring-1 ring-foreground/10">
+                          <span className="rounded-full bg-muted px-2 py-0.5 ring-1 ring-foreground/10">
                             {t("stockLabel", lang)} {it.stockCode}
                           </span>
                         )}
                       </div>
+
                       <div className="mt-2 flex items-center gap-2">
                         <div className="inline-flex items-center rounded-lg border bg-background/70 shadow-sm">
                           <button
                             type="button"
-                            aria-label="Decrease quantity"
-                            className="h-8 w-8 text-sm hover:bg-muted rounded-l-lg"
+                            className="h-8 w-8 rounded-l-lg hover:bg-muted"
                             onClick={() =>
                               updateQty(it.id, Math.max(1, it.qty - 1), key)
                             }
@@ -1126,40 +1137,22 @@ export default function CartPage() {
                                 key
                               )
                             }
-                            className="h-8 w-22 border-x px-2 text-center text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                            aria-label={t("quantity", lang)}
+                            className="h-8 w-22 border-x px-2 text-center text-sm"
                           />
                           <button
                             type="button"
-                            aria-label="Increase quantity"
-                            className="h-8 w-8 text-sm hover:bg-muted rounded-r-lg"
+                            className="h-8 w-8 rounded-r-lg hover:bg-muted"
                             onClick={() => updateQty(it.id, it.qty + 1, key)}
                           >
                             +
                           </button>
                         </div>
+
                         <button
-                          className="ml-1 inline-flex h-8 w-8 items-center justify-center rounded-lg hover:bg-red-50 text-red-600"
+                          className="ml-1 inline-flex h-8 w-8 items-center justify-center rounded-lg text-red-600 hover:bg-red-50"
                           onClick={() => remove(it.id, key)}
-                          type="button"
-                          aria-label={t("remove", lang)}
-                          title={t("remove", lang)}
                         >
-                          <svg
-                            width="18"
-                            height="18"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            aria-hidden
-                          >
-                            <path
-                              d="M6 7h12M10 7v11m4-11v11M4 7h16l-1 12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 7Zm3-2h8l-1 2H8l-1-2Z"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
+                          🗑
                         </button>
                       </div>
                     </div>
@@ -1168,11 +1161,12 @@ export default function CartPage() {
               })}
             </div>
 
+            {/* ================= SUMMARY ================= */}
             {/* Summary + actions */}
             <aside className="space-y-4 lg:sticky lg:top-24 self-start">
               <div className="rounded-2xl border border-foreground/10 bg-gradient-to-br from-background to-muted p-4 shadow-sm">
                 <div className="text-sm text-muted-foreground">{t("items", lang)}</div>
-                <div className="text-2xl font-bold">{totalItems}</div>
+                <div className="text-2xl font-bold">{items.length}</div>
                 <div className="mt-3 grid grid-cols-2 gap-2">
                   <Link
                     href="/categories"
@@ -1363,11 +1357,13 @@ export default function CartPage() {
 
       {showSuccess && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
-          <div className="bg-white dark:bg-background rounded-xl p-6 shadow-2xl text-center w-80 max-w-[90%] animate-fade-in scale-up">
+          <div className="rounded-xl bg-background p-6 shadow-2xl text-center w-80 max-w-[90%]">
             <h2 className="text-lg font-semibold mb-2">{t("thankyou", lang)}</h2>
-            <p className="text-sm text-muted-foreground">{t("thankSubmited", lang)}</p>
+            <p className="text-sm text-muted-foreground">
+              {t("thankSubmited", lang)}
+            </p>
             <button
-              className="mt-4 inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-white text-sm font-semibold shadow-md transition-all duration-200 hover:brightness-110"
+              className="mt-4 rounded-lg bg-primary px-4 py-2 text-white text-sm font-semibold"
               onClick={() => setShowSuccess(false)}
             >
               {t("submitClose", lang)}
@@ -1375,10 +1371,9 @@ export default function CartPage() {
           </div>
         </div>
       )}
-
-
     </div>
   );
+
 }
 
 

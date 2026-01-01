@@ -48,7 +48,7 @@ export default function CartDrawer() {
           {/* Header */}
           <header className="flex items-center justify-between border-b border-foreground/10 p-4">
             <div className="text-base font-semibold">
-              {t("cart", lang)} ({count})
+              {t("cart", lang)} ({items.length})
             </div>
             <button className="rounded p-2 hover:bg-muted" onClick={closeDrawer} aria-label={t("close", lang)}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
