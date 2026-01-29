@@ -1,4 +1,3 @@
-
 "use client";
 
 import Image from "next/image";
@@ -10,7 +9,7 @@ import { useLang } from "@/hooks/useLang";
 import { t } from "@/data/labels";
 import { WHATSAPP_NUMBER } from "@/data/site";
 import { buildWhatsAppMessage, type ClientInfo } from "@/utils/whatsapp";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import ArabicReshaper from 'arabic-reshaper';
 import { pickAny } from "@/data/i18n";
 import type { jsPDF } from "jspdf";
@@ -35,8 +34,20 @@ export default function CartPage() {
   const totalItems = items.reduce((acc, it) => acc + it.qty, 0);
   const [isSubmittingQ, setIsSubmittingQ] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  
+  // PDF Download Cooldown States
+  const [pdfCooldown, setPdfCooldown] = useState(false);
+  const [cooldownSeconds, setCooldownSeconds] = useState(0);
+  const cooldownTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-
+  // Cleanup timer on unmount
+  useEffect(() => {
+    return () => {
+      if (cooldownTimerRef.current) {
+        clearInterval(cooldownTimerRef.current);
+      }
+    };
+  }, []);
 
   const handleSubmitQuotation = async () => {
     if (!formRef.current || isSubmittingQ) return;
@@ -134,8 +145,45 @@ export default function CartPage() {
     const mailto = `mailto:sale@moq.com.sa?subject=${subject}&body=${body}`;
     window.location.href = mailto;
   };
+
+  // Start cooldown timer
+  const startCooldown = (seconds: number) => {
+    setPdfCooldown(true);
+    setCooldownSeconds(seconds);
+
+    // Clear any existing timer
+    if (cooldownTimerRef.current) {
+      clearInterval(cooldownTimerRef.current);
+    }
+
+    // Start countdown
+    cooldownTimerRef.current = setInterval(() => {
+      setCooldownSeconds((prev) => {
+        if (prev <= 1) {
+          if (cooldownTimerRef.current) {
+            clearInterval(cooldownTimerRef.current);
+          }
+          setPdfCooldown(false);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
+
   const handleDownloadPDF = async () => {
+    // Check if cooldown is active
+    if (pdfCooldown) {
+      toast.error(`Please wait ${cooldownSeconds} seconds before downloading again.`);
+      return;
+    }
+
     if (!ensureFormValid()) return;
+
+    // Start cooldown (10 seconds - you can change this to 5-10 as needed)
+    const COOLDOWN_DURATION = 10; // Change to 5 for 5 seconds
+    startCooldown(COOLDOWN_DURATION);
+
     const { jsPDF } = await import("jspdf").then((mod) => mod);
     const QRCode = (await import("qrcode")).default;
 
@@ -1288,14 +1336,18 @@ export default function CartPage() {
                   </button>
                 </div>
 
-                {/* Download PDF */}
+                {/* Download PDF - WITH COOLDOWN */}
                 <button
-                  className="w-full inline-flex items-center justify-center gap-2 rounded-lg border px-4 py-2 text-sm shadow-sm transition-all duration-200 hover:bg-muted hover:shadow-md"
+                  className="w-full inline-flex items-center justify-center gap-2 rounded-lg border px-4 py-2 text-sm shadow-sm transition-all duration-200 hover:bg-muted hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
                   onClick={handleDownloadPDF}
                   type="button"
+                  disabled={pdfCooldown}
                 >
                   <FaFilePdf className="h-5 w-5" />
-                  {t("downloadPDF", lang)}
+                  {pdfCooldown 
+                    ? `Wait ${cooldownSeconds}s...` 
+                    : t("downloadPDF", lang)
+                  }
                 </button>
 
                 {/* SHARE MODAL */}
@@ -1375,5 +1427,3 @@ export default function CartPage() {
   );
 
 }
-
-

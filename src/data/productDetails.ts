@@ -162,5 +162,31 @@ export const productDetailsById: Record<string, ProductDetail> = {
       "/images/all-products/category-1766747244591/p-1766848283790_1766848849368_ckjjkf.png",
       "/images/all-products/category-1766747244591/p-1766848283790_1766848851661_rrmi67.png"
     ]
+  },
+  "p-1769275165538": {
+    description: { en: "hello abc section here ", ar: "hello abc section here - Arabic" },
+    properties: [
+      { en: "dsfaasdfaskldfjasdoifjoi", ar: "asdfjaoire asdfoijawer arabic" }
+    ],
+    applications: [
+      { en: "washroom dsf", ar: "washroom arabic" },
+      { en: "room", ar: "room arabic" },
+      { en: "drawing room", ar: "drawing room arabic" }
+    ],
+    productSpecs: [
+      { specification: {"en":"A1","ar":"a1 arabic"}, value: {"en":"200","ar":"200"} }
+    ],
+    technicalSpecs: [
+      { title: {"en":"4ewefr","ar":"sdfasdf"}, description: {"en":"asdfasf","ar":"asdfae"} }
+    ],
+    packaging: [
+      { stockCode: "A1243", productCode: "F5533", type: "asdf", volume: "500ml", boxQty: "15" }
+    ],
+    tdsUrl: "www.google.com",
+    images: [
+      "/images/all-products/category-1766747244591/subcategory-1766842274536/p-1769275165538_1769275886294_twuuo3.png",
+      "/images/all-products/category-1766747244591/subcategory-1766842274536/p-1769275165538_1769275906950_gajew8.png",
+      "/images/all-products/category-1766747244591/subcategory-1766842274536/p-1769275165538_1769275929674_in9m6r.png"
+    ]
   }
 };

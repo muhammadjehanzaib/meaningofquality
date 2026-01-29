@@ -25,6 +25,7 @@ export type Item = {
 };
 
 export const categories: Category[] = [
+  { id: "category-1769276168804", title: { en: "Safety Vest", ar: "سترة السلامة" } },
   { id: "category-1766747244591", title: { en: "Gun Powder", ar: "فئة جديدة" } },
   { id: "fire-rated", title: { en: "Fire Rated Series", ar: "حماية من الحريق" } },
   { id: "adhesives", title: { en: "Adhesives & Glues", ar: "لاصقات وغراء" } },
@@ -40,6 +41,7 @@ export const categories: Category[] = [
 ];
 
 export const subcategories: Subcategory[] = [
+  { id: "subcategory-1769276439547", title: { en: "Safety Vest Sub Cate", ar: "Safety Vest Sub Cate - arabic" }, categoryId: "category-1769276168804" },
   { id: "subcategory-1766842274536", title: { en: "New Subcategory Gun Powder", ar: "فئة فرعية جديدة" }, categoryId: "category-1766747244591" },
   { id: "subcategory-1766670276520", title: { en: "Fire Rated Sub cate", ar: "فئة فرعية جديدة" }, categoryId: "fire-rated" },
   { id: "hybrid", title: { en: "Hybrid (MS Polymer)", ar: "هجين (MS Polymer)" }, categoryId: "adhesives" },
@@ -55,6 +57,7 @@ export const subcategories: Subcategory[] = [
 ];
 
 export const newProducts: Item[] = [
+  { id: "p-1769275165538", name: { en: "ABC", ar: "ABC - Arabic" }, categoryId: "category-1769276168804", subcategoryId: "subcategory-1766842274536", priceRange: { min: 300, max: 600 }, Brand: "Niki" },
   { id: "p-1766848283790", name: { en: "New Product", ar: "منتج جديد" }, categoryId: "category-1766747244591", subcategoryId: "subcategory-1766842274536", priceRange: { min: 50, max: 100 }, Brand: "Sultan" },
   { id: "np-1", name: { en: "AC578 Sanitary Bath & Kitchen Acrylic Sealant", ar: "AC578 مانع تسرب أكريليك للمطبخ والحمام" }, categoryId: "adhesives", subcategoryId: "hybrid", priceRange: { min: 10, max: 50 }, Brand: "Akfix" },
   { id: "np-2", name: { en: "740 Allbond Hybrid", ar: "740 أولبوند هجين" }, categoryId: "adhesives", subcategoryId: "hybrid", priceRange: { min: 10, max: 20 }, Brand: "Sultan" },

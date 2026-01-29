@@ -106,104 +106,104 @@ export default function AdminPage() {
     setTimeout(() => setMessage(null), 5000);
   };
 
-const validateData = () => {
-  const errors: string[] = [];
+  const validateData = () => {
+    const errors: string[] = [];
 
-  const cats = categoriesData ?? [];
-  const subs = subcategoriesData ?? [];
+    const cats = categoriesData ?? [];
+    const subs = subcategoriesData ?? [];
 
-  const categoryIds = new Set(cats.map(c => c.id));
-  const subcategoryIds = new Set(subs.map(s => s.id));
+    const categoryIds = new Set(cats.map(c => c.id));
+    const subcategoryIds = new Set(subs.map(s => s.id));
 
-  subs.forEach(sub => {
-    if (!categoryIds.has(sub.categoryId)) {
-      errors.push(`Subcategory "${sub.title.en}" references invalid category "${sub.categoryId}"`);
-    }
-  });
+    subs.forEach(sub => {
+      if (!categoryIds.has(sub.categoryId)) {
+        errors.push(`Subcategory "${sub.title.en}" references invalid category "${sub.categoryId}"`);
+      }
+    });
 
-  // Use productsData directly
-  (productsData ?? []).forEach(product => {
-    if (!categoryIds.has(product.categoryId)) {
-      errors.push(`Product "${product.name.en}" references invalid category "${product.categoryId}"`);
-    }
-    if (product.subcategoryId && !subcategoryIds.has(product.subcategoryId)) {
-      errors.push(`Product "${product.name.en}" references invalid subcategory "${product.subcategoryId}"`);
-    }
-    if (product.priceRange && product.priceRange.min > product.priceRange.max) {
-      errors.push(`Product "${product.name.en}" has invalid price range (min > max)`);
-    }
-  });
+    // Use productsData directly
+    (productsData ?? []).forEach(product => {
+      if (!categoryIds.has(product.categoryId)) {
+        errors.push(`Product "${product.name.en}" references invalid category "${product.categoryId}"`);
+      }
+      if (product.subcategoryId && !subcategoryIds.has(product.subcategoryId)) {
+        errors.push(`Product "${product.name.en}" references invalid subcategory "${product.subcategoryId}"`);
+      }
+      if (product.priceRange && product.priceRange.min > product.priceRange.max) {
+        errors.push(`Product "${product.name.en}" has invalid price range (min > max)`);
+      }
+    });
 
-  return errors;
-};
+    return errors;
+  };
 
-const saveCatalog = async () => {
-  const validationErrors = validateData();
-  if (validationErrors.length > 0) {
-    showMessage("error", `Validation errors:\n${validationErrors.join("\n")}`);
-    return;
-  }
-
-  setLoading(true);
-  try {
-    // Safety check
-    if (!productsData || !Array.isArray(productsData)) {
-      console.error("Invalid productsData:", productsData);
-      showMessage("error", "Products data is invalid");
-      setLoading(false);
+  const saveCatalog = async () => {
+    const validationErrors = validateData();
+    if (validationErrors.length > 0) {
+      showMessage("error", `Validation errors:\n${validationErrors.join("\n")}`);
       return;
     }
 
-    console.log("Products data length:", productsData.length);
-    console.log("Sample product:", productsData[0]);
+    setLoading(true);
+    try {
+      // Safety check
+      if (!productsData || !Array.isArray(productsData)) {
+        console.error("Invalid productsData:", productsData);
+        showMessage("error", "Products data is invalid");
+        setLoading(false);
+        return;
+      }
 
-    // Helper to remove flag properties
-    const removeFlags = (item: Item) => {
-      const {...rest } = item;
-      return rest;
-    };
+      console.log("Products data length:", productsData.length);
+      console.log("Sample product:", productsData[0]);
 
-    // Separate lists based on flags for backend
-    const newProductsToSave = productsData
-      .filter(p => p && p.isNew)
-      .map(removeFlags);
+      // Helper to remove flag properties
+      const removeFlags = (item: Item) => {
+        const { ...rest } = item;
+        return rest;
+      };
 
-    const mostVisitedToSave = productsData
-      .filter(p => p && p.isMostVisited)
-      .map(removeFlags);
+      // Separate lists based on flags for backend
+      const newProductsToSave = productsData
+        .filter(p => p && p.isNew)
+        .map(removeFlags);
 
-    const featuredToSave = productsData
-      .filter(p => p && p.isFeatured)
-      .map(removeFlags);
+      const mostVisitedToSave = productsData
+        .filter(p => p && p.isMostVisited)
+        .map(removeFlags);
 
-    const response = await fetch("/api/admin/catalog", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        type: "updateCatalog",
-        data: {
-          categories: categoriesData,
-          subcategories: subcategoriesData,
-          newProducts: newProductsToSave,
-          mostVisited: mostVisitedToSave,
-          featuredProducts: featuredToSave,
-          productImageByItemId: productImagesData,
-        },
-      }),
-    });
+      const featuredToSave = productsData
+        .filter(p => p && p.isFeatured)
+        .map(removeFlags);
 
-    const result = await response.json();
-    if (result.success) {
-      showMessage("success", "Catalog saved successfully! Restart dev server to see changes.");
-    } else {
-      showMessage("error", result.error || "Failed to save catalog");
+      const response = await fetch("/api/admin/catalog", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "updateCatalog",
+          data: {
+            categories: categoriesData,
+            subcategories: subcategoriesData,
+            newProducts: newProductsToSave,
+            mostVisited: mostVisitedToSave,
+            featuredProducts: featuredToSave,
+            productImageByItemId: productImagesData,
+          },
+        }),
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        showMessage("success", "Catalog saved successfully! Restart dev server to see changes.");
+      } else {
+        showMessage("error", result.error || "Failed to save catalog");
+      }
+    } catch (error) {
+      showMessage("error", error instanceof Error ? error.message : "Failed to save");
+    } finally {
+      setLoading(false);
     }
-  } catch (error) {
-    showMessage("error", error instanceof Error ? error.message : "Failed to save");
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
 
   const saveProductDetails = async () => {
@@ -259,43 +259,43 @@ const saveCatalog = async () => {
   };
 
 
-  
 
-const saveAssetsFull = async (
-  overrideBanners?: Banner[],
-  overrideCategoryIcons?: Record<string, string>
-) => {
-  setLoading(true);
-  try {
-    const response = await fetch("/api/admin/catalog", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        type: "updateAssetsFull",
-        data: {
-          sliderBanners: overrideBanners ?? sliderBannersData,
-          categoryIconById: overrideCategoryIcons ?? categoryIconData,
-          categoryThemeById: categoryThemeById,
-          productImageByItemId: productImagesData,
-        },
-      }),
-    });
 
-    const result = await response.json();
-    if (result.success) {
-      showMessage("success", "Assets saved successfully! Restart dev server to see changes.");
-    } else {
-      showMessage("error", result.error || "Failed to save assets");
+  const saveAssetsFull = async (
+    overrideBanners?: Banner[],
+    overrideCategoryIcons?: Record<string, string>
+  ) => {
+    setLoading(true);
+    try {
+      const response = await fetch("/api/admin/catalog", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "updateAssetsFull",
+          data: {
+            sliderBanners: overrideBanners ?? sliderBannersData,
+            categoryIconById: overrideCategoryIcons ?? categoryIconData,
+            categoryThemeById: categoryThemeById,
+            productImageByItemId: productImagesData,
+          },
+        }),
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        showMessage("success", "Assets saved successfully! Restart dev server to see changes.");
+      } else {
+        showMessage("error", result.error || "Failed to save assets");
+      }
+    } catch (error) {
+      showMessage(
+        "error",
+        error instanceof Error ? error.message : "Failed to save"
+      );
+    } finally {
+      setLoading(false);
     }
-  } catch (error) {
-    showMessage(
-      "error",
-      error instanceof Error ? error.message : "Failed to save"
-    );
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
 
   const addProduct = () => {
@@ -1274,7 +1274,7 @@ const saveAssetsFull = async (
                     setCategoryIconData(nextIcons);
 
                     // 2️⃣ Persist immediately
-                    await saveAssetsFull(undefined,nextIcons );
+                    await saveAssetsFull(undefined, nextIcons);
                   }}
                 />
 
@@ -1351,7 +1351,7 @@ const saveAssetsFull = async (
                           setCategoryIconData(nextIcons);
 
                           // 3️⃣ Persist to assets.ts
-                          await saveAssetsFull( undefined, nextIcons );
+                          await saveAssetsFull(undefined, nextIcons);
                         }}
                         className="inline-flex items-center justify-center h-8 w-8 rounded-md text-red-600 hover:text-red-700 hover:bg-red-50 transition-colors"
                       >
@@ -1508,6 +1508,10 @@ function ProductSpecificationEditor({
     onUpdate(newSpecs);
   };
 
+  const removeRow = (index: number) => {
+    onUpdate(specs.filter((_, i) => i !== index));
+  };
+
   const ensureLString = (v: string | LString): LString =>
     typeof v === "string" ? { en: v, ar: "" } : v;
 
@@ -1573,7 +1577,7 @@ function ProductSpecificationEditor({
             </div>
 
             <button
-              onClick={() => updateRow(index, { specification: spec, value: value })}
+              onClick={() => removeRow(index)}
               className="rounded bg-red-100 px-2 py-1 text-xs text-red-700 hover:bg-red-200"
             >
               Remove
@@ -1611,6 +1615,10 @@ function TechnicalSpecificationEditor({
     const newSpecs = [...specs];
     newSpecs[index] = { ...newSpecs[index], ...updates };
     onUpdate(newSpecs);
+  };
+
+  const removeRow = (index: number) => {
+    onUpdate(specs.filter((_, i) => i !== index));
   };
 
   const ensureLString = (v: string | LString): LString =>
@@ -1678,7 +1686,7 @@ function TechnicalSpecificationEditor({
             </div>
 
             <button
-              onClick={() => updateRow(index, { title, description })}
+              onClick={() => removeRow(index)}
               className="rounded bg-red-100 px-2 py-1 text-xs text-red-700 hover:bg-red-200"
             >
               Remove
@@ -1697,7 +1705,6 @@ function TechnicalSpecificationEditor({
   );
 }
 
-// Images Editor Component
 function ImagesEditor({
   images,
   onUpdate,

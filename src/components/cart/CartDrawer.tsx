@@ -10,7 +10,7 @@ import { pickAny } from "@/data/i18n";
 import ArabicNumberTranslator from "../ui/ArabicNumberTranslator";
 
 export default function CartDrawer() {
-  const { drawerOpen, closeDrawer, lastAdded, items, count, updateQty, remove } = useCart();
+  const { drawerOpen, closeDrawer, lastAdded, items, updateQty, remove } = useCart();
   const lang = useLang();
 
   const isRTL = lang === "ar"; // Arabic => Right-to-Left
