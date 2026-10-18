@@ -2407,37 +2407,20 @@ function ProductDetailEditor({
   // const appsEn = (detail.applications ?? []).map((a) => (typeof a === "string" ? a : a.en || "")).join("\n");
   // const appsAr = (detail.applications ?? []).map((a) => (typeof a === "string" ? "" : a.ar || "")).join("\n");
 
-  // Local state for use cases, ignoring empty entries
-  const [appsEnLocal, setAppsEnLocal] = useState(
-    (detail.applications ?? [])
-      .filter((a) => (typeof a === "string" ? a.trim() !== "" : (a.en || "").trim() !== ""))
-      .map((a) => (typeof a === "string" ? a : a.en || ""))
-      .join("\n")
-  );
+// Local state for use cases, ignoring empty entries.
+const [appsEnLocal, setAppsEnLocal] = useState(() =>
+  getApplicationsText(detail.applications, "en")
+);
 
-  const [appsArLocal, setAppsArLocal] = useState(
-    (detail.applications ?? [])
-      .filter((a) => (typeof a === "string" ? a.trim() !== "" : (a.ar || "").trim() !== ""))
-      .map((a) => (typeof a === "string" ? "" : a.ar || ""))
-      .join("\n")
-  );
+const [appsArLocal, setAppsArLocal] = useState(() =>
+  getApplicationsText(detail.applications, "ar")
+);
 
-  // Sync if parent detail changes
-  useEffect(() => {
-    setAppsEnLocal(
-      (detail.applications ?? [])
-        .filter((a) => (typeof a === "string" ? a.trim() !== "" : (a.en || "").trim() !== ""))
-        .map((a) => (typeof a === "string" ? a : a.en || ""))
-        .join("\n")
-    );
-    setAppsArLocal(
-      (detail.applications ?? [])
-        .filter((a) => (typeof a === "string" ? a.trim() !== "" : (a.ar || "").trim() !== ""))
-        .map((a) => (typeof a === "string" ? "" : a.ar || ""))
-        .join("\n")
-    );
-  }, [detail.applications]);
-
+// Sync if parent detail changes.
+useEffect(() => {
+  setAppsEnLocal(getApplicationsText(detail.applications, "en"));
+  setAppsArLocal(getApplicationsText(detail.applications, "ar"));
+}, [detail.applications]);
 
   const mergeDualList = (enText: string, arText: string) => {
     const enLines = enText.split("\n");
@@ -2625,3 +2608,27 @@ function ProductDetailEditor({
 
 
 
+function getApplicationsText(
+  applications: unknown,
+  language: "en" | "ar"
+): string {
+  if (!Array.isArray(applications)) {
+    return "";
+  }
+
+  return applications
+    .map((item: unknown): string => {
+      if (typeof item === "string") {
+        return language === "en" ? item : "";
+      }
+
+      if (typeof item === "object" && item !== null) {
+        const value = (item as Record<string, unknown>)[language];
+        return typeof value === "string" ? value : "";
+      }
+
+      return "";
+    })
+    .filter((value) => value.trim() !== "")
+    .join("\n");
+}
