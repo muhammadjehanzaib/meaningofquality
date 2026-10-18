@@ -446,7 +446,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
 
 
 
-type ApplicationText = string | { en: string; ar: string };
+  type ApplicationText = string | { en: string; ar: string };
 
   const applications: unknown[] = Array.isArray(detail.applications)
     ? detail.applications
@@ -634,7 +634,7 @@ type ApplicationText = string | { en: string; ar: string };
 
                     <span className="text-lg font-semibold text-foreground">
 
-                       {typeof item.priceRange?.min === "number" &&
+                      {typeof item.priceRange?.min === "number" &&
 
                         typeof item.priceRange?.max === "number" && (
 
