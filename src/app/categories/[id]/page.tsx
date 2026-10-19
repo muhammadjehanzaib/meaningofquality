@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import Container from "@/components/ui/Container";
@@ -9,6 +10,40 @@ import { Suspense } from "react";
 
 interface PageProps {
   params: Promise<{ id: string }>;
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { id } = await params;
+  const cat = categories.find((c) => c.id === id);
+
+  if (!cat) {
+    return {
+      title: "Category Not Found",
+      description: "The requested category could not be found.",
+    };
+  }
+
+  const enTitle = typeof cat.title === "string" ? cat.title : cat.title.en;
+  const title = `${enTitle} | Wholesale Supplies`;
+  const desc = cat.desc
+    ? typeof cat.desc === "string"
+      ? cat.desc
+      : cat.desc.en
+    : `Explore wholesale ${enTitle} from Meaning of Quality (Sultan). High performance industrial fasteners, adhesives, and sealants with Riyadh dispatch.`;
+
+  return {
+    title,
+    description: desc,
+    alternates: {
+      canonical: `https://www.moq.com.sa/categories/${id}`,
+    },
+    openGraph: {
+      title: `${enTitle} | Meaning of Quality (Sultan)`,
+      description: desc,
+      url: `https://www.moq.com.sa/categories/${id}`,
+      type: "website",
+    },
+  };
 }
 
 export async function generateStaticParams() {
@@ -36,9 +71,56 @@ export default async function CategoryPage({ params }: PageProps) {
     );
   }
 
+  const enTitle = typeof cat.title === "string" ? cat.title : cat.title.en;
+  const categoryJsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        "@id": `https://www.moq.com.sa/categories/${cat.id}#collection`,
+        name: enTitle,
+        url: `https://www.moq.com.sa/categories/${cat.id}`,
+        description: `Explore wholesale ${enTitle} from Meaning of Quality (Sultan).`,
+        hasPart: items.map((item) => ({
+          "@type": "Product",
+          name: typeof item.name === "string" ? item.name : item.name.en,
+          url: `https://www.moq.com.sa/p/${item.id}`,
+        })),
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Home",
+            item: "https://www.moq.com.sa",
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Categories",
+            item: "https://www.moq.com.sa/categories",
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: enTitle,
+            item: `https://www.moq.com.sa/categories/${cat.id}`,
+          },
+        ],
+      },
+    ],
+  };
+
   return (
-    <div className="py-10 sm:py-12">
-      <Container className="max-w-5xl">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(categoryJsonLd) }}
+      />
+      <div className="py-10 sm:py-12">
+        <Container className="max-w-5xl">
         {/* Breadcrumb */}
         <nav className="text-xs text-muted-foreground">
           <Link href="/" className="hover:underline"><LKey k="home" /></Link>
@@ -78,6 +160,7 @@ export default async function CategoryPage({ params }: PageProps) {
         )}
       </Container>
     </div>
+    </>
   );
 }
 

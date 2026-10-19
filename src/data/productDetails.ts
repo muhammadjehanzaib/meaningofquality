@@ -1182,7 +1182,7 @@ export const productDetailsById: Record<string, ProductDetail> = {
       { title: {"en":"Application Guidelines","ar":"إرشادات الاستخدام والتطبيق"}, description: {"en":"Shake can vigorously for 30 seconds before use. Spray from a distance of 15–20 cm. For permanent bonds, coat both mating surfaces. For repositionable bonds, apply to one substrate only.","ar":"رج العبوة جيداً لمدة 30 ثانية قبل الاستخدام. رش من مسافة 15-20 سم. للالتصاق الدائم، رش كلا السطحين. للالتصاق المؤقت القابل للتعديل، رش سطحاً واحداً فقط."} }
     ],
     packaging: [
-      { stockCode: "-", productCode: "sultan-spray-glue-400ml", type: "Contact Spray Adhesive", volume: "400 ml + 100 g", boxQty: "12 cans/carton" }
+      { stockCode: "-", productCode: "sultan-spray-glue-400ml", type: "Contact Spray Adhesive", volume: "400 ml + 100 g", boxQty: "24 Pieces/carton" }
     ],
     images: [
       "/images/all-products/adhesives/subcategory-1792074317951/sultan-spray-glue-400ml_1792418474088_htkda7.jpg",

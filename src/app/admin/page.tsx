@@ -10,6 +10,8 @@ import { categories, subcategories, newProducts, mostVisited, featuredProducts, 
 import { productDetailsById, type ProductDetail, type PackagingRow, type ProductSpecification, type TechnicalSpecification } from "@/data/productDetails";
 import { productImageByItemId, sliderBanners, categoryIconById, categoryThemeById, type Banner } from "@/data/assets";
 import { LString } from "@/data/i18n";
+
+type WithUid = { _uid?: string };
 import {
   Plus,
   Save,
@@ -26,8 +28,11 @@ import {
   XCircle,
   Loader2,
   ChevronDown,
-  ChevronRight
+  ChevronRight,
+  Sparkles
 } from "lucide-react";
+import { slugify } from "@/utils/slugify";
+
 
 export default function AdminPage() {
   const [loading, setLoading] = useState(false);
@@ -359,7 +364,25 @@ export default function AdminPage() {
   };
 
   const updateProduct = (id: string, updates: Partial<Item>) => {
-    setProductsData(productsData.map(p => p.id === id ? { ...p, ...updates } : p));
+    const newId = updates.id?.trim();
+    if (newId && newId !== id) {
+      setProductsData(productsData.map(p => p.id === id ? { ...p, ...updates, id: newId } : p));
+      if (editingProduct === id) {
+        setEditingProduct(newId);
+      }
+      if (productDetailsData[id]) {
+        const nextDetails = { ...productDetailsData, [newId]: productDetailsData[id] };
+        delete nextDetails[id];
+        setProductDetailsData(nextDetails);
+      }
+      if (productImagesData[id] !== undefined) {
+        const nextImages = { ...productImagesData, [newId]: productImagesData[id] };
+        delete nextImages[id];
+        setProductImagesData(nextImages);
+      }
+    } else {
+      setProductsData(productsData.map(p => p.id === id ? { ...p, ...updates } : p));
+    }
   };
 
   const addCategory = () => {
@@ -376,7 +399,19 @@ export default function AdminPage() {
   };
 
   const updateCategory = (id: string, updates: Partial<Category>) => {
-    setCategoriesData(categoriesData.map(c => c.id === id ? { ...c, ...updates } : c));
+    const newId = updates.id?.trim();
+    if (newId && newId !== id) {
+      setCategoriesData(categoriesData.map(c => c.id === id ? { ...c, ...updates, id: newId } : c));
+      setSubcategoriesData(subcategoriesData.map(s => s.categoryId === id ? { ...s, categoryId: newId } : s));
+      setProductsData(productsData.map(p => p.categoryId === id ? { ...p, categoryId: newId } : p));
+      if (categoryIconData[id] !== undefined) {
+        const nextIcons = { ...categoryIconData, [newId]: categoryIconData[id] };
+        delete nextIcons[id];
+        setCategoryIconData(nextIcons);
+      }
+    } else {
+      setCategoriesData(categoriesData.map(c => c.id === id ? { ...c, ...updates } : c));
+    }
   };
 
   const handleAddSubcategory = (categoryId: string) => {
@@ -415,7 +450,13 @@ export default function AdminPage() {
   };
 
   const updateSubcategory = (id: string, updates: Partial<Subcategory>) => {
-    setSubcategoriesData(subcategoriesData.map(s => s.id === id ? { ...s, ...updates } : s));
+    const newId = updates.id?.trim();
+    if (newId && newId !== id) {
+      setSubcategoriesData(subcategoriesData.map(s => s.id === id ? { ...s, ...updates, id: newId } : s));
+      setProductsData(productsData.map(p => p.subcategoryId === id ? { ...p, subcategoryId: newId } : p));
+    } else {
+      setSubcategoriesData(subcategoriesData.map(s => s.id === id ? { ...s, ...updates } : s));
+    }
   };
 
   if (process.env.NODE_ENV === "production") {
@@ -790,9 +831,9 @@ export default function AdminPage() {
             </div>
 
             <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {categoriesData.map((category) => (
+              {categoriesData.map((category, index) => (
                 <CategoryEditor
-                  key={category.id}
+                  key={(category as Category & WithUid)._uid ??= `cat-item-${index}`}
                   category={category}
                   productsData={productsData}
                   onUpdate={(updates) => updateCategory(category.id, updates)}
@@ -903,16 +944,43 @@ export default function AdminPage() {
                                 </tr>
                               </thead>
                               <tbody className="divide-y divide-gray-200">
-                                {categorySubcategories.map((subcategory) => {
+                                 {categorySubcategories.map((subcategory, index) => {
                                   const productCount = productsData.filter(p => p.subcategoryId === subcategory.id).length;
                                   return (
-                                    <tr key={subcategory.id} className="hover:bg-gray-50">
-                                      <td className="px-4 py-3 text-sm font-mono text-gray-900">{subcategory.id}</td>
+                                    <tr key={(subcategory as Subcategory & WithUid)._uid ??= `sub-item-${subcategory.categoryId}-${index}`} className="hover:bg-gray-50">
+                                      <td className="px-4 py-3 text-sm font-mono text-gray-900">
+                                        <div className="flex items-center gap-1">
+                                          <input
+                                            type="text"
+                                            value={subcategory.id}
+                                            onChange={(e) => updateSubcategory(subcategory.id, { id: e.target.value })}
+                                            className="w-44 px-2 py-1 border border-gray-300 rounded text-xs font-mono focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                                            title="Subcategory ID / URL slug"
+                                          />
+                                          <button
+                                            type="button"
+                                            onClick={() => {
+                                              const slug = slugify(subcategory.title.en);
+                                              if (slug) updateSubcategory(subcategory.id, { id: slug });
+                                            }}
+                                            className="p-1 text-blue-600 hover:text-blue-800 rounded hover:bg-blue-50"
+                                            title="Auto-generate slug from English title"
+                                          >
+                                            <Sparkles className="h-3.5 w-3.5" />
+                                          </button>
+                                        </div>
+                                      </td>
                                       <td className="px-4 py-3 text-sm text-gray-900">
                                         <input
                                           type="text"
                                           value={subcategory.title.en}
                                           onChange={(e) => updateSubcategory(subcategory.id, { title: { ...subcategory.title, en: e.target.value } })}
+                                          onBlur={() => {
+                                            if (!subcategory.id || subcategory.id.startsWith("subcategory-")) {
+                                              const slug = slugify(subcategory.title.en);
+                                              if (slug) updateSubcategory(subcategory.id, { id: slug });
+                                            }
+                                          }}
                                           className="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                                         />
                                       </td>
@@ -2051,13 +2119,27 @@ function ProductEditor({
     <div className="space-y-6">
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">ID</label>
+          <div className="flex items-center justify-between mb-1">
+            <label className="block text-sm font-medium text-gray-700">ID / URL Slug</label>
+            <button
+              type="button"
+              onClick={() => {
+                const slug = slugify(product.name.en);
+                if (slug) onUpdate({ id: slug });
+              }}
+              className="text-xs text-blue-600 hover:text-blue-800 font-medium inline-flex items-center gap-1"
+              title="Auto-generate clean SEO URL slug from English name"
+            >
+              <Sparkles className="h-3 w-3" /> Auto Slug
+            </button>
+          </div>
           <input
             type="text"
             value={product.id}
             onChange={(e) => onUpdate({ id: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm font-mono focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
+          <p className="text-xs text-gray-400 mt-1">URL: /p/{product.id}</p>
         </div>
         <div className="md:col-span-2">
           <label className="block text-sm font-medium text-gray-700 mb-2">Product Lists</label>
@@ -2111,6 +2193,12 @@ function ProductEditor({
             type="text"
             value={product.name.en}
             onChange={(e) => onUpdate({ name: { ...product.name, en: e.target.value } })}
+            onBlur={() => {
+              if (!product.id || product.id.startsWith("p-")) {
+                const slug = slugify(product.name.en);
+                if (slug) onUpdate({ id: slug });
+              }
+            }}
             className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
@@ -2255,13 +2343,27 @@ function CategoryEditor({
       </div>
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">ID</label>
+          <div className="flex items-center justify-between mb-1">
+            <label className="block text-sm font-medium text-gray-700">ID / URL Slug</label>
+            <button
+              type="button"
+              onClick={() => {
+                const slug = slugify(category.title.en);
+                if (slug) onUpdate({ id: slug });
+              }}
+              className="text-xs text-blue-600 hover:text-blue-800 font-medium inline-flex items-center gap-1"
+              title="Auto-generate clean SEO URL slug from English title"
+            >
+              <Sparkles className="h-3 w-3" /> Auto Slug
+            </button>
+          </div>
           <input
             type="text"
             value={category.id}
             onChange={(e) => onUpdate({ id: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm font-mono focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
+          <p className="text-xs text-gray-400 mt-1">URL: /categories/{category.id}</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
@@ -2270,6 +2372,12 @@ function CategoryEditor({
               type="text"
               value={category.title.en}
               onChange={(e) => onUpdate({ title: { ...category.title, en: e.target.value } })}
+              onBlur={() => {
+                if (!category.id || category.id.startsWith("category-")) {
+                  const slug = slugify(category.title.en);
+                  if (slug) onUpdate({ id: slug });
+                }
+              }}
               className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
           </div>

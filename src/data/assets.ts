@@ -11,6 +11,11 @@ export const sliderBanners: Banner[] = [
 
 export const categoryIconById: Record<string, string> = {
   "adhesives": "/images/product-categories/categories-icons/adhesives.png",
+  "brad-nails-f-series": "/images/product-categories/categories-icons/category-1792073296472_1792073502556_49s1l4.png",
+  "brad-nails-u-series": "/images/product-categories/categories-icons/category-1792073343435_1792073491351_fsx2r5.png",
+  "brad-nails-j-series": "/images/product-categories/categories-icons/category-1792296041915_1792296378306_n5f70s.png",
+  "steel-nails-st-series": "/images/product-categories/categories-icons/category-1792073082887_1792073227144_ibjdpk.png",
+  // Backward compatibility aliases
   "category-1792073082887": "/images/product-categories/categories-icons/category-1792073082887_1792073227144_ibjdpk.png",
   "category-1792073296472": "/images/product-categories/categories-icons/category-1792073296472_1792073502556_49s1l4.png",
   "category-1792073343435": "/images/product-categories/categories-icons/category-1792073343435_1792073491351_fsx2r5.png",

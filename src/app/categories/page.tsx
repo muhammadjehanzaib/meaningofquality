@@ -1,9 +1,25 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import Container from "@/components/ui/Container";
 import { categories, subcategoriesByCategoryId } from "@/data/catalog";
 import { categoryIconById, categoryThemeById } from "@/data/assets";
 import L, { LKey } from "@/components/i18n/L";
+
+export const metadata: Metadata = {
+  title: "All Product Categories | Wholesale Fasteners, Adhesives & Sealants",
+  description:
+    "Browse Sultan industrial product categories: 18-gauge straight brad nails, ST-series concrete steel nails, fine crown staples, PVA wood glue, and high-yield PU foam.",
+  alternates: {
+    canonical: "https://www.moq.com.sa/categories",
+  },
+  openGraph: {
+    title: "All Product Categories | Meaning of Quality (Sultan)",
+    description:
+      "Wholesale industrial fasteners, brad nails, PVA adhesives, and PU foams distributed from Riyadh warehouse across Saudi Arabia.",
+    url: "https://www.moq.com.sa/categories",
+  },
+};
 
 export default function CategoriesIndexPage() {
   return (
