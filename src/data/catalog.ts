@@ -67,6 +67,7 @@ export const newProducts: Item[] = [
   { id: "brad-nails-f40", name: { en: "F40 Brad Nails Sultan", ar: "مسمار دبوس سلطان F40" }, categoryId: "category-1792073296472", priceRange: { min: 100, max: 300 }, Brand: "Sultan" },
   { id: "brad-nails-f45", name: { en: "F45 Brad Nails Sultan", ar: "مسمار دبوس سلطان F45" }, categoryId: "category-1792073296472", priceRange: { min: 100, max: 300 }, Brand: "Sultan" },
   { id: "brad-nails-f50", name: { en: "F50 Brad Nails Sultan", ar: "مسمار دبوس سلطان F50" }, categoryId: "category-1792073296472", priceRange: { min: 100, max: 300 }, Brand: "Sultan" },
+  { id: "steel-nails-st18", name: { en: "ST18 Steel Nails", ar: "مسامير فولاذية ST18" }, categoryId: "category-1792073082887", priceRange: { min: 100, max: 300 }, Brand: "Sultan" },
   { id: "steel-nails-st25", name: { en: "ST25 Steel Nails", ar: "مسامير فولاذية ST25" }, categoryId: "category-1792073082887", priceRange: { min: 100, max: 300 }, Brand: "Sultan" },
   { id: "steel-nails-st32", name: { en: "ST32 Steel Nails", ar: "مسامير فولاذية ST32" }, categoryId: "category-1792073082887", priceRange: { min: 100, max: 300 }, Brand: "Sultan" },
   { id: "steel-nails-st38", name: { en: "ST38 Steel Nails", ar: "مسامير فولاذية ST38" }, categoryId: "category-1792073082887", priceRange: { min: 100, max: 300 }, Brand: "Sultan" },

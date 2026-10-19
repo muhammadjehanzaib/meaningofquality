@@ -1,11 +1,12 @@
 export type Banner = { src: string; alt: string; href?: string };
 
 export const sliderBanners: Banner[] = [
-  { src: "/images/sliders/banner_1792295220724_wtxsal.jpg", alt: "705 Universal Fast Adhesive banner" },
-  { src: "/images/sliders/banner_1792252617336_n7zhck.jpg", alt: "705 Universal Fast Adhesive banner" },
-  { src: "/images/sliders/banner_1792252615234_4p53s0.jpg", alt: "Brad Nails" },
-  { src: "/images/sliders/banner_1792252613334_4e22sm.jpg", alt: "Brad Nails" },
-  { src: "/images/sliders/banner_1792252600266_oevqi1.jpg", alt: "Brad Nails" }
+  { src: "/images/sliders/banner_1792422803147_y05jiz.png", alt: "" },
+  { src: "/images/sliders/banner_1792422292702_issst7.png", alt: "" },
+  { src: "/images/sliders/banner_1792421358157_0khauh.jpg", alt: "" },
+  { src: "/images/sliders/banner_1792420937574_abu28n.jpg", alt: "" },
+  { src: "/images/sliders/banner_1792420897324_vwngfa.jpg", alt: "" },
+  { src: "/images/sliders/banner_1792420828724_ayv3d3.jpg", alt: "" }
 ];
 
 export const categoryIconById: Record<string, string> = {
@@ -36,13 +37,14 @@ export const productImageByItemId: Record<string, string> = {
   "p-1766663816115": "/images/all-products/fire-rated/p-1766663816115_1766743011221_jq9pyz.jpeg",
   "p-1766747336873": "/images/all-products/category-1766747244591/p-1766747336873_1766750555797_d1fezx.png",
   "p-1792075071410": "",
+  "steel-nails-st18": "/images/all-products/category-1792073082887/steel-nails-st18_1792423377780_7mx6j6.png",
   "steel-nails-st25": "/images/all-products/category-1792073082887/steel-nails-st25_1792250599855_6271mn.png",
   "steel-nails-st32": "/images/all-products/category-1792073082887/steel-nails-st32_1792250610782_4te0b6.png",
   "steel-nails-st38": "/images/all-products/category-1792073082887/steel-nails-st38_1792250617830_ioxaj3.png",
   "steel-nails-st50": "/images/all-products/category-1792073082887/steel-nails-st50_1792250628229_mangqy.png",
-  "sultan-pu-foam-750ml": "/images/all-products/adhesives/subcategory-1792074350245/sultan-pu-foam-750ml_1792299752263_qx7a28.jpg",
-  "sultan-spray-glue-400ml": "/images/all-products/adhesives/subcategory-1792074317951/sultan-spray-glue-400ml_1792299763076_bsvah4.jpg",
-  "sultan-wood-glue-370kg": "/images/all-products/adhesives/subcategory-1792074373839/sultan-wood-glue-370kg_1792299740632_6uwrpl.jpg",
+  "sultan-pu-foam-750ml": "/images/all-products/adhesives/subcategory-1792074350245/sultan-pu-foam-750ml_1792418500227_1c0rjv.jpg",
+  "sultan-spray-glue-400ml": "/images/all-products/adhesives/subcategory-1792074317951/sultan-spray-glue-400ml_1792418474088_htkda7.jpg",
+  "sultan-wood-glue-370kg": "/images/all-products/adhesives/subcategory-1792074373839/sultan-wood-glue-370kg_1792418789307_2yl3q6.jpg",
   "u-nails-1008j": "/images/all-products/category-1792073343435/u-nails-1008j_1792250200531_zpxb9a.png",
   "u-nails-1010j": "/images/all-products/category-1792073343435/u-nails-1010j_1792250210521_vloyt1.png",
   "u-nails-1013j": "/images/all-products/category-1792073343435/u-nails-1013j_1792250219306_3zxcjz.png",
