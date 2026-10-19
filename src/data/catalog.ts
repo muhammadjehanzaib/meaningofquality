@@ -39,6 +39,9 @@ export const subcategories: Subcategory[] = [
 ];
 
 export const newProducts: Item[] = [
+  { id: "sultan-spray-glue-400ml", name: { en: "Sultan Spray Glue 400ml + 100gr", ar: "غراء بخاخ سلطان 400 مل+ 100 غرام" }, categoryId: "adhesives", subcategoryId: "subcategory-1792074317951", Brand: "Sultan" },
+  { id: "sultan-pu-foam-750ml", name: { en: "Sultan PU Foam 750ml / 800gr", ar: "بولي يوريثين رغوة سلطان 750 مل / 800 غرام" }, categoryId: "adhesives", subcategoryId: "subcategory-1792074350245", Brand: "Sultan" },
+  { id: "sultan-wood-glue-370kg", name: { en: "Sultan Wood Glue 3.70Kg x 4 Buckets/Carton", ar: "غراء خشب سلطان ٣،٧٠ كجم × ٤ سطل/كرتون" }, categoryId: "adhesives", subcategoryId: "subcategory-1792074373839", Brand: "Sultan" },
   { id: "u-nails-5540", name: { en: "U Nails 5540 Sultan", ar: "مسمار دبوس سلطان U 5540" }, categoryId: "category-1792073343435", priceRange: { min: 100, max: 300 }, Brand: "Sultan" },
   { id: "u-nails-5545", name: { en: "U Nails 5545 Sultan", ar: "مسمار دبوس سلطان U 5545" }, categoryId: "category-1792073343435", priceRange: { min: 100, max: 300 }, Brand: "Sultan" },
   { id: "u-nails-5550", name: { en: "U Nails 5550 Sultan", ar: "مسمار دبوس سلطان U 5550" }, categoryId: "category-1792073343435", priceRange: { min: 100, max: 300 }, Brand: "Sultan" },
@@ -72,12 +75,12 @@ export const newProducts: Item[] = [
   { id: "steel-nails-st32", name: { en: "ST32 Steel Nails", ar: "مسامير فولاذية ST32" }, categoryId: "category-1792073082887", priceRange: { min: 100, max: 300 }, Brand: "Sultan" },
   { id: "steel-nails-st38", name: { en: "ST38 Steel Nails", ar: "مسامير فولاذية ST38" }, categoryId: "category-1792073082887", priceRange: { min: 100, max: 300 }, Brand: "Sultan" },
   { id: "steel-nails-st50", name: { en: "ST50 Steel Nails", ar: "مسامير فولاذية ST50" }, categoryId: "category-1792073082887", priceRange: { min: 100, max: 300 }, Brand: "Sultan" },
-  { id: "sultan-spray-glue-400ml", name: { en: "Sultan Spray Glue 400ml + 100gr", ar: "غراء بخاخ سلطان 400 مل+ 100 غرام" }, categoryId: "adhesives", subcategoryId: "subcategory-1792074317951", Brand: "Sultan" },
-  { id: "sultan-pu-foam-750ml", name: { en: "Sultan PU Foam 750ml / 800gr", ar: "بولي يوريثين رغوة سلطان 750 مل / 800 غرام" }, categoryId: "adhesives", subcategoryId: "subcategory-1792074350245", Brand: "Sultan" },
-  { id: "sultan-wood-glue-370kg", name: { en: "Sultan Wood Glue 3.70Kg x 4 Buckets/Carton", ar: "غراء خشب سلطان ٣،٧٠ كجم × ٤ سطل/كرتون" }, categoryId: "adhesives", subcategoryId: "subcategory-1792074373839", Brand: "Sultan" }
 ];
 
 export const mostVisited: Item[] = [
+  { id: "sultan-spray-glue-400ml", name: { en: "Sultan Spray Glue 400ml + 100gr", ar: "غراء بخاخ سلطان 400 مل+ 100 غرام" }, categoryId: "adhesives", subcategoryId: "subcategory-1792074317951", Brand: "Sultan" },
+  { id: "sultan-pu-foam-750ml", name: { en: "Sultan PU Foam 750ml / 800gr", ar: "بولي يوريثين رغوة سلطان 750 مل / 800 غرام" }, categoryId: "adhesives", subcategoryId: "subcategory-1792074350245", Brand: "Sultan" },
+  { id: "sultan-wood-glue-370kg", name: { en: "Sultan Wood Glue 3.70Kg x 4 Buckets/Carton", ar: "غراء خشب سلطان ٣،٧٠ كجم × ٤ سطل/كرتون" }, categoryId: "adhesives", subcategoryId: "subcategory-1792074373839", Brand: "Sultan" },
   { id: "u-nails-5540", name: { en: "U Nails 5540 Sultan", ar: "مسمار دبوس سلطان U 5540" }, categoryId: "category-1792073343435", priceRange: { min: 100, max: 300 }, Brand: "Sultan" },
   { id: "u-nails-5545", name: { en: "U Nails 5545 Sultan", ar: "مسمار دبوس سلطان U 5545" }, categoryId: "category-1792073343435", priceRange: { min: 100, max: 300 }, Brand: "Sultan" },
   { id: "u-nails-5550", name: { en: "U Nails 5550 Sultan", ar: "مسمار دبوس سلطان U 5550" }, categoryId: "category-1792073343435", priceRange: { min: 100, max: 300 }, Brand: "Sultan" },
